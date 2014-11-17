@@ -1,5 +1,6 @@
 {
   "name": "gab",
+  "description":"concierge",
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
