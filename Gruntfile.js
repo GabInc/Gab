@@ -15,8 +15,6 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
-  // Load Manually Installed Packages
-  grunt.loadNpmTasks('grunt-contrib-coffee');
 
   // Configurable paths for the application
   var appConfig = {
@@ -30,20 +28,6 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
-    // // Compiles Coffeescript
-    // coffee: {
-    //   options: { bare: true },
-    //   files: { '<%= yeoman.app %>/scripts/app.js': '<%= yeoman.app %>/scripts/app.coffee' }
-    // },
-    coffee: {
-      build: {
-        expand: true,
-        cwd: '<%= yeoman.app %>/scripts',
-        src: [ '**/*.coffee' ],
-        dest: '<%= yeoman.app %>/scripts',
-        ext: '.js'
-      }
-    },
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -370,10 +354,7 @@ module.exports = function (grunt) {
       }
     }
   });
-  
-  grunt.registerTask( 'scripts', 'Compiles the JavaScript files.', 
-    [ 'coffee' ]
-  );
+
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -406,8 +387,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',
-    'scripts',
-    'stylesheets',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
