@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
-
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks( 'grunt-contrib-coffee' );
 
   // Define the configuration for all the tasks
@@ -37,12 +37,21 @@ module.exports = function (grunt) {
         files: {'<%= yeoman.app %>/scripts/app.js': '<%= yeoman.app %>/scripts/app.coffee'}
       }
     },
+    less: {
+      compile:{
+        files: {'<%= yeoman.app %>/styles/main.css': '<%= yeoman.app %>/styles/main.less'}
+      }
+    },
                     
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       coffee:{
         files: ['<%= yeoman.app %>/scripts/*.coffee'],
         tasks: ['coffee']
+      },
+      less:{
+        files: ['<%= yeoman.app %>/styles/*.less'],
+        tasks: ['less']
       },
       bower: {
         files: ['bower.json'],
@@ -401,6 +410,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'coffee',
+    'less',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
@@ -418,6 +428,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'coffee',
+    'less',
     'newer:jshint',
     'test',
     'build'
