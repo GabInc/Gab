@@ -1,6 +1,6 @@
 (->
-  ### jshint quotmark: false ###
-  "use strict"
+
+  'use strict'
   
   # {greetings,menus,actions,destinations,appellations} = jsondata
 

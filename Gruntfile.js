@@ -22,14 +22,28 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+
+  grunt.loadNpmTasks( 'grunt-contrib-coffee' );
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
     // Project settings
     yeoman: appConfig,
-
+    
+    coffee: {
+      compile:{
+        options: { bare: true } ,
+        files: {'<%= yeoman.app %>/scripts/app.js': '<%= yeoman.app %>/scripts/app.coffee'}
+      }
+    },
+                    
     // Watches files for changes and runs tasks based on the changed files
     watch: {
+      coffee:{
+        files: ['<%= yeoman.app %>/scripts/*.coffee'],
+        tasks: ['coffee']
+      },
       bower: {
         files: ['bower.json'],
         tasks: ['wiredep']
@@ -386,6 +400,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'coffee',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
@@ -402,6 +417,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
+    'coffee',
     'newer:jshint',
     'test',
     'build'
