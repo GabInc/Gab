@@ -28,17 +28,17 @@ module.exports = (grunt) ->
     # Project settings
     yeoman: appConfig
     coffee:
-      options:
-        bare: true
-
-      files:
-        "<%= yeoman.app %>/scripts/app.js": "<%= yeoman.app %>/scripts/app.coffee"
+      compile:
+        options:
+          bare: true
+        files:
+          "<%= yeoman.app %>/scripts/app.js": "<%= yeoman.app %>/scripts/app.coffee"
 
     less:
-      files:
-        "<%= yeoman.app %>/styles/main.css": "<%= yeoman.app %>/styles/main.less"
+      compile:
+        files:
+          "<%= yeoman.app %>/styles/main.css": "<%= yeoman.app %>/styles/main.less"
 
-    
     # Watches files for changes and runs tasks based on the changed files
     watch:
       coffee:
@@ -63,7 +63,7 @@ module.exports = (grunt) ->
         files: ["test/spec/{,*/}*.js"]
         tasks: [
           "newer:jshint:test"
-          "karma"
+          # "karma"
         ]
 
       styles:
@@ -354,10 +354,10 @@ module.exports = (grunt) ->
 
     
     # Test settings
-    karma:
-      unit:
-        configFile: "test/karma.conf.js"
-        singleRun: true
+    # karma:
+    #   unit:
+    #     configFile: "test/karma.conf.js"
+    #     singleRun: true
 
   grunt.registerTask "serve", "Compile then start a connect web server", (target) ->
     if target is "dist"
@@ -385,7 +385,7 @@ module.exports = (grunt) ->
     "concurrent:test"
     "autoprefixer"
     "connect:test"
-    "karma"
+    # "karma"
   ]
   grunt.registerTask "build", [
     "clean:dist"

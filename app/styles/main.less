@@ -20,7 +20,7 @@ body{
   color:#fff;
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
-  background: #241e20; /* Old browsers */
+  background: #241e20; 
   background: -moz-linear-gradient(45deg, #241e20 0%, #323030 100%); 
   background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#241e20), color-stop(100%,#323030)); 
   background: -webkit-linear-gradient(45deg, #241e20 0%,#323030 100%); 
@@ -123,8 +123,13 @@ input{
   
 }
 
+.menu,.destination{
+  display:none;
+  &.active{
+    display:block;
+  }
+}
 .menu{
-  display:block;
   width:80vw;
   height:60vh; 
   #greeting{
@@ -187,13 +192,6 @@ input{
     }
   }
 }
-.menu,.destination{
-  display:none
-}
-.menu:nth-of-type(2){
-  display:block;
-}
-
 
 
 

@@ -5,7 +5,8 @@
     "es5-shim": "~4.0.3",
     "jquery": "~2.1.1",
     "json3": "~3.3.2",
-    "vminpoly": "*"
+    "vminpoly": "*",
+    "handlebars": "~2.0.0"
   },
   "devDependencies": {},
   "appPath": "app"

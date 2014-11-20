@@ -23,7 +23,6 @@ body {
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
   background: #241e20;
-  /* Old browsers */
   background: -moz-linear-gradient(45deg, #241e20 0%, #323030 100%);
   background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #241e20), color-stop(100%, #323030));
   background: -webkit-linear-gradient(45deg, #241e20 0%, #323030 100%);
@@ -122,8 +121,15 @@ input {
   margin-left: 10vw;
   max-height: 80vh;
 }
-.menu {
+.menu,
+.destination {
+  display: none;
+}
+.menu.active,
+.destination.active {
   display: block;
+}
+.menu {
   width: 80vw;
   height: 60vh;
 }
@@ -182,13 +188,6 @@ input {
   position: absolute;
   bottom: 0;
   padding: .5em;
-}
-.menu,
-.destination {
-  display: none;
-}
-.menu:nth-of-type(2) {
-  display: block;
 }
 @media screen and (max-width: 720px) {
   .menu .actions .action {

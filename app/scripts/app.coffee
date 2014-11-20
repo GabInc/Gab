@@ -1,54 +1,118 @@
+### jshint ignore:start ###
+'use strict'
 (->
 
-  'use strict'
+  Handlebars.registerHelper "render_actions", ( obj, fn )->
+    out = obj.map ( a )-> a.render().html()
+    new Handlebars.SafeString out.join('')
+    
+  ###
+    Base class for DRYer Code
+  ###
   
-  # {greetings,menus,actions,destinations,appellations} = jsondata
-
-  menus = Object.keys( jsondata.menus ).map (  name )->
-    menu = jsondata.menus[name]
-    menu.name = name
-    menu.domid = "#{name}_menu"
-    menu.actions = menu.actions.map ( n )-> 
-      action = jsondata.actions[n]
-      action.name = n
-      action.href = "#{n}_#{action.type}"
-      return action
-    return menu
-
-  destinations = Object.keys(jsondata.destinations).map ( name )->
-    dest = jsondata.destinations[name]
-    dest.name = name
-    dest.domid = "#{name}_destination"
-    return dest
+  class Concierge
     
-  greetings = Object.keys( jsondata.greetings ).map ( k )-> jsondata.greetings[k]
+    ###
+      Store the json locally for easier referencing
+    ###
+    @json: window.gabConciergeJSONConfig
     
+    ###
+      Starts the show!
+    ###
+    @init: ( container )->
+      concierge = @
+      ### Remove Welcome Screen ###
+      $(container).empty()
+      @menus = {}
+      @destinations = {}
+      ### attach named modules to main module for reference (and render templates to container ) ###
+      Object.keys( @json.menu ).reduce ( self, menuname )-> 
+        menu = new Menu( menuname )
+        self["#{menuname}_menu"] = menu
+        $(container).append menu.render()
+        return self
+      , concierge
+      Object.keys( @json.destination ).reduce ( self, destname )-> 
+        destination = new Destination( destname )
+        self["#{destname}_destination"] = destination
+        $(container).append destination.render()        
+        return self
+      , concierge
+      
+      $(container).on 'click', '.action a', ( event )->
+        event.preventDefault()
+        target_name = $(this).attr('href').replace '#', ''
+        $('.active').data('menu').hide()
+        concierge[target_name].show()
 
-  renderMenu = ( menu )->
-    html = ""
-    html += "<nav id=\"#{menu.domid}\" class=\"menu\">"    
-    if menu.name is 'main'
-      html += "<header class=\"menu-title\" id=\"greeting\">Greetings</header>"
-    if menu.title
-      html += "<header class=\"menu-title\"><a class=\"back\" href=\"#main-menu\"><i class=\"fa fa-chevron-left\"></i></a><h1>#{menu.title}</h1></header>"
-    html += "<ul class=\"actions\">"
-    menu.actions.forEach ( action )->
-      html += "<li class=\"action\"><a href=\"##{action.href}\">"
-      html += "<img class=\"action-icon\" src=\"#{action.icon}\"/>"
-      html += "<h1 class=\"action-title\">#{action.title}</h1>"
-      html += "</a></li>"
-    html += "</ul></nav>"
-    return html
+      @main_menu.show()
+      return @
+      
+    ###
+      Based on json config file and builds a few utility class methods we can inherit
+    ###
+    constructor: ( name )->
+      @type = @constructor.name.toLowerCase()
+      @name  = name
+      @domid  = "#{@name}_#{@type}"
+      json = Concierge.json["#{@type}"]?[name] || Concierge.json
+      Object.keys( json ).reduce ( self, key )->
+        self[key]=json[key]
+        self
+      , @     
+      return @
+    
+    ###
+      Compiles the template on first run, then renders self with compiled template
+    ###
+    
+    render: ()->
+      if !@template
+        templateSource = $("##{@constructor.name.toLowerCase()}-template").html()
+        @template = Handlebars.compile templateSource
+      @$el = $ @template @ 
+      @$el.data @type, @
+      return @$el
+    
+    ###
+      Add "active" class to main element for css takeover of visual logic
+    ###
+    show: ( )->
+      @$el.addClass 'active'
+      
+    ###
+      Remove "active" class from main element
+    ###
+    hide: ( )->
+      @$el.removeClass 'active'
+      
 
-  renderDestination = ( dest )->
-    "<div id=\"#{dest.domid}\" class=\"destination\">#{JSON.stringify(dest)}</div>"
+  class Action extends Concierge
+    constructor: ( actionname, @menu )->
+      super actionname
+      @href = "#{@name}_#{@type}"
+      return @
+      
+  class Menu extends Concierge
+    constructor: ( menuname )->
+      super menuname
+      menu = @
+      @isMain = menuname is 'main'
+      if @actions
+        @actions = @actions.map ( actionname )-> 
+          action = new Action actionname
+          action.menu = menu
+          return action
+      return @
 
-
-  $('#content').html('')
-
-  menus.map ( menu )->
-    $('#content').append renderMenu menu 
-
-  destinations.map ( dest )->
-    $('#content').append renderDestination dest
+  class Destination extends Menu
+    constructor: ( destname )->
+      super destname
+      
+  
+  Concierge.init '#content'
+  
+  
 )()
+### jshint ignore:end ###
