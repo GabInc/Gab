@@ -32,7 +32,7 @@
       <img class="logo" src="./images/logo.svg" onerror="this.onerror=null; this.src='images/logo.png'" />
     </h1>
     <form id="search">
-      <label for="search-box"><input id="search-box" name="q" /></label>
+      <label for="search-box"><i class="fa fa-search"></i><input id="search-box" name="q" /></label>
     </form>
     <nav id="navigation">
       <a href="#">Concierge</a>
@@ -63,7 +63,7 @@
         <header class="menu-title" id="greeting">Greetings</header>
       {{else}}
         <header class="menu-title">
-          <a class="back" href="#main-menu"><i class="fa fa-chevron-left"></i></a>
+          <a class="back" href="#main_menu"><i class="fa fa-chevron-left"></i></a>
           <h1>{{title}}</h1>
         </header>
       {{/if}}
@@ -108,23 +108,25 @@
     <!--[if lt IE 9]>
       <script src="bower_components/es5-shim/es5-shim.js"></script>
       <script src="bower_components/json3/lib/json3.js"></script>
-      <script src="bower_components/vminpoly/vminpoly.js"></script>
+      <script src="bower_components/html5-history-api/history.js"></script>
     <![endif]-->
   <!-- endbuild -->
   
   <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/handlebars/handlebars.js"></script>    
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/handlebars/handlebars.js"></script>
+      
+      <script src="bower_components/html5-polyfills/Storage.js"></script>
+      <script src="bower_components/html5-history-api/history.js"></script>
     <!-- endbower -->
   <!-- endbuild -->
+  <!-- <script src="bower_components/vminpoly/vminpoly.js"></script> -->
 
   <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/data.js"></script>
     <script src="scripts/app.js"></script>
   <!-- endbuild -->
-  
 
-  
 </body>
 </html>

@@ -5,7 +5,7 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 (function() {
-  var Action, Concierge, Destination, Menu;
+  var Action, Concierge, Destination, Menu, location;
   Handlebars.registerHelper("render_actions", function(obj, fn) {
     var out;
     out = obj.map(function(a) {
@@ -13,6 +13,7 @@ var __hasProp = {}.hasOwnProperty,
     });
     return new Handlebars.SafeString(out.join(''));
   });
+  location = window.history.location || window.location;
 
   /*
     Base class for DRYer Code
@@ -34,7 +35,7 @@ var __hasProp = {}.hasOwnProperty,
       concierge = this;
 
       /* Remove Welcome Screen */
-      $(container).empty();
+      this.$el = $(container).empty();
       this.menus = {};
       this.destinations = {};
 
@@ -43,24 +44,93 @@ var __hasProp = {}.hasOwnProperty,
         var menu;
         menu = new Menu(menuname);
         self["" + menuname + "_menu"] = menu;
-        $(container).append(menu.render());
+        self.$el.append(menu.render());
         return self;
       }, concierge);
       Object.keys(this.json.destination).reduce(function(self, destname) {
         var destination;
         destination = new Destination(destname);
         self["" + destname + "_destination"] = destination;
-        $(container).append(destination.render());
+        self.$el.append(destination.render());
         return self;
       }, concierge);
-      $(container).on('click', '.action a', function(event) {
-        var target_name;
+      $(container).on('click', 'a', function(event) {
+        var target;
         event.preventDefault();
-        target_name = $(this).attr('href').replace('#', '');
-        $('.active').data('menu').hide();
-        return concierge[target_name].show();
+        target = $(this).attr('href').replace(/.*#/, '');
+        if (concierge[target]) {
+          return concierge.activate(concierge[target]);
+        }
       });
-      this.main_menu.show();
+      $(window).on('popstate', function(event) {
+        var state;
+        state = event.originalEvent.state;
+        if (state && concierge[state.target]) {
+          return concierge.activate(concierge[state.target]);
+        }
+      });
+      this.activate(this.main_menu);
+      return this;
+    };
+
+
+    /*
+      Re-use jQuery Event methods
+     */
+
+    Concierge.on = function(event, fn) {
+      $(this).on(event, fn);
+      return this;
+    };
+
+    Concierge.off = function(event, fn) {
+      return $(this).off(event, fn);
+    };
+
+
+    /*
+      Calling this method "once" instead of "one" should clue you in
+      that these method signatures are more like the node.js event system than jQuery's.
+     */
+
+    Concierge.once = function(event, fn) {
+      return $(this).one(event, fn);
+    };
+
+    Concierge.fire = function(event, data) {
+      return $(this).trigger(event, data);
+    };
+
+    Concierge.reset = function(callback) {
+      this.$el.find('.active').removeClass('active');
+      return setTimeout(callback, 200);
+    };
+
+
+    /*
+      Handle An Action
+     */
+
+    Concierge.activate = function(target) {
+      var c;
+      c = this;
+      if (this.busy || this.$el.is('.active')) {
+        return false;
+      }
+      this.busy = true;
+      this.reset(function() {
+        return target.show(function() {
+          var historyMethod;
+          historyMethod = 'replaceState';
+          if (history.state && history.state.target && history.state.target !== target.domid) {
+            historyMethod = 'pushState';
+          }
+          history[historyMethod]({
+            target: target.domid
+          }, c.name, "#" + target.domid);
+          return c.busy = false;
+        });
+      });
       return this;
     };
 
@@ -103,8 +173,9 @@ var __hasProp = {}.hasOwnProperty,
       Add "active" class to main element for css takeover of visual logic
      */
 
-    Concierge.prototype.show = function() {
-      return this.$el.addClass('active');
+    Concierge.prototype.show = function(callback) {
+      this.$el.addClass('active');
+      return setTimeout(callback, 200);
     };
 
 
@@ -113,7 +184,8 @@ var __hasProp = {}.hasOwnProperty,
      */
 
     Concierge.prototype.hide = function() {
-      return this.$el.removeClass('active');
+      this.$el.removeClass('active');
+      return setTimeout(callback, 200);
     };
 
     return Concierge;

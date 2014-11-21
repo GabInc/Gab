@@ -27,6 +27,8 @@ module.exports = (grunt) ->
     
     # Project settings
     yeoman: appConfig
+    
+      
     coffee:
       compile:
         options:
@@ -59,13 +61,13 @@ module.exports = (grunt) ->
         options:
           livereload: "<%= connect.options.livereload %>"
 
-      jsTest:
-        files: ["test/spec/{,*/}*.js"]
-        tasks: [
-          "newer:jshint:test"
-          # "karma"
-        ]
-
+      # jsTest:
+      #         files: ["test/spec/{,*/}*.js"]
+      #         tasks: [
+      #           "newer:jshint:test"
+      #           # "karma"
+      #         ]
+      
       styles:
         files: ["<%= yeoman.app %>/styles/{,*/}*.css"]
         tasks: [
@@ -244,24 +246,24 @@ module.exports = (grunt) ->
     # concat: {
     #   dist: {}
     # },
-    imagemin:
-      dist:
-        files: [
-          expand: true
-          cwd: "<%= yeoman.app %>/images"
-          src: "{,*/}*.{png,jpg,jpeg,gif}"
-          dest: "<%= yeoman.dist %>/images"
-        ]
-
-    svgmin:
-      dist:
-        files: [
-          expand: true
-          cwd: "<%= yeoman.app %>/images"
-          src: "{,*/}*.svg"
-          dest: "<%= yeoman.dist %>/images"
-        ]
-
+    # imagemin:
+    #      dist:
+    #        files: [
+    #          expand: true
+    #          cwd: "<%= yeoman.app %>/images"
+    #          src: "{,*/}*.{png,jpg,jpeg,gif}"
+    #          dest: "<%= yeoman.dist %>/images"
+    #        ]
+    # 
+    #    svgmin:
+    #      dist:
+    #        files: [
+    #          expand: true
+    #          cwd: "<%= yeoman.app %>/images"
+    #          src: "{,*/}*.svg"
+    #          dest: "<%= yeoman.dist %>/images"
+    #        ]
+   
     htmlmin:
       dist:
         options:

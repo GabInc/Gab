@@ -6,6 +6,8 @@
     out = obj.map ( a )-> a.render().html()
     new Handlebars.SafeString out.join('')
     
+  location = window.history.location || window.location
+  
   ###
     Base class for DRYer Code
   ###
@@ -23,32 +25,75 @@
     @init: ( container )->
       concierge = @
       ### Remove Welcome Screen ###
-      $(container).empty()
+      @$el = $(container).empty()
       @menus = {}
       @destinations = {}
       ### attach named modules to main module for reference (and render templates to container ) ###
       Object.keys( @json.menu ).reduce ( self, menuname )-> 
         menu = new Menu( menuname )
         self["#{menuname}_menu"] = menu
-        $(container).append menu.render()
+        self.$el.append menu.render()
         return self
       , concierge
       Object.keys( @json.destination ).reduce ( self, destname )-> 
         destination = new Destination( destname )
         self["#{destname}_destination"] = destination
-        $(container).append destination.render()        
+        self.$el.append destination.render()        
         return self
       , concierge
       
-      $(container).on 'click', '.action a', ( event )->
+      $(container).on 'click', 'a', ( event )-> 
         event.preventDefault()
-        target_name = $(this).attr('href').replace '#', ''
-        $('.active').data('menu').hide()
-        concierge[target_name].show()
-
-      @main_menu.show()
+        target = $(this).attr('href').replace /.*#/, ''
+        if concierge[target]
+          concierge.activate concierge[target]
+          
+      $(window).on 'popstate', ( event )->
+        state = event.originalEvent.state
+        if state and concierge[state.target]
+          concierge.activate concierge[state.target]
+        
+      @activate @main_menu
       return @
+    
+    ###
+      Re-use jQuery Event methods
+    ###
+    @on: ( event, fn )->
+      $( @ ).on( event, fn )
+      return @
+    @off: ( event, fn )->
+      $( @ ).off( event, fn )
+    ###
+      Calling this method "once" instead of "one" should clue you in
+      that these method signatures are more like the node.js event system than jQuery's.
+    ###
+    @once: ( event, fn )->
+      $( @ ).one event, fn 
       
+    @fire: ( event, data )->
+      $( @ ).trigger event, data
+    
+    @reset: ( callback )->
+      @$el.find('.active').removeClass('active')
+      setTimeout callback, 200
+    ###
+      Handle An Action
+    ###
+    @activate: ( target )->
+      c = @
+      if @busy or @$el.is '.active' then return false
+      @busy = true
+      @reset ->
+        target.show ->  
+          historyMethod = 'replaceState'
+          if history.state and history.state.target and history.state.target isnt target.domid      
+            historyMethod = 'pushState'
+          history[historyMethod] { target: target.domid }, c.name, "##{target.domid}"
+          c.busy = false
+      return @
+
+
     ###
       Based on json config file and builds a few utility class methods we can inherit
     ###
@@ -78,14 +123,16 @@
     ###
       Add "active" class to main element for css takeover of visual logic
     ###
-    show: ( )->
+    show: ( callback )->
       @$el.addClass 'active'
+      setTimeout callback, 200
       
     ###
       Remove "active" class from main element
     ###
     hide: ( )->
       @$el.removeClass 'active'
+      setTimeout callback, 200
       
 
   class Action extends Concierge
