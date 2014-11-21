@@ -30,7 +30,7 @@ module.exports = (grunt) ->
     
     'gh-pages':
       options: 
-        base: 'dist/app'
+        base: 'dist/app/'
       src: ['**']
       
     coffee:
