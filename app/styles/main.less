@@ -119,15 +119,17 @@ input{
 }
 
 .menu,.destination{
-  display:block;
-  opacity:0;
-  transform: scale(0);
-  transition:all .2s ease-in;
   position:absolute;
+  display:block;
   top:20vh;
   width:80vw;
   left:10vw;
   height:60vh;
+  opacity:0;
+  transform: scale(0);
+  transition:all .2s ease-in;
+
+  
   &.active{
     transform: scale(1);
     opacity:1;
@@ -157,6 +159,7 @@ input{
   .actions{
     display:block;
     width:80vw;
+    max-width:960px;
     text-align:center;
     .action{
       text-align:left;
@@ -165,6 +168,8 @@ input{
       float:left;
       width:20vw;
       height:20vw;
+      max-width:220px;
+      max-height:220px;      
       a{
         min-width:150px;
         max-width:200px;
@@ -198,7 +203,20 @@ input{
   }
 }
 
-
+/*@media screen and (max-width : 960px) {
+  .menu,.destination{
+    .actions{
+      .action{
+        &:nth-of-type(3n + 0){
+          background:red;
+          margin-right:50%;
+        }
+        max-width:200px;
+        max-height:200px;
+      }
+    }
+  }
+}*/
 
 @media screen and (max-width: 720px) {
   .menu .actions{

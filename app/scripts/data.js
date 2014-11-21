@@ -39,12 +39,16 @@
       'browse': {
         'title': 'News is important...',
         'actions': ['news', 'music', 'fun', 'plan', 'social', 'learn', 'browse', 'create']
+      },
+      'sports_news': {
+        'title': 'Make a selection, sit back and enjoy your sports news!',
+        'actions': [ '' ]
       }
     },
     'destination': {
       'sports_news': {
-        'title': 'Title',
         'description': 'Description',
+        'father': 'news',
         'links': [{
           'logo': 'http://placecage.com/100/100',
           'text': 'Label',

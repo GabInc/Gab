@@ -3,7 +3,8 @@
 (->
 
   Handlebars.registerHelper "render_actions", ( obj, fn )->
-    out = obj.map ( a )-> a.render().html()
+    out = obj.map ( a )-> 
+      a.render().html()
     new Handlebars.SafeString out.join('')
     
   location = window.history.location || window.location
@@ -134,6 +135,9 @@
       @$el.removeClass 'active'
       setTimeout callback, 200
       
+
+
+    
 
   class Action extends Concierge
     constructor: ( actionname, @menu )->

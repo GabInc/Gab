@@ -28,6 +28,10 @@ module.exports = (grunt) ->
     # Project settings
     yeoman: appConfig
     
+    'gh-pages':
+      options: 
+        base: 'dist'
+      src: ['**']
       
     coffee:
       compile:

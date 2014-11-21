@@ -74,22 +74,23 @@
   </script>
   
   <script id="action-template" type="text/x-handlebars-template">
-    <div>
-      <li id="{{domid}}" class="action">
-        <a class="inner" href="#{{href}}">
-          <div class="action-icon" style="background-image:url('{{icon}}')"></div>
-          <h1 class="action-title">{{title}}</h1>
-        </a>
-      </li>
-    </div>
+    <ul>
+    <li id="{{domid}}" class="action">
+      <a class="inner" href="#{{href}}">
+        <div class="action-icon" style="background-image:url('{{icon}}')"></div>
+        <h1 class="action-title">{{title}}</h1>
+      </a>
+    </li>
+    </ul>
   </script>
-  
+    
   <script id="destination-template" type="text/x-handlebars-template">
     <div class="destination">
-      <a class="inner" href="#{{href}}">
-        <div class="destination-icon" style="background-image:url('{{icon}}')"></div>
-        <h1 class="destination-title">{{title}}</h1>
-      </a>
+      <header class="menu-title">
+        <a class="back" href="#{{father}}_menu"><i class="fa fa-chevron-left"></i></a>
+        <h1>{{title}}</h1>
+      </header>
+      
     </div>
   </script>
   
@@ -114,11 +115,8 @@
   
   <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-      <script src="bower_components/jquery/dist/jquery.js"></script>
-      <script src="bower_components/handlebars/handlebars.js"></script>
-      
-      <script src="bower_components/html5-polyfills/Storage.js"></script>
-      <script src="bower_components/html5-history-api/history.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/handlebars/handlebars.js"></script>
     <!-- endbower -->
   <!-- endbuild -->
   <!-- <script src="bower_components/vminpoly/vminpoly.js"></script> -->
