@@ -343,6 +343,8 @@ module.exports = (grunt) ->
               "*.html"
               "views/{,*/}*.html"
               "images/{,*/}*.{webp}"
+              "styles/{,*/}*.css"
+              "scripts/{,*/}*.js"
               "fonts/*"
             ]
           }
