@@ -10,8 +10,6 @@
 # 'test/spec/**/*.js'
 module.exports = (grunt) ->
   
-  # Load grunt tasks automatically
-  require("load-grunt-tasks") grunt
   
   # Time how long tasks take. Can help when optimizing build times
   require("time-grunt") grunt
@@ -28,10 +26,23 @@ module.exports = (grunt) ->
     # Project settings
     yeoman: appConfig
     
+    svgmin: 
+        options: 
+            plugins: [ { removeViewBox: false }, {removeUselessStrokeAndFill: false} ]
+        files: ["<%= yeoman.dist %>/images/svg/**/*.svg"]
+    
     'gh-pages':
       options: 
-        base: 'dist/app/'
+        base: 'dist/app'
       src: ['**']
+      
+    # svgstore:
+    #   options: 
+    #     prefix: "gab_icon_"
+    #   default: 
+    #     files: 
+    #       "<%= yeoman.app %>/images/svg/gab_icons_en.svg": "<%= yeoman.app %>/images/svg/en/*.svg"
+    #       "<%= yeoman.app %>/images/svg/gab_icons_fr.svg": "<%= yeoman.app %>/images/svg/fr/*.svg"
       
     coffee:
       compile:
@@ -47,6 +58,15 @@ module.exports = (grunt) ->
 
     # Watches files for changes and runs tasks based on the changed files
     watch:
+      
+      # svgmin: 
+      #   files: ["<%= yeoman.app %>/images/**/*.svg"]
+      #   tasks: ["svgmin"]
+        
+      # svgstore:
+      #   files: ["<%= yeoman.app %>/images/**/*.svg"]
+      #   tasks: ["svgstore"]
+        
       coffee:
         files: ["<%= yeoman.app %>/scripts/*.coffee"]
         tasks: ["coffee"]
@@ -194,7 +214,6 @@ module.exports = (grunt) ->
           "<%= yeoman.dist %>/styles/fonts/*"
         ]
 
-    
     # Reads HTML for usemin blocks to enable smart builds that automatically
     # concat, minify and revision files. Creates configurations in memory so
     # additional tasks can operate on them
@@ -354,8 +373,8 @@ module.exports = (grunt) ->
       test: ["copy:styles"]
       dist: [
         "copy:styles"
-        "imagemin"
-        "svgmin"
+        # "imagemin"
+        # "svgmin"
       ]
 
     
@@ -419,4 +438,8 @@ module.exports = (grunt) ->
     "test"
     "build"
   ]
+  
+  # Load grunt tasks automatically
+  require("load-grunt-tasks") grunt
+  
   return

@@ -36,6 +36,7 @@
         self.$el.append menu.render()
         return self
       , concierge
+      
       Object.keys( @json.destination ).reduce ( self, destname )-> 
         destination = new Destination( destname )
         self["#{destname}_destination"] = destination
@@ -78,6 +79,7 @@
     @reset: ( callback )->
       @$el.find('.active').removeClass('active')
       setTimeout callback, 200
+      
     ###
       Handle An Action
     ###
