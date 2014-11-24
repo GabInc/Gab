@@ -100,7 +100,7 @@ module.exports = (grunt) ->
         ]
 
       gruntfile:
-        files: ["Gruntfile.js"]
+        files: ["Gruntfile.coffee"]
 
       livereload:
         options:
@@ -186,7 +186,7 @@ module.exports = (grunt) ->
     # Add vendor prefixed styles
     autoprefixer:
       options:
-        browsers: ["last 1 version"]
+        browsers: ["last 2 versions"]
 
       dist:
         files: [
@@ -426,9 +426,8 @@ module.exports = (grunt) ->
     "ngAnnotate"
     "copy:dist"
     "cdnify"
-    
-    # 'cssmin',
-    # 'uglify',
+    'cssmin',
+    'uglify',
     "filerev"
     "usemin"
     "htmlmin"
