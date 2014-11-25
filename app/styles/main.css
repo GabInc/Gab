@@ -25,7 +25,7 @@ body {
   font-size: 17px;
   line-height: 20px;
   -webkit-font-smoothing: antialiased;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.004);
+  /*  text-shadow: 1px 1px 1px rgba(255,255,255,0.004);*/
 }
 html {
   background: #241e20;
