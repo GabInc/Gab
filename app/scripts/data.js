@@ -33,20 +33,83 @@
       'browse': {
         'title': 'News is important...',
         'actions': ['news', 'music', 'fun', 'plan', 'social', 'learn']
+      },
+      'sports_news': {
+        'title': 'Select an options, lay back and enjoy the mo\'!',
+        'actions': [ 'sports_news_scores', 'sports_news_all', 'sports_news_hockey', 'create_concierge' ]
       }
     },
-    'destination': {
-      'sports_news': {
-        'description': 'Description',
-        'father': 'news',
-        'links': [{
-          'logo': 'http://placecage.com/100/100',
-          'text': 'Label',
-          'href': 'http://example.com'
-        }]
+    'link':{
+      'score_board': {
+        'logo': 'http://placecage.com/100/40',
+        'text': 'Label',
+        'href': 'http://example.com'
+      },
+      'rds': {
+        'logo': 'http://placecage.com/100/40',
+        'text': 'Label',
+        'href': 'http://example.com'
+      },
+      'stanley': {
+        'logo': 'http://placecage.com/100/40',
+        'text': 'Label',
+        'href': 'http://example.com'        
       }
     },
     'action': {
+      'sports_news_scores': {
+        'title': 'Only Scores',
+        'description': 'All the Sports, one scoreboard, even cricket',
+        'type': 'link',
+        'links': [ 'score_board' ]
+      },
+      'sports_news_all': {
+        'title': 'All Sports',
+        'description': 'All the things sports!',
+        'type': 'link',
+        'links': [ 'rds' ]
+      },
+      'sports_news_hockey': {
+        'title': 'Hockey Hockey!',
+        'description': 'Where\'s that puck!?!?!',
+        'type': 'link',
+        'links': [ 'stanley' ]
+      },
+      'create_concierge': {
+        'title': 'Hockey Hockey!',
+        'description': 'Where\'s that puck!?!?!',
+        'type': 'feature'
+      },
+      'sports_news':{
+        'icon': 'http://placecage.com/100/100',
+        'title': 'Sports News-ah!',
+        'type': 'menu'        
+      }, 
+      'hot_news':{
+        'icon': 'http://placecage.com/100/100',
+        'title': 'Burning Hot News!',
+        'type': 'menu'
+      }, 
+      'political_news':{
+        'icon': 'http://placecage.com/100/100',
+        'title': 'All About The Man!',
+        'type': 'menu'
+      }, 
+      'world_news':{
+        'icon': 'http://placecage.com/100/100',
+        'title': 'World Hapennings!',
+        'type': 'menu'
+      }, 
+      'gossip_news':{
+        'icon': 'http://placecage.com/100/100',
+        'title': 'Miley Cirus!',
+        'type': 'menu'
+      }, 
+      'inspiring_news':{
+        'icon': 'http://placecage.com/100/100',
+        'title': 'Legalize Marijuana!',
+        'type': 'menu'
+      },
       'news': {
         'icon': 'http://placecage.com/100/100',
         'title': 'Catch Up On Some News',
@@ -76,56 +139,6 @@
         'icon': 'http://placecage.com/100/100',
         'title': 'Learn Something Cool',
         'type': 'menu'
-      },
-      'browse': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Browse The Web',
-        'type': 'special'
-      },
-      'create': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Create Your Own Concierge',
-        'type': 'special'
-      },
-      'sports_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'See who won the big game.',
-        'type': 'destination'
-      },
-      'hot_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'What you should know today.',
-        'type': 'destination'
-      },
-      'political_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Win your political arguments.',
-        'type': 'destination'
-      },
-      'world_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Around the world.',
-        'type': 'destination'
-      },
-      'gossip_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Celebrity gossip.',
-        'type': 'destination'
-      },
-      'inspiring_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Get inspired',
-        'type': 'destination'
-      },
-      'financial_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Show me the money.',
-        'type': 'destination'
-      },
-      'entertainment_news': {
-        'icon': 'http://placecage.com/100/100',
-        'title': 'Entertainment, art & music',
-        'type': 'destination'
       }
     }
   };

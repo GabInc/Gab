@@ -59,34 +59,55 @@
     
   </script>
   
-  <script id="menu-template" type="text/x-handlebars-template">
+  <script id="menu_template" type="text/x-handlebars-template">
     <nav id="{{domid}}" class="menu">
-      {{#if isMain}}
-        <header class="menu-title" id="greeting">Greetings</header>
-      {{else}}
+      {{#if title}}
         <header class="menu-title">
           <a class="back" href="#main_menu"><i class="fa fa-chevron-left"></i></a>
           <h1>{{title}}</h1>
         </header>
+      {{else}}
+        <header class="menu-title main-menu-title" id="greeting">
+          <form>
+            <label>Good Morning</label>
+            <label>Sunshine!</label>
+          </form>
+        </header>
       {{/if}}
-      <ul class="actions">
-        {{render_actions actions}}
-      </ul>
+      {{#if actions}}
+        <ul class="actions">
+          {{render_actions actions}}
+        </ul>
+      {{/if}}
     </nav>
   </script>
   
-  <script id="action-template" type="text/x-handlebars-template">
-    <ul>
-    <li id="{{domid}}" class="action">
+  <script id="action_template" type="text/x-handlebars-template">
+    <li id="{{domid}}" class="action {{type}}-action">
       <a class="inner" href="#{{href}}">
-        <div class="action-icon" style="background-image:url('{{icon}}')"></div>
-        <h1 class="action-title">{{title}}</h1>
+        {{#if icon}}<span class="action-icon" style="background-image:url('{{icon}}')"></span>{{/if}}
+        {{#if title}}<h1 class="action-title">{{title}}</h1>{{/if}}
+        {{#if description}}<p class="action-description">{{description}}</p>{{/if}}
+      </a>
+      {{#if links}}
+        <ul class="links">
+          <li class="prev"><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+          {{render_links links}}
+          <li class="next"><a href="#"><i class="fa fa-chevron-right"></i></a></li>
+        </ul>
+      {{/if}}
+    </li>
+  </script>
+  
+  <script id="link_template" type="text/x-handlebars-template">
+    <li id="{{domid}}" class="link">
+      <a href="{{href}}" title="{{text}}">
+        <img src="{{logo}}" alt="{{text}}" />
       </a>
     </li>
-    </ul>
   </script>
     
-  <script id="destination-template" type="text/x-handlebars-template">
+  <!--<script id="destination-template" type="text/x-handlebars-template">
     <div class="destination">
       <header class="menu-title">
         <a class="back" href="#{{father}}_menu"><i class="fa fa-chevron-left"></i></a>
@@ -94,7 +115,7 @@
       </header>
       
     </div>
-  </script>
+  </script>-->
   
   <!-- Google Analytics -->
    <script>
