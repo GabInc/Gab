@@ -260,7 +260,7 @@ module.exports = (grunt) ->
         files: [
             expand: true
             cwd: "<%= yeoman.app %>/images"
-            src: "{,*/}*.{png,jpg,jpeg,gif}"
+            src: "<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,svg}"
             dest: "<%= yeoman.dist %>/images"
           ]
     
@@ -361,7 +361,7 @@ module.exports = (grunt) ->
       test: ["copy:styles"]
       dist: [
         "copy:styles"
-        # "imagemin"
+        "imagemin"
         # "svgmin"
       ]
 
