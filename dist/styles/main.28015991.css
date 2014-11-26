@@ -25,7 +25,6 @@ body {
   font-size: 17px;
   line-height: 20px;
   -webkit-font-smoothing: antialiased;
-  /*  text-shadow: 1px 1px 1px rgba(255,255,255,0.004);*/
 }
 html {
   background: #241e20;
@@ -37,9 +36,7 @@ a {
 }
 .actions,
 .links {
-  /*  display:block;
-  float:left;
-  padding-bottom:10px;*/
+
   list-style-type: none;
 }
 #content .placeholder {
@@ -75,6 +72,7 @@ a {
 }
 #navbar #search {
   text-align: left;
+  margin-top: 1.5em;
 }
 #navbar #search label {
   display: inline-block;
@@ -88,10 +86,11 @@ a {
   color: #fff;
 }
 #navbar #search label input {
-  outline: none;
+  outline: 0;
   border: 1px solid #fff;
   background: none;
   padding: .25em .25em .25em 1.5em;
+  color:#fff;
 }
 #navbar #navigation {
   text-align: right;

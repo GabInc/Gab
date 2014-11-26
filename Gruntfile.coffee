@@ -419,13 +419,13 @@ module.exports = (grunt) ->
     "wiredep"
     "useminPrepare"
     "concurrent:dist"
-    "autoprefixer"
+    # "autoprefixer"
     "concat"
     # "ngAnnotate"
     "copy:dist"
     "cdnify"
-    'cssmin',
-    'uglify',
+    'cssmin'
+    'uglify'
     "filerev"
     "usemin"
     "htmlmin"
