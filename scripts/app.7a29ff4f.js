@@ -1,11 +1,11 @@
-
-/* jshint ignore:start */
-'use strict';
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
 (function() {
-  var Concierge, location;
+  'use strict';
+
+  /* jshint ignore:start */
+  var Concierge, location,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
   Handlebars.registerHelper("render_actions", function(obj, fn) {
     var out;
     out = obj.map(function(name) {
@@ -15,6 +15,7 @@ var __hasProp = {}.hasOwnProperty,
     });
     return new Handlebars.SafeString(out.join(''));
   });
+
   Handlebars.registerHelper("render_links", function(obj, fn) {
     var out;
     out = obj.map(function(name) {
@@ -24,11 +25,14 @@ var __hasProp = {}.hasOwnProperty,
     });
     return new Handlebars.SafeString(out.join(''));
   });
+
   location = window.history.location || window.location;
+
 
   /*
     Base class for DRYer Code
    */
+
   Concierge = (function() {
     Concierge.decorate = function(object, properties) {
       var key, val;
@@ -133,6 +137,7 @@ var __hasProp = {}.hasOwnProperty,
     return Concierge;
 
   })();
+
   Concierge.Action = (function(_super) {
     __extends(Action, _super);
 
@@ -150,6 +155,7 @@ var __hasProp = {}.hasOwnProperty,
     return Action;
 
   })(Concierge);
+
   Concierge.Link = (function(_super) {
     __extends(Link, _super);
 
@@ -167,6 +173,7 @@ var __hasProp = {}.hasOwnProperty,
     return Link;
 
   })(Concierge);
+
   Concierge.Menu = (function(_super) {
     __extends(Menu, _super);
 
@@ -205,6 +212,7 @@ var __hasProp = {}.hasOwnProperty,
     return Menu;
 
   })(Concierge);
+
   Concierge.Visitor = (function() {
     function Visitor() {
       true;
@@ -213,7 +221,8 @@ var __hasProp = {}.hasOwnProperty,
     return Visitor;
 
   })();
-  return $(function() {
+
+  $(function() {
     Concierge.init('#content');
     Concierge.activateMenu('#main_menu');
     return $(window).on('popstate', function(event) {
@@ -224,7 +233,8 @@ var __hasProp = {}.hasOwnProperty,
       }
     });
   });
-})();
 
 
-/* jshint ignore:end */
+  /* jshint ignore:end */
+
+}).call(this);
