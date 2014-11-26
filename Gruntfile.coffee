@@ -47,7 +47,7 @@ module.exports = (grunt) ->
     coffee:
       compile:
         options:
-          bare: true
+          bare: false
         files:
           "<%= yeoman.app %>/scripts/app.js": "<%= yeoman.app %>/scripts/app.coffee"
 

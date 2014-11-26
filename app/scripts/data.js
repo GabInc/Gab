@@ -1,7 +1,8 @@
-(function() {
+(function (exports) {
   'use strict';
-  window.gabConciergeJSONConfig = {
-    
+
+  exports.gabConciergeJSONConfig = {
+
     'menu': {
       'main': {
         'actions': ['news', 'music', 'fun', 'plan', 'social', 'learn' ]
@@ -142,4 +143,4 @@
       }
     }
   };
-})();
+})(window);
