@@ -4,6 +4,9 @@
 
 ### jshint ignore:start ###
 
+## Necessary for History polyfill.
+location = window.history.location || window.location
+
 Handlebars.registerHelper "render_actions", ( obj, fn )->
   out = obj.map ( name )-> 
     rendered = Concierge.render Concierge.action[name]
@@ -16,8 +19,9 @@ Handlebars.registerHelper "render_links", ( obj, fn )->
     rendered.get(0).outerHTML
   new Handlebars.SafeString out.join('')
   
-location = window.history.location || window.location
 
+
+  
 
 ###
   Base class for DRYer Code
@@ -28,8 +32,19 @@ class Concierge
     return object
     
   ### Store JSON locally to the class ###
-  @json:  window.gabConciergeJSONConfig
-  
+  @getJSON: ( lang  )->
+    lang ?= @getLang( )
+    translate_keys = ['title','description','text']
+    stringified = JSON.stringify GABJSON.concierge 
+    i18n GABJSON.i18n[lang]
+    JSON.parse stringified, ( k, v )->
+      if k in translate_keys then return i18n._ v
+      return v
+      
+  @getLang: ()->
+    if !@visitor then @visitor = new Concierge.Visitor()
+    @visitor.get('lang') || ( navigator.userLanguage||navigator.language||navigator.browserLanguage||navigator.systemLanguage).replace(/-.+/,'')
+    
   @resetMenus: ( callback )->
     Concierge.container.find( '.menu.active' ).removeClass( 'active' )
     setTimeout callback, 200
@@ -47,8 +62,10 @@ class Concierge
         history[historyMethod] { target: href }, name, "#{href}"
     return @
     
-  @init: ( container )->
+  @init: ( container, callback )->
+    
     Concierge.container = $( container ).empty()
+    Concierge.json = Concierge.getJSON()
     
     ### Read JSON data and build proper Class Instances ###
     Object.keys( Concierge.json ).forEach ( klass )->
@@ -63,14 +80,11 @@ class Concierge
       render = Concierge.render Concierge.menu[name]
       Concierge.container.append render
     
-    Concierge.container.on 'click', '.menu-action .inner, .menu .back', ( event )->
+    Concierge.container.off( 'click' ).on 'click', '.menu-action .inner, .menu .back', ( event )->
       event.preventDefault()
       Concierge.activateMenu $( this ).attr 'href'
-    
-    # Concierge.container.on 'click', , ( event )->
-    #   event.preventDefault()
-    #   history.go( -1 )
       
+    if callback then callback.call Concierge
     return Concierge
     
   # @factory: menu: Menu, action: Action, link: Link
@@ -99,17 +113,28 @@ class Concierge
        domid: "#{@classname}_#{@name}"
      
      return @    
-  
+
+###
+  Concierge.Action Class 
+###
 class Concierge.Action extends Concierge
   init: (  )->
     Concierge.decorate @json, href: "#{@name}_#{@json.type}"
     return @
+
+###
+  Concierge.Link Class
+###
     
 class Concierge.Link extends Concierge
   init: (  )->
     Concierge.decorate @json, href: "#{@name}_link"
     return @
-    
+   
+###
+  Concierge.Menu Class
+###
+
 class Concierge.Menu extends Concierge
   init: ( )->
     @isMain = @name is 'main'
@@ -130,14 +155,97 @@ class Concierge.Menu extends Concierge
     @$el.removeClass 'active'
     setTimeout callback, 200
   
+
+    
+###
+  Visitor Class For Semi-Persistent Data Handling
+###
+
 class Concierge.Visitor
-  constructor: -> true
+  constructor: ->
+    @store = new window.Basil 
+      namespace: 'g-a-b-0-0-1'
+      storages: [ 'local', 'session', 'cookie' ]
+      expireDays: 365
+    return @
+  incr: ( key )->
+    v = @store.get key
+    if !v then v = 0
+    if v and isNaN v then throw new Error "NaN"
+    @store.set key, ++v
+    return @
+  put: ( key, value )->
+    @store.set key, value 
+  get: ( key )->
+    @store.get key
+  del: ( key )->
+    @store.remove key
+  all: ()->
+    vis = @
+    keymap = @store.keysMap()
+    Object.keys( keymap ).reduce ( out, key )->
+      out[key] = vis.get key, keymap[key]
+      return out
+    , {}
+
+###
+  jQuery Widget For Link Box Cycling
+###
+
+class Concierge.LinkWidget
+  
+  constructor: ( el )->
+    widget = @
+    widget.$el = $ el
+    widget.$el.on 'click', '.prev, .next', ( e )->
+      e.preventDefault()
+      dir = if $(this).hasClass 'prev' then -1 else 1
+      widget.cycle( dir )
+    widget.$el.find('.link:first').addClass 'active'
+    return @
+    
+  cycle: ( dir )->
+    $links = @$el.find '.link'
+    $active = $links.filter '.active'
+    if dir is -1
+      $other = $active.prev('.link') 
+      if $other.length is 0 then $other = $links.last()
+    else
+      $other = $active.next('.link') 
+      if $other.length is 0 then $other = $links.first()
+    $active.removeClass 'active'
+    $other.addClass 'active'
+    return @
+    
+$.fn.linkWidget = ( )->
+  $(this).each ->
+    $el    = $( this )
+    data = $el.data 'linkwidget'
+    if !data
+      $el.data 'linkwidget', data = new Concierge.LinkWidget( $el )
+    return $el
+    
+$.fn.linkWidget.constructor = Concierge.LinkWidget
+$.fn.linkWidget::=Concierge.LinkWidget::
 
 $ -> 
-  Concierge.init '#content'
-  Concierge.activateMenu '#main_menu'
-  $(window).on 'popstate', ( event )->
-    state = event.originalEvent.state
-    if state then Concierge.activateMenu state.target
+  Concierge.init '#content', ->
+    
+    $( document ).on 'click', '.lang-en,.lang-fr', ( e )->
+      e.preventDefault()
+      clickLang = if $(this).hasClass('lang-en') then 'en' else 'fr'
+      localLang = Concierge.getLang()
+      if clickLang is localLang then return 
+      Concierge.visitor.set 'lang', clickLang
+      window.location.reload true 
+
+    Concierge.activateMenu '#main_menu'
+
+    $('.action .links').linkWidget()
+
+    $(window).on 'popstate', ( event )->
+      state = event.originalEvent.state
+      if state then Concierge.activateMenu state.target
+
 
 ### jshint ignore:end ###

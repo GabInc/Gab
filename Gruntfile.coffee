@@ -11,6 +11,8 @@
 module.exports = (grunt) ->
   
   
+  fs = require 'fs'
+  
   # Time how long tasks take. Can help when optimizing build times
   require("time-grunt") grunt
   
@@ -335,6 +337,7 @@ module.exports = (grunt) ->
               "styles/{,*/}*.css"
               "scripts/{,*/}*.js"
               "fonts/*"
+              "CNAME"
             ]
           }
           {
@@ -357,7 +360,6 @@ module.exports = (grunt) ->
         dest: ".tmp/styles/"
         src: "{,*/}*.css"
 
-    
     # Run some tasks in parallel to speed up the build process
     concurrent:
       server: ["copy:styles"]
@@ -368,13 +370,18 @@ module.exports = (grunt) ->
         # "svgmin"
       ]
 
-    
     # Test settings
     # karma:
     #   unit:
     #     configFile: "test/karma.conf.js"
     #     singleRun: true
 
+  grunt.registerTask "jsonloader", "Expose JSON data to JS without needing ajax calls", ->
+    i18n   = fs.readFileSync './app/scripts/data/i18n.json', 'utf8'
+    concierge   = fs.readFileSync './app/scripts/data/concierge.json', 'utf8'
+    source = "/* jshint ignore:start */(function(exports){'use strict';exports.GABJSON={ concierge: #{concierge}, i18n: #{i18n} };})(window);/* jshint ignore:end */"
+    fs.writeFileSync './app/scripts/data.js', source
+    
   grunt.registerTask "serve", "Compile then start a connect web server", (target) ->
     if target is "dist"
       return grunt.task.run([
@@ -383,6 +390,7 @@ module.exports = (grunt) ->
       ])
     grunt.task.run [
       "clean:server"
+      "jsonloader"
       "wiredep"
       "concurrent:server"
       "autoprefixer"
@@ -407,12 +415,13 @@ module.exports = (grunt) ->
     "clean:dist"
     "coffee"
     "less"
+    "jsonloader"
     "wiredep"
     "useminPrepare"
     "concurrent:dist"
     "autoprefixer"
     "concat"
-    "ngAnnotate"
+    # "ngAnnotate"
     "copy:dist"
     "cdnify"
     'cssmin',

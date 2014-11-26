@@ -3,8 +3,11 @@
 
   /* jshint ignore:start */
   var Concierge, location,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  location = window.history.location || window.location;
 
   Handlebars.registerHelper("render_actions", function(obj, fn) {
     var out;
@@ -26,8 +29,6 @@
     return new Handlebars.SafeString(out.join(''));
   });
 
-  location = window.history.location || window.location;
-
 
   /*
     Base class for DRYer Code
@@ -46,7 +47,28 @@
 
     /* Store JSON locally to the class */
 
-    Concierge.json = window.gabConciergeJSONConfig;
+    Concierge.getJSON = function(lang) {
+      var stringified, translate_keys;
+      if (lang == null) {
+        lang = this.getLang();
+      }
+      translate_keys = ['title', 'description', 'text'];
+      stringified = JSON.stringify(GABJSON.concierge);
+      i18n(GABJSON.i18n[lang]);
+      return JSON.parse(stringified, function(k, v) {
+        if (__indexOf.call(translate_keys, k) >= 0) {
+          return i18n._(v);
+        }
+        return v;
+      });
+    };
+
+    Concierge.getLang = function() {
+      if (!this.visitor) {
+        this.visitor = new Concierge.Visitor();
+      }
+      return this.visitor.get('lang') || (navigator.userLanguage || navigator.language || navigator.browserLanguage || navigator.systemLanguage).replace(/-.+/, '');
+    };
 
     Concierge.resetMenus = function(callback) {
       Concierge.container.find('.menu.active').removeClass('active');
@@ -76,8 +98,9 @@
       return this;
     };
 
-    Concierge.init = function(container) {
+    Concierge.init = function(container, callback) {
       Concierge.container = $(container).empty();
+      Concierge.json = Concierge.getJSON();
 
       /* Read JSON data and build proper Class Instances */
       Object.keys(Concierge.json).forEach(function(klass) {
@@ -93,10 +116,13 @@
         render = Concierge.render(Concierge.menu[name]);
         return Concierge.container.append(render);
       });
-      Concierge.container.on('click', '.menu-action .inner, .menu .back', function(event) {
+      Concierge.container.off('click').on('click', '.menu-action .inner, .menu .back', function(event) {
         event.preventDefault();
         return Concierge.activateMenu($(this).attr('href'));
       });
+      if (callback) {
+        callback.call(Concierge);
+      }
       return Concierge;
     };
 
@@ -138,6 +164,11 @@
 
   })();
 
+
+  /*
+    Concierge.Action Class
+   */
+
   Concierge.Action = (function(_super) {
     __extends(Action, _super);
 
@@ -156,6 +187,11 @@
 
   })(Concierge);
 
+
+  /*
+    Concierge.Link Class
+   */
+
   Concierge.Link = (function(_super) {
     __extends(Link, _super);
 
@@ -173,6 +209,11 @@
     return Link;
 
   })(Concierge);
+
+
+  /*
+    Concierge.Menu Class
+   */
 
   Concierge.Menu = (function(_super) {
     __extends(Menu, _super);
@@ -213,24 +254,142 @@
 
   })(Concierge);
 
+
+  /*
+    Visitor Class For Semi-Persistent Data Handling
+   */
+
   Concierge.Visitor = (function() {
     function Visitor() {
-      true;
+      this.store = new window.Basil({
+        namespace: 'g-a-b-0-0-1',
+        storages: ['local', 'session', 'cookie'],
+        expireDays: 365
+      });
+      return this;
     }
+
+    Visitor.prototype.incr = function(key) {
+      var v;
+      v = this.store.get(key);
+      if (!v) {
+        v = 0;
+      }
+      if (v && isNaN(v)) {
+        throw new Error("NaN");
+      }
+      this.store.set(key, ++v);
+      return this;
+    };
+
+    Visitor.prototype.put = function(key, value) {
+      return this.store.set(key, value);
+    };
+
+    Visitor.prototype.get = function(key) {
+      return this.store.get(key);
+    };
+
+    Visitor.prototype.del = function(key) {
+      return this.store.remove(key);
+    };
+
+    Visitor.prototype.all = function() {
+      var keymap, vis;
+      vis = this;
+      keymap = this.store.keysMap();
+      return Object.keys(keymap).reduce(function(out, key) {
+        out[key] = vis.get(key, keymap[key]);
+        return out;
+      }, {});
+    };
 
     return Visitor;
 
   })();
 
-  $(function() {
-    Concierge.init('#content');
-    Concierge.activateMenu('#main_menu');
-    return $(window).on('popstate', function(event) {
-      var state;
-      state = event.originalEvent.state;
-      if (state) {
-        return Concierge.activateMenu(state.target);
+
+  /*
+    jQuery Widget For Link Box Cycling
+   */
+
+  Concierge.LinkWidget = (function() {
+    function LinkWidget(el) {
+      var widget;
+      widget = this;
+      widget.$el = $(el);
+      widget.$el.on('click', '.prev, .next', function(e) {
+        var dir;
+        e.preventDefault();
+        dir = $(this).hasClass('prev') ? -1 : 1;
+        return widget.cycle(dir);
+      });
+      widget.$el.find('.link:first').addClass('active');
+      return this;
+    }
+
+    LinkWidget.prototype.cycle = function(dir) {
+      var $active, $links, $other;
+      $links = this.$el.find('.link');
+      $active = $links.filter('.active');
+      if (dir === -1) {
+        $other = $active.prev('.link');
+        if ($other.length === 0) {
+          $other = $links.last();
+        }
+      } else {
+        $other = $active.next('.link');
+        if ($other.length === 0) {
+          $other = $links.first();
+        }
       }
+      $active.removeClass('active');
+      $other.addClass('active');
+      return this;
+    };
+
+    return LinkWidget;
+
+  })();
+
+  $.fn.linkWidget = function() {
+    return $(this).each(function() {
+      var $el, data;
+      $el = $(this);
+      data = $el.data('linkwidget');
+      if (!data) {
+        $el.data('linkwidget', data = new Concierge.LinkWidget($el));
+      }
+      return $el;
+    });
+  };
+
+  $.fn.linkWidget.constructor = Concierge.LinkWidget;
+
+  $.fn.linkWidget.prototype = Concierge.LinkWidget.prototype;
+
+  $(function() {
+    return Concierge.init('#content', function() {
+      $(document).on('click', '.lang-en,.lang-fr', function(e) {
+        var clickLang, localLang;
+        e.preventDefault();
+        clickLang = $(this).hasClass('lang-en') ? 'en' : 'fr';
+        localLang = Concierge.getLang();
+        if (clickLang === localLang) {
+          return;
+        }
+        Concierge.visitor.set('lang', clickLang);
+        return window.location.reload(true);
+      });
+      Concierge.activateMenu('#main_menu');
+      $('.action .links').linkWidget();
+      return $(window).on('popstate', function(event) {
+        var state;
+        state = event.originalEvent.state;
+        if (state) {
+          return Concierge.activateMenu(state.target);
+        }
+      });
     });
   });
 
