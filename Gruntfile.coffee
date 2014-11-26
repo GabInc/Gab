@@ -85,12 +85,12 @@ module.exports = (grunt) ->
         options:
           livereload: "<%= connect.options.livereload %>"
 
-      # jsTest:
-      #         files: ["test/spec/{,*/}*.js"]
-      #         tasks: [
-      #           "newer:jshint:test"
-      #           # "karma"
-      #         ]
+      jsTest:
+        files: ["test/spec/{,*/}*.js"]
+        tasks: [
+          "newer:jshint:test"
+          # "karma"
+        ]
       
       styles:
         files: ["<%= yeoman.app %>/styles/{,*/}*.css"]
@@ -253,6 +253,7 @@ module.exports = (grunt) ->
       dist: files: '<%= yeoman.dist %>/styles/main.css': [ '.tmp/styles/{,*/}*.css' ]
 
     uglify: 
+      options: mangle: false
       dist: files: '<%= yeoman.dist %>/scripts/scripts.js': [ '<%= yeoman.dist %>/scripts/scripts.js' ]
 
     # imagemin:
