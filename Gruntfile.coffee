@@ -255,14 +255,16 @@ module.exports = (grunt) ->
     uglify: 
       dist: files: '<%= yeoman.dist %>/scripts/scripts.js': [ '<%= yeoman.dist %>/scripts/scripts.js' ]
 
-    imagemin:
-      dist:
-        files: [
-            expand: true
-            cwd: "<%= yeoman.app %>/images"
-            src: "<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,svg}"
-            dest: "<%= yeoman.dist %>/images"
-          ]
+    # imagemin:
+    #   dist:
+    #     options: 
+    #       cache: false
+    #     files: [
+    #         expand: true
+    #         cwd: "<%= yeoman.app %>/images"
+    #         src: "<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,svg}"
+    #         dest: "<%= yeoman.dist %>/images"
+    #       ]
     
     # svgmin:
     #   dist:
@@ -328,7 +330,7 @@ module.exports = (grunt) ->
               ".htaccess"
               "*.html"
               "views/{,*/}*.html"
-              "images/{,*/}*.{webp}"
+              "images/{,*/}*.{webp,png,jpg,jpeg,gif,svg}"
               "styles/{,*/}*.css"
               "scripts/{,*/}*.js"
               "fonts/*"
@@ -361,7 +363,7 @@ module.exports = (grunt) ->
       test: ["copy:styles"]
       dist: [
         "copy:styles"
-        "imagemin"
+        # "imagemin"
         # "svgmin"
       ]
 

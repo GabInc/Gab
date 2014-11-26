@@ -7,8 +7,9 @@
     "json3": "~3.3.2",
     "vminpoly": "*",
     "handlebars": "~2.0.0",
-    "html5-polyfills": "*",
-    "html5-history-api": "~4.1.15"
+    "html5-history-api": "~4.1.15",
+    "i18n": "*",
+    "basil.js": "~0.3.4"
   },
   "devDependencies": {},
   "appPath": "app"
