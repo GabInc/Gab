@@ -64,9 +64,6 @@
     };
 
     Concierge.getLang = function() {
-      if (!this.visitor) {
-        this.visitor = new Concierge.Visitor();
-      }
       return this.visitor.get('lang') || (navigator.userLanguage || navigator.language || navigator.browserLanguage || navigator.systemLanguage).replace(/-.+/, '');
     };
 
@@ -99,8 +96,16 @@
     };
 
     Concierge.init = function(container, callback) {
+      var vstats;
+      Concierge.visitor = new Concierge.Visitor();
       Concierge.container = $(container).empty();
       Concierge.json = Concierge.getJSON();
+      vstats = Concierge.visitor.all();
+      Concierge.json.menu.main.actions.sort(function(a, b) {
+        a = vstats["action_" + a] || 0;
+        b = vstats["action_" + b] || 0;
+        return b - a;
+      });
 
       /* Read JSON data and build proper Class Instances */
       Object.keys(Concierge.json).forEach(function(klass) {
@@ -119,6 +124,9 @@
       Concierge.container.off('click').on('click', '.menu-action .inner, .menu .back', function(event) {
         event.preventDefault();
         return Concierge.activateMenu($(this).attr('href'));
+      });
+      $('#menu_main').on('click', '.action', function() {
+        return Concierge.visitor.incr($(this).attr('id'));
       });
       if (callback) {
         callback.call(Concierge);
@@ -295,11 +303,11 @@
     };
 
     Visitor.prototype.all = function() {
-      var keymap, vis;
+      var keys, vis;
       vis = this;
-      keymap = this.store.keysMap();
-      return Object.keys(keymap).reduce(function(out, key) {
-        out[key] = vis.get(key, keymap[key]);
+      keys = this.store.keys();
+      return keys.reduce(function(out, key) {
+        out[key] = vis.get(key);
         return out;
       }, {});
     };
@@ -329,8 +337,13 @@
     }
 
     LinkWidget.prototype.cycle = function(dir) {
-      var $active, $links, $other;
-      $links = this.$el.find('.link');
+      var $active, $links, $other, widget;
+      widget = this;
+      if (widget.busy) {
+        return false;
+      }
+      widget.busy = true;
+      $links = widget.$el.find('.link');
       $active = $links.filter('.active');
       if (dir === -1) {
         $other = $active.prev('.link');
@@ -344,7 +357,12 @@
         }
       }
       $active.removeClass('active');
-      $other.addClass('active');
+      setTimeout(function() {
+        $other.addClass('active');
+        return setTimeout(function() {
+          return widget.busy = false;
+        }, 200);
+      }, 200);
       return this;
     };
 
@@ -392,6 +410,8 @@
       });
     });
   });
+
+  window.Concierge = Concierge;
 
 
   /* jshint ignore:end */

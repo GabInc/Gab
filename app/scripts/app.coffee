@@ -42,7 +42,6 @@ class Concierge
       return v
       
   @getLang: ()->
-    if !@visitor then @visitor = new Concierge.Visitor()
     @visitor.get('lang') || ( navigator.userLanguage||navigator.language||navigator.browserLanguage||navigator.systemLanguage).replace(/-.+/,'')
     
   @resetMenus: ( callback )->
@@ -63,9 +62,14 @@ class Concierge
     return @
     
   @init: ( container, callback )->
-    
+    Concierge.visitor   = new Concierge.Visitor()
     Concierge.container = $( container ).empty()
-    Concierge.json = Concierge.getJSON()
+    Concierge.json      = Concierge.getJSON()
+    vstats = Concierge.visitor.all()
+    Concierge.json.menu.main.actions.sort ( a, b )->
+      a = vstats["action_#{a}"]||0
+      b = vstats["action_#{b}"]||0
+      b - a
     
     ### Read JSON data and build proper Class Instances ###
     Object.keys( Concierge.json ).forEach ( klass )->
@@ -83,6 +87,9 @@ class Concierge
     Concierge.container.off( 'click' ).on 'click', '.menu-action .inner, .menu .back', ( event )->
       event.preventDefault()
       Concierge.activateMenu $( this ).attr 'href'
+    
+    $('#menu_main').on 'click', '.action' , ->
+      Concierge.visitor.incr $(this).attr( 'id' )
       
     if callback then callback.call Concierge
     return Concierge
@@ -182,9 +189,9 @@ class Concierge.Visitor
     @store.remove key
   all: ()->
     vis = @
-    keymap = @store.keysMap()
-    Object.keys( keymap ).reduce ( out, key )->
-      out[key] = vis.get key, keymap[key]
+    keys = @store.keys()
+    keys.reduce ( out, key )->
+      out[key] = vis.get key
       return out
     , {}
 
@@ -205,7 +212,10 @@ class Concierge.LinkWidget
     return @
     
   cycle: ( dir )->
-    $links = @$el.find '.link'
+    widget = @
+    if widget.busy then return false
+    widget.busy = true
+    $links = widget.$el.find '.link'
     $active = $links.filter '.active'
     if dir is -1
       $other = $active.prev('.link') 
@@ -214,7 +224,12 @@ class Concierge.LinkWidget
       $other = $active.next('.link') 
       if $other.length is 0 then $other = $links.first()
     $active.removeClass 'active'
-    $other.addClass 'active'
+    setTimeout ->
+      $other.addClass 'active'
+      setTimeout ->
+        widget.busy = false
+      , 200
+    , 200
     return @
     
 $.fn.linkWidget = ( )->
@@ -246,6 +261,7 @@ $ ->
     $(window).on 'popstate', ( event )->
       state = event.originalEvent.state
       if state then Concierge.activateMenu state.target
-
+      
+window.Concierge = Concierge
 
 ### jshint ignore:end ###

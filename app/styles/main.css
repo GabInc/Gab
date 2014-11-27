@@ -193,12 +193,11 @@ a {
 }
 #content .action.link-action .links .link {
   opacity: 0;
-  transition: opacity 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
   top: 0;
   left: 0;
   width: 100px;
-  height: 40px;
-  overflow: hidden;
+  height: 0px;
   display: none;
 }
 #content .action.link-action .links .link a,
@@ -206,10 +205,17 @@ a {
   display: inline-block;
   width: 100%;
   height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+}
+#content .action.link-action .links .link a > img {
+  min-width: 100%;
+  min-height: 100%;
 }
 #content .action.link-action .links .link.active {
   display: inline-block;
   opacity: 1;
+  height: 40px;
 }
 #content .action.link-action .links .prev,
 #content .action.link-action .links .next {
@@ -268,18 +274,21 @@ img {
   padding-bottom: 20px;
 }
 .large_squares #content .menu .action .links {
-  width: 150px;
-  height: 50px;
+  width: 140px;
+  height: 56px;
+  margin-top: -76px;
 }
 .large_squares #content .menu .action .links .link {
-  width: 160px;
-  height: 50px;
+  width: 140px;
+}
+.large_squares #content .menu .action .links .link.active {
+  height: 56px;
 }
 .large_squares #content .menu .action .links .prev,
 .large_squares #content .menu .action .links .next {
-  width: 40px;
-  height: 50px;
-  left: -20px;
+  width: 30px;
+  height: 56px;
+  left: -30px;
 }
 .large_squares #content .menu .action .links .next {
   left: 140px;
@@ -307,18 +316,21 @@ img {
     padding-bottom: 20px;
   }
   #content .menu .action .links {
-    width: 150px;
-    height: 50px;
+    width: 140px;
+    height: 56px;
+    margin-top: -76px;
   }
   #content .menu .action .links .link {
-    width: 160px;
-    height: 50px;
+    width: 140px;
+  }
+  #content .menu .action .links .link.active {
+    height: 56px;
   }
   #content .menu .action .links .prev,
   #content .menu .action .links .next {
-    width: 40px;
-    height: 50px;
-    left: -20px;
+    width: 30px;
+    height: 56px;
+    left: -30px;
   }
   #content .menu .action .links .next {
     left: 140px;
@@ -355,18 +367,21 @@ img {
     padding-bottom: 20px;
   }
   #content .menu .action .links {
-    width: 150px;
-    height: 50px;
+    width: 140px;
+    height: 56px;
+    margin-top: -76px;
   }
   #content .menu .action .links .link {
-    width: 160px;
-    height: 50px;
+    width: 140px;
+  }
+  #content .menu .action .links .link.active {
+    height: 56px;
   }
   #content .menu .action .links .prev,
   #content .menu .action .links .next {
-    width: 40px;
-    height: 50px;
-    left: -20px;
+    width: 30px;
+    height: 56px;
+    left: -30px;
   }
   #content .menu .action .links .next {
     left: 140px;
