@@ -75,6 +75,7 @@ a {
 }
 #navbar #search {
   text-align: left;
+  margin-top: 1.75em;
 }
 #navbar #search label {
   display: inline-block;
