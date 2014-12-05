@@ -6,16 +6,21 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
+    
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <!-- endbower -->
     <!-- endbuild -->
-    <!-- build:css(.tmp) styles/concierge.css -->
-    <link rel="stylesheet" href="styles/concierge.css">
+    <!-- build:css(.tmp) styles/concierge.css -->    
+      <link rel="stylesheet" href="styles/concierge.css">
     <!-- endbuild -->
-    <!-- build:js scripts/vendor/modernizr.js -->
-    <script src="bower_components/modernizr/modernizr.js"></script>
+
+    <!-- build:js scripts/modernizr.js -->
+      <script src="bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 
   </head>
@@ -25,15 +30,92 @@
     <![endif]-->
 
 
-    <div class="hero-unit">
-      <h1>'Allo, 'Allo!</h1>
-      <p>You now have</p>
-      <ul>
-      <li>HTML5 Boilerplate</li>
+    <header id="topbar" class="site-head">
 
-      <li>Modernizr</li>
-      </ul>
-    </div>
+      <h1 class="brand">
+        <a class="name" href="#">GAB</a>
+        <img class="logo" src="images/logo.svg">
+      </h1>
+
+      <form class="search">
+        <label class="search-input">
+          <input id="search" value="" type="text" autocorrect="off" autocomplete="off">
+        </label>
+      </form>
+
+      <nav class="navigation">
+        <ul class="site-links">
+          <li><a tabindex="-1" href="#">concierge</a></li>
+          <li><a tabindex="-1" href="#">favorites</a></li>
+        </ul>
+        <ul class="lang-links">
+          <li><a tabindex="-1"      data-value="en" href="#">En</a></li>
+          <li><a tabindex="-1" data-value="fr" href="#">Fr</a></li>        
+        </ul>
+      </nav>
+
+    </header>
+    
+    <main id="content" class="site-body">
+      <h1>Placeholder Title</h1>
+      <p>Placeholder Text</p>
+    </main>
+    
+    
+    <script id="link_partial" type='text/ractive'>
+      <li intro="fade" id="{{link_name}}_link" class="link-widget-item action-link">
+        <a class="outbound" target="{{link_name}}" title="{{title}}" href="{{href}}" data-css-background-image="{{icon}}">{{title}}</a>
+      </li>
+    </script>
+
+    <script id="action_partial" type='text/ractive'>
+      <li intro="fade" id="{{action_name}}_action" class="action action-{{target}} menu-action" data-target="{{action_name}}">
+        <header class="action-head">
+          <h1 class="action-title">{{title}}</h1>
+          <p class="action-description">{{description}}</p>
+        </header>
+        <section class="action-body">
+          <div class="action-icon concierge-icon {{icon}}"></div>
+        </section>
+        {{#hasLinks}}      
+        <footer class="action-foot">
+            <ul class="action-links link-widget">
+              <li class="link-widget-prev"><a class="prev" href="#">&lt;</a></li>
+              {{#links}}
+                {{>link_partial}}
+              {{/links}}
+              <li class="link-widget-next"><a class="next" href="#">&gt;</a></li>
+            </ul>
+        </footer>
+        {{/hasLinks}}  
+      </li>
+    </script>
+    
+    <script id="menu_template" type='text/ractive'>
+       <section id="{{menu_name}}_menu" class="menu">
+        {{#if isMainMenu}}
+          <header class="menu-head">
+            <h1 class="menu-title">{{title}}</h1>
+          </header>        
+        {{else}}
+         <header class="menu-head">
+           <a class="menu-back" onclick="history.back(-1)">&lt;</a>
+           <h1 class="menu-title">{{title}}</h1>
+         </header>
+        {{/if}}
+         <section class="menu-body">
+          {{#hasActions}}
+             <ul class="menu-actions">
+             {{#actions}}
+                {{>action_partial}}
+             {{/actions}}
+             </ul>
+           {{/hasActions}}
+         </section>
+         <footer class="menu-foot">
+         </footer>      
+       </section>
+    </script>
 
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -49,12 +131,9 @@
 
     <!-- Putting this before GA!!! SRsly! Duh! -->
     <!-- build:js({app,.tmp}) scripts/concierge.js -->
-      <script src="scripts/concierge-data.js"></script>
       <script src="styles/concierge-icons-loader.js"></script>
+      <script src="scripts/concierge-data.js"></script>
       <script src="scripts/concierge.js"></script>
-      <script>
-        grunticon(["gab-icons-data-svg.css", "gab-icons-data-png.css", "gab-icons-fallback.css"]);
-      </script>
     <!-- endbuild -->
     
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -67,6 +146,6 @@
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
 
-
+    <footer id="copyright" class="site-foot">Copyright &copy; 2014-2015 GAB</footer>
 </body>
 </html>

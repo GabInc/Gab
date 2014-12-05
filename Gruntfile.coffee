@@ -29,18 +29,41 @@ module.exports = (grunt) ->
     # Project settings
     config: config
     
-    # Replaces variables in source before compiling like grunt does with this file.
-    template:
-      source_config_vars: 
-        options: data: config
-        files: 
-          "<%= config.app %>/scripts/concierge.coffee":"<%= config.dist %>/scripts/concierge.coffee"
-          "<%= config.app %>/styles/concierge.less":"<%= config.dist %>/styles/concierge.less"
-          
-    # Before i18n'ing the JSON, we need to merge it into translatable files
+    # Before i18n'ing the JSON, we need to merge it into useable/translatable files
     merge_data: 
       structures:
-        src: [ "<%= config.app %>/sources/structure/*.json" ]
+        options: 
+          data: ( data )->
+            links = Object.keys(data.link).reduce ( named, k )->
+              link = data.link[k]
+              link.link_name = k
+              named[k] = link
+              return named
+            , {}
+            actions = Object.keys(data.action).reduce ( named, k )->
+              action = data.action[k]
+              action.action_name = k
+              if action.links and action.links.length
+                action.hasLinks = true
+                action.links = action.links.map ( name )-> links[name]
+              named[k] = action
+              return named
+            , {}
+            menus = Object.keys(data.menu).reduce ( named, k )->
+              menu = data.menu[k]
+              menu.menu_name = k
+              if k is 'main' then menu.isMainMenu = true
+              if menu.actions and menu.actions.length 
+                menu.hasActions = true
+                menu.actions = menu.actions.map ( name )-> actions[name]
+              named[k] = menu
+              return named
+            , {}
+            data.action = actions
+            data.link = links
+            data.menu = menus
+            return data
+        src: [ "<%= config.app %>/sources/structure/*.json", "!<%= config.app %>/sources/structure/generated-template.json"]
         dest: "<%= config.app %>/sources/structure/generated-template.json"
           
     # So always use the previous task before this one!
@@ -50,7 +73,6 @@ module.exports = (grunt) ->
         locales: "<%= config.app %>/sources/locales"
         output: "<%= config.app %>/scripts/concierge-data.js"
       
-      
     # Watches files for changes and runs tasks based on the changed files
     watch:
       bower:
@@ -59,11 +81,11 @@ module.exports = (grunt) ->
         
       less:
         files: ["<%= config.app %>/styles/{,*/}*.less"]
-        tasks: ["less:dist","autoprefixer"]
+        tasks: ["less:dist","autoprefixer", "wiredep"]
         
       coffee:
         files: ["<%= config.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}"]
-        tasks: ["coffee:dist"]
+        tasks: ["coffee:dist", "wiredep"]
 
       coffeeTest:
         files: ["test/spec/{,*/}*.{coffee,litcoffee,coffee.md}"]
@@ -96,39 +118,39 @@ module.exports = (grunt) ->
     
     # The actual grunt server settings
     connect:
-      options:
-        port: 9000
-        open: true
-        livereload: 35729
-        
-        # Change this to '0.0.0.0' to access the server from outside
-        hostname: "localhost"
-
-      livereload:
-        options:
-          middleware: (connect) ->
-            [
-              connect.static(".tmp")
-              connect().use("/bower_components", connect.static("./bower_components"))
-              connect.static(config.app)
-            ]
-
-      test:
-        options:
-          open: false
-          port: 9001
-          middleware: (connect) ->
-            [
-              connect.static(".tmp")
-              connect.static("test")
-              connect().use("/bower_components", connect.static("./bower_components"))
-              connect.static(config.app)
-            ]
-
-      dist:
-        options:
-          base: "<%= config.dist %>"
-          livereload: false
+          options:
+            port: 9000
+            open: true
+            livereload: 35729
+            
+            # Change this to '0.0.0.0' to access the server from outside
+            hostname: "localhost"
+    
+          livereload:
+            options:
+              middleware: (connect) ->
+                [
+                  connect.static(".tmp")
+                  connect().use("/bower_components", connect.static("./bower_components"))
+                  connect.static(config.app)
+                ]
+    
+          test:
+            options:
+              open: false
+              port: 9001
+              middleware: (connect) ->
+                [
+                  connect.static(".tmp")
+                  connect.static("test")
+                  connect().use("/bower_components", connect.static("./bower_components"))
+                  connect.static(config.app)
+                ]
+    
+          dist:
+            options:
+              base: "<%= config.dist %>"
+              livereload: false
 
     
     # Empties folders to start fresh
@@ -170,7 +192,7 @@ module.exports = (grunt) ->
     less:
       dist:
         options: 
-          paths: [ "styles" ]
+          paths: [ "<%= config.app %>/styles" ]
         files: [
           expand: true
           cwd: "<%= config.app %>/styles"
@@ -213,9 +235,9 @@ module.exports = (grunt) ->
       dist:
         files: [
           expand: true
-          cwd: ".tmp/styles/"
+          cwd: "<%= config.app %>/styles/"
           src: "{,*/}*.css"
-          dest: ".tmp/styles/"
+          dest: "<%= config.dist %>/styles/"
         ]
 
     
@@ -224,9 +246,6 @@ module.exports = (grunt) ->
       app:
         ignorePath: /^\/|\.\.\//
         src: ["<%= config.app %>/index.html"]
-      less:
-        src: ['<%= config.app %>/styles/{,*/}*.less'],
-        ignorePath: /(\.\.\/){1,2}bower_components\//
     
     # Renames files for browser caching purposes
     rev:
@@ -235,6 +254,8 @@ module.exports = (grunt) ->
           src: [
             "<%= config.dist %>/scripts/{,*/}*.js"
             "<%= config.dist %>/styles/{,*/}*.css"
+            "!<%= config.dist %>/styles/concierge-icons-*.css"
+            "!<%= config.dist %>/images/logo.*"
             "<%= config.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}"
             "<%= config.dist %>/styles/fonts/{,*/}*.*"
             "<%= config.dist %>/*.{ico,png}"
@@ -327,7 +348,6 @@ module.exports = (grunt) ->
           urlpngcss: "concierge-icons-fallback.css"
           previewhtml: "concierge-icons-preview.html"
           loadersnippet: "concierge-icons-loader.js"
-          pngpath: "/images/fallback"
           cssprefix: ".concierge-icon-"
         
     # By default, your `index.html`'s <!-- Usemin block --> will take care
@@ -358,51 +378,28 @@ module.exports = (grunt) ->
     
     # Copies remaining files to places other tasks can use
     copy:
-      dist:
+      dist: 
         files: [
           {
             expand: true
             dot: true
             cwd: "<%= config.app %>"
             dest: "<%= config.dist %>"
-            src: [
-              "*.{ico,png,txt}"
-              "images/{,*/}*.*"
-              "{,*/}*.html"
-              "styles/fonts/{,*/}*.*"
-            ]
+            src: [ "*.{ico,png,txt}", "images/{,*/}*.*", "{,*/}*.html", "styles/fonts/{,*/}*.*" ]
           }
-          {
-            src: "node_modules/apache-server-configs/dist/.htaccess"
-            dest: "<%= config.dist %>/.htaccess"
-          }
-          {
-            expand: true
-            cwd: ".tmp/images"
-            dest: "<%= config.dist %>/images"
-            src: ["generated/*"]
-          }
-          {
-            expand: true
-            cwd: "bower_components/bootstrap/dist"
-            src: "fonts/*"
-            dest: "<%= config.dist %>"
-          }
-        ]
-
+          ]
       styles:
         expand: true
         dot: true
         cwd: "<%= config.app %>/styles"
         dest: ".tmp/styles/"
         src: "{,*/}*.css"
-            
     # Generates a custom Modernizr build that includes only the tests you
     # reference in your app
     modernizr:
       dist:
         devFile: "bower_components/modernizr/modernizr.js"
-        outputFile: "<%= config.dist %>/scripts/vendor/modernizr.js"
+        outputFile: "<%= config.dist %>/scripts/modernizr.js"
         files:
           src: [
             "<%= config.dist %>/scripts/{,*/}*.js"
@@ -423,15 +420,15 @@ module.exports = (grunt) ->
       test: [
         "less"
         "coffee"
-        "copy:styles"
+        "copy"
       ]
       dist: [
         "less"
         "coffee"
-        "copy:styles"
-        "imagemin"
+        # "imagemin"
         "svgmin"
         "grunticon"
+        "copy"
       ]
       
 
@@ -490,7 +487,6 @@ module.exports = (grunt) ->
 
   grunt.registerTask "build", [
     "clean:dist"
-    "template:source_config_vars"
     "merge_data"
     "gab_json_i18n"
     "grunticon"

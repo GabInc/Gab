@@ -32,84 +32,84 @@
   },
   "sports_news": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-running-news",
     "title": "Sports News-ah!",
     "target": "menu"
     
   },
   "hot_news": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-running-news",
     "title": "Burning Hot News!",
     "target": "menu"
     
   },
   "political_news": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-running-news",
     "title": "All About The Man!",
     "target": "menu"
     
   },
   "world_news": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-screen-book",
     "title": "World Hapennings!",
     "target": "menu"
     
   },
   "gossip_news": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-angel-face",
     "title": "Miley Cirus!",
     "target": "menu"
     
   },
   "inspiring_news": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-broken-glasses",
     "title": "Legalize Marijuana!",
     "target": "menu"
     
   },
   "news": {
     
-    "icon": "icon-running-news",
+    "icon": "concierge-icon-running-news",
     "title": "Catch Up On Some News",
     "target": "menu"
     
   },
   "music": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-broken-glasses",
     "title": "Listen To Some Music",
     "target": "menu"
     
   },
   "fun": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-arcade",
     "title": "Laugh Your Ass Off",
     "target": "menu"
     
   },
   "plan": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-organizer",
     "title": "Plan Your Day",
     "target": "menu"
     
   },
   "social": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-social-people",
     "title": "See What Your Friends Are Up To",
     "target": "menu"
     
   },
   "learn": {
     
-    "icon": "http://placecage.com/100/100",
+    "icon": "concierge-icon-broken-glasses",
     "title": "Learn Something Cool",
     "target": "menu"
     
