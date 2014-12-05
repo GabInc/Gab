@@ -1,16 +1,23 @@
 {
-  "name": "gab",
+  "name": "gab-concierge-engine",
   "version": "0.0.0",
+  "authors": [
+    "akrfranko <franko@akr.club>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "es5-shim": "~4.0.3",
-    "jquery": "~2.1.1",
-    "json3": "~3.3.2",
-    "vminpoly": "*",
-    "handlebars": "~2.0.0",
-    "html5-history-api": "~4.1.15",
     "i18n": "*",
-    "basil.js": "~0.3.4"
-  },
-  "devDependencies": {},
-  "appPath": "app"
+    "basil.js": "~0.3.4",
+    "jquery.hotkeys": "*",
+    "jquery": "~2.1.1",
+    "moment": "~2.8.4",
+    "ractive": "edge"
+  }
 }
