@@ -1,16 +1,13 @@
 {
-  "name": "gab",
-  "version": "0.0.0",
+  "name": "g-a-b-co",
+  "private": true,
   "dependencies": {
-    "es5-shim": "~4.0.3",
     "jquery": "~2.1.1",
-    "json3": "~3.3.2",
-    "vminpoly": "*",
-    "handlebars": "~2.0.0",
-    "html5-history-api": "~4.1.15",
-    "i18n": "*",
-    "basil.js": "~0.3.4"
-  },
-  "devDependencies": {},
-  "appPath": "app"
+    "modernizr": "~2.8.2",
+    "basil.js": "~0.3.4",
+    "jquery.hotkeys": "*",
+    "moment": "~2.8.4",
+    "ractive": "~0.6.1",
+    "i18n": "*"
+  }
 }
