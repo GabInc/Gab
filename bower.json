@@ -1,0 +1,13 @@
+{
+  "name": "g-a-b-co",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "modernizr": "~2.8.2",
+    "basil.js": "~0.3.4",
+    "jquery.hotkeys": "*",
+    "moment": "~2.8.4",
+    "ractive": "~0.6.1",
+    "i18n": "*"
+  }
+}
