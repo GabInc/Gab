@@ -241,8 +241,10 @@ class Concierge extends Module
     ###
       Initialize "Visitor" instance
     ###
+    Concierge = @
     Concierge.visitor = new Visitor "concierge-visitor"
     Concierge.current_language_choice = Concierge.visitor.get 'language_choice'
+    if !json[Concierge.current_language_choice] then Concierge.current_language_choice = 'en_CA'
     
     menus = ['en_CA','fr_CA'].reduce ( data, locale )->
       data[locale] = Object.keys(json[locale].menu).map ( n )-> json[locale].menu[n]
@@ -257,14 +259,28 @@ class Concierge extends Module
         menu_template:  jQuery('#menu_template').html()
         action_partial: jQuery('#action_partial').html()
         link_partial:   jQuery('#link_partial').html()
+        
     $('#main_menu').addClass('active')
+
+    $('.navigation').on 'click', ()-> $( this ).toggleClass('open')
+    $('.search').on 'click', -> $( this ).toggleClass('huge').find('input').focus()
+
+
 
     $( document ).on 'click', '.action.action-menu', ( event )->
       event.preventDefault()
       target = $(this).data('target')
-      $('.menu.active').removeClass('active')
-      $("##{target}_menu").addClass 'active'
+      Concierge.activate target
     return @
+    
+  activate: ( target )->
+    if @current_menu is target then return
+    @current_menu = target
+    $('.menu.active').removeClass 'active'
+    $("##{target}_menu").addClass 'active'
+    
+  goback: ( )->
+    
     
 ###
   Visitor Class
@@ -286,12 +302,10 @@ class Visitor extends Concierge
       visitor.put 'last_visit', new Date().getTime()
     # get/or autoset language
     lang = visitor.get 'language_choice'
-    browser_lang  = navigator.language.replace(/-.+$/,'')
-    if !lang then visitor.put 'language_choice', if browser_lang in SUPPORTED_LANGUAGES then browser_lang else DEFAULT_LANGUAGE
+    browser_lang  = navigator.language
+    language_choice =  if browser_lang in SUPPORTED_LANGUAGES then browser_lang else DEFAULT_LANGUAGE
+    if !lang then visitor.put 'language_choice',language_choice
     return @
     
 $('#content').empty()
 window[LIB_NAME] = new Concierge "gab-concierge-#{SEMVER}", window[LIB_NAME]
-$('.navigation').on 'click', ()-> $( this ).toggleClass('open')
-$('.search').on 'click', -> $( this ).toggleClass('huge').find('input').focus()
-

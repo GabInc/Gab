@@ -31,6 +31,7 @@ input {
 }
 .background {
   background: #111;
+  background: -webkit-linear-gradient(123deg, #000000 0%, #2a2b2c 100%);
   background: linear-gradient(-33deg, #000000 0%, #2a2b2c 100%);
   background-size: cover;
   background-repeat: no-repeat;
@@ -41,6 +42,7 @@ html {
   height: 100%;
   font-size: 62.5%;
   background: #111;
+  background: -webkit-linear-gradient(123deg, #000000 0%, #2a2b2c 100%);
   background: linear-gradient(-33deg, #000000 0%, #2a2b2c 100%);
   background-size: cover;
   background-repeat: no-repeat;
@@ -230,15 +232,20 @@ h1 {
   height: 0;
   width: 0;
   opacity: 0;
-  transform: scale(0) translateX(10000px);
-  transition: all 0.2s ease-in;
+  -webkit-transform: scale(0) translateX(10000px);
+      -ms-transform: scale(0) translateX(10000px);
+          transform: scale(0) translateX(10000px);
+  -webkit-transition: all 0.2s ease-in;
+          transition: all 0.2s ease-in;
   overflow: hidden;
 }
 .menu.active {
   height: 100%;
   width: 100%;
   opacity: 1;
-  transform: scale(1) translateX(0);
+  -webkit-transform: scale(1) translateX(0);
+      -ms-transform: scale(1) translateX(0);
+          transform: scale(1) translateX(0);
 }
 .menu .menu-head {
   font-size: 32px;
@@ -319,7 +326,8 @@ h1 {
     margin-left: -80px;
     margin-left: -8rem;
     text-indent: 100%;
-    transition: all 0.1s ease-in;
+    -webkit-transition: all 0.1s ease-in;
+            transition: all 0.1s ease-in;
   }
   #topbar .navigation:before {
     content: '';
@@ -338,6 +346,7 @@ h1 {
   }
   #topbar .navigation.open {
     background: #111;
+    background: -webkit-linear-gradient(123deg, #000000 0%, #2a2b2c 100%);
     background: linear-gradient(-33deg, #000000 0%, #2a2b2c 100%);
     background-size: cover;
     background-repeat: no-repeat;
