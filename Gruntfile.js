@@ -142,7 +142,7 @@ module.exports = function (grunt) {
     },
     'gh-pages': {
       options: {
-        base: '<%= yeoman.dist %>'
+        base: 'dist'
       }, src: ['**']
     },
     // Make sure code styles are up to par and there are no obvious mistakes
