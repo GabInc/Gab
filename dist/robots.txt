@@ -1,2 +1,2 @@
-# robotstxt.org
+# robotstxt.org/
 User-agent: *

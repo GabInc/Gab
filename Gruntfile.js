@@ -81,11 +81,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-    // rename: {
-    //   icons: {
-    //     files: [{ src: '<%= yeoman.app %>/styles/concierge-icons-loader.js' , dest:  '<%= yeoman.app %>/scripts/concierge-icons-loader.js' }]
-    //   }
-    // },
     concat: {
       icons: {
         options: {
@@ -96,7 +91,7 @@ module.exports = function (grunt) {
             ].join('\n');
           }
         },
-        files: { '<%= yeoman.app %>/scripts/concierge-icons-loader.js': '<%= yeoman.app %>/scripts/concierge-icons-loader.js' }
+        files: { '<%= yeoman.app %>/scripts/concierge-icons-loader.js': '<%= yeoman.app %>/styles/concierge-icons-loader.js' }
       }
     },
     // The actual grunt server settings
