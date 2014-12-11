@@ -62,7 +62,43 @@ module.exports = function (grunt) {
         ]
       }
     },
-
+    grunticon: {
+      icons: {
+        options: {
+          colors: { white: '#FFFFFF', red: '#FFFF00', black: '#00000' },
+          datasvgcss: 'concierge-icons-data-svg.css',
+          datapngcss: 'concierge-icons-data-png.css',
+          urlpngcss: 'concierge-icons-fallback.css',
+          previewhtml: 'concierge-icons-preview.html',
+          loadersnippet: 'concierge-icons-loader.js',
+          cssprefix: '.concierge-icon-'
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/svg',
+          src: ['*.svg','*.png'],
+          dest: '<%= yeoman.app %>/styles'
+        }]
+      }
+    },
+    // rename: {
+    //   icons: {
+    //     files: [{ src: '<%= yeoman.app %>/styles/concierge-icons-loader.js' , dest:  '<%= yeoman.app %>/scripts/concierge-icons-loader.js' }]
+    //   }
+    // },
+    concat: {
+      icons: {
+        options: {
+          process: function ( src ) {
+            return [ 
+              src ,
+              'grunticon( [ \'styles/concierge-icons-data-svg.css\', \'styles/concierge-icons-data-png.css\', \'styles/concierge-icons-fallback.css\' ] );'
+            ].join('\n');
+          }
+        },
+        files: { '<%= yeoman.app %>/scripts/concierge-icons-loader.js': '<%= yeoman.app %>/scripts/concierge-icons-loader.js' }
+      }
+    },
     // The actual grunt server settings
     connect: {
       options: {
@@ -109,7 +145,11 @@ module.exports = function (grunt) {
         }
       }
     },
-
+    'gh-pages': {
+      options: {
+        base: '<%= yeoman.dist %>'
+      }, src: ['**']
+    },
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
@@ -119,7 +159,8 @@ module.exports = function (grunt) {
       all: {
         src: [
           'Gruntfile.js',
-          '<%= yeoman.app %>/scripts/{,*/}*.js'
+          '<%= yeoman.app %>/scripts/{,*/}*.js',
+          '!<%= yeoman.app %>/scripts/concierge-icons-loader.js'
         ]
       },
       test: {
@@ -286,6 +327,14 @@ module.exports = function (grunt) {
           src: '{,*/}*.svg',
           dest: '<%= yeoman.dist %>/images'
         }]
+      },
+      icons: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/svg',
+          src: '{,*/}*.svg',
+          dest: '<%= yeoman.dist %>/svg'
+        }]
       }
     },
 
@@ -341,7 +390,8 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
-            'fonts/{,*/}*.*'
+            'fonts/{,*/}*.*',
+            'CNAME'
           ]
         }, {
           expand: true,
@@ -382,7 +432,8 @@ module.exports = function (grunt) {
     }
   });
 
-
+  grunt.registerTask('icons', 'Compile sprites from svg', [ 'svgmin:icons', 'grunticon:icons', 'concat:icons' ] );
+  
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -398,7 +449,7 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
+  grunt.registerTask('server', 'DEPRECATED TASK. Use the `serve` task instead', function (target) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve:' + target]);
   });
@@ -408,11 +459,12 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    // 'karma'
   ]);
 
   grunt.registerTask('build', [
     'clean:dist',
+    'icons',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
@@ -429,6 +481,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
+    'icons',
     'newer:jshint',
     'test',
     'build'

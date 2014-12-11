@@ -8,6 +8,9 @@
  *
  * Main module of the application.
  */
+ 
+
+ 
 var strings = {
    'en_CA': {
      'News is important...': 'News is important...',
