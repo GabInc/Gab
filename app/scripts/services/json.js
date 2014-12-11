@@ -7,7 +7,7 @@
  * # json
  * Provider in the sqrApp.
  */
-angular.module('sqrApp')
+angular.module('gabApp')
   .provider('json', function () {
     var menuJSON = [{
       'name': 'main',

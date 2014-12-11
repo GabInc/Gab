@@ -3,7 +3,7 @@
 describe('Controller: AboutCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('sqrApp'));
+  beforeEach(module('gabApp'));
 
   var AboutCtrl,
     scope;

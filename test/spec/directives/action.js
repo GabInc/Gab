@@ -3,7 +3,7 @@
 describe('Directive: action', function () {
 
   // load the directive's module
-  beforeEach(module('sqrApp'));
+  beforeEach(module('gabApp'));
 
   var element,
     scope;

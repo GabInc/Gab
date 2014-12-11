@@ -10,7 +10,7 @@
 
 
 
-angular.module('sqrApp').controller('MenuCtrl', ['$scope', '$routeParams', '$location', 'json', function($scope, $routeParams, $location, jsonProvider ) {
+angular.module('gabApp').controller('MenuCtrl', ['$scope', '$routeParams', '$location', 'json', function($scope, $routeParams, $location, jsonProvider ) {
 
   
   $scope.menu = jsonProvider.getMenu( ($routeParams.menuName || 'main') );

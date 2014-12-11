@@ -54,14 +54,8 @@ var strings = {
    }
  };
 var locale = 'en_CA';
-var myApp = angular.module('myApp',[]);
-myApp.factory('UserService', function() {
-  return {
-      name : 'anonymous'
-  };
-});
 angular
-  .module('sqrApp', [
+  .module('gabApp', [
     'ngAnimate',
     'ngAria',
     'ngCookies',

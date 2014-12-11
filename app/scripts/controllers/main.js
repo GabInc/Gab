@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of the sqrApp
  */
-angular.module('sqrApp')
+angular.module('gabApp')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

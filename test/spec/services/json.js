@@ -3,7 +3,7 @@
 describe('Service: json', function () {
 
   // load the service's module
-  beforeEach(module('sqrApp'));
+  beforeEach(module('gabApp'));
 
   // instantiate service
   var json;
