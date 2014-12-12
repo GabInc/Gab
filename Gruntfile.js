@@ -477,7 +477,7 @@ module.exports = function (grunt) {
     'usemin',
     'htmlmin'
   ]);
-  grunt.registerTask('deploy', ['gh-pages'] );
+  grunt.registerTask('deploy', [ 'build', 'gh-pages' ] );
   grunt.registerTask('default', [
     'icons',
     'newer:jshint',
