@@ -8,6 +8,8 @@ meteor-platform
 autopublish
 insecure
 less
-nemo64:bootstrap
-accounts-ui
 accounts-password
+accounts-facebook
+accounts-google
+ian:bootstrap-3
+ian:accounts-ui-bootstrap-3
