@@ -9,3 +9,5 @@ autopublish
 insecure
 less
 nemo64:bootstrap
+accounts-ui
+accounts-password
