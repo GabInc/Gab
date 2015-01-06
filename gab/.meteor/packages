@@ -11,5 +11,5 @@ less
 accounts-password
 accounts-facebook
 accounts-google
-ian:bootstrap-3
 ian:accounts-ui-bootstrap-3
+ian:bootstrap-3

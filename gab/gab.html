@@ -1,0 +1,58 @@
+<body>
+  <div class="container">
+    {{#if currentUser}}
+      <input id="search" type="text" class="form-control" placeholder="Search">
+      <h1>Todo List ({{incompleteCount}})</h1>
+      
+      <label class="hide-completed">
+        <input type="checkbox" checked="{{hideCompleted}}" />
+        Hide Completed Tasks
+      </label>
+
+
+      <form class="new-task">
+        <input type="text" name="text" placeholder="Type to add new tasks" />
+      </form>
+
+    <ul>
+      {{#each tasks}}
+        {{> task}}
+      {{/each}}
+    </ul>
+
+        {{> logout}}
+{{else}}
+{{> loginButtons}}
+
+{{/if}}
+
+    </div><!-- /.container -->
+
+    <footer class="footer">
+      <div class="container">
+        <ul class="list-inline">
+          <li><span class="glyphicon glyphicon-home black" aria-hidden="true"></span></li>
+          <li><span class="glyphicon glyphicon-user black" aria-hidden="true"></span></li>
+          <li><span class="glyphicon glyphicon-comment black" aria-hidden="true"></span></li>
+          <li><span class="glyphicon glyphicon-globe black" aria-hidden="true"></span></li>
+          <li><span class="glyphicon glyphicon-th black" aria-hidden="true"></span></li>
+        </ul>
+      </div>
+    </footer>
+
+  </body>
+
+<template name="logout">
+<button class="btn btn-default logout">Logout</button>
+</template>
+
+
+<template name="task">
+  <li class="{{#if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+    <span class="text">{{text}}</span>
+  </li>
+</template>
