@@ -1,8 +1,8 @@
 Tasks = new Mongo.Collection("tasks");
+Friends = new Meteor.Collection("Friends");
 
 if (Meteor.isClient) {
   // This code only runs on the client
-
    Template.body.helpers({
     tasks: function () {
       if (Session.get("hideCompleted")) {
@@ -39,6 +39,9 @@ if (Meteor.isClient) {
     },
     "change .hide-completed input": function (event) {
       Session.set("hideCompleted", event.target.checked);
+    },
+    "click #message-icon": function () {
+      Meteor.logout();
     }
   });
 
@@ -49,11 +52,6 @@ if (Meteor.isClient) {
     },
     "click .delete": function () {
       Tasks.remove(this._id);
-    }
-  });
-  Template.logout.events({
-    "click .logout": function () {
-      Meteor.logout(); 
     }
   });
 }
