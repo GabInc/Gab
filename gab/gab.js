@@ -1,5 +1,4 @@
 Tasks = new Mongo.Collection("tasks");
-Friends = new Meteor.Collection("Friends");
 
 if (Meteor.isClient) {
   // This code only runs on the client
