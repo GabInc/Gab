@@ -6,11 +6,13 @@
 
 <div id="wrapper">
 <div id="scroller">
-<ul id="thelist">
-      {{#each tasks}}
-        {{> task}}
-      {{/each}}
-</ul>
+
+{{> messages}}
+
+{{> mess_box}}
+
+
+
 </div>
 </div>
 <div id="footer">
@@ -29,6 +31,21 @@
 {{/if}}
 
 </body>
+<template name="messages">
+{{#each messages}}
+{{> message}}
+{{/each}}
+</template>
+
+<template name="message">
+<p>{{message}}</p>
+
+</template>
+
+<template name="mess_box">
+<input type="text" id="message" placeholder="Your message">
+</template>
+
 
 <template name="task">
   <li class="{{#if checked}}checked{{/if}}">

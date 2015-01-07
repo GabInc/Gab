@@ -1,7 +1,37 @@
 Tasks = new Mongo.Collection("tasks");
-
+Messages = new Mongo.Collection("messages");
 if (Meteor.isClient) {
   // This code only runs on the client
+   var okcancel_events = function (selector) {
+     return 'keyup '+selector+', keydown '+selector+', focusout '+selector;
+   };
+   var make_okcancel_handler = function (options) {
+     var ok = options.ok || function () {};
+     var cancel = options.cancel || function () {};
+     
+     return function (evt) {
+       if (evt.type === "keydown" && evt.which === 27) {
+         cancel.call(this, evt);
+       } else if (evt.type === "keyup"  && evt.which === 13){
+       var value = String(evt.target.value || "");
+       if (value)
+         ok.call(this, value, evt);
+       else
+         cancel.call(this, evt);
+       }
+     };        
+   };
+   Template.mess_box.events = {};
+   
+   Template.mess_box.events[okcancel_events('#message')] = make_okcancel_handler({
+     ok: function (text, event) {
+       console.log("Ben oui");
+     }
+   });
+   
+   Template.messages.messages = function () {
+     return Messages.find({}, { sort: {createdAt: -1} });
+   };
    Template.body.helpers({
     tasks: function () {
       if (Session.get("hideCompleted")) {

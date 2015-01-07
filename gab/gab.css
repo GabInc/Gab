@@ -3,7 +3,11 @@
   margin-right: 15px;
   margin-top: 20px;
 }
+#message {
+  width:100%;
+  margin-top: 15px;
 
+}
 body,ul,li {
 	padding:0;
 	margin:0;
@@ -44,6 +48,8 @@ body {
 	padding:0;
 	border-top:1px solid #444;
 }
+
+
 
 #wrapper {
 	position:absolute; z-index:1;
