@@ -6,7 +6,17 @@
 #message {
   width:100%;
   margin-top: 15px;
-
+  margin-left: 10px;
+  margin-right: 10px;
+ 
+}
+#chat_box {
+  margin-top:25px; 
+  padding:10px;
+  background-color:white;
+  width:100%;
+  margin-right: 10px;
+  margin-left: 10px;  
 }
 body,ul,li {
 	padding:0;
@@ -57,6 +67,7 @@ body {
 	width:100%;
 	background:#aaa;
 	overflow:auto;
+
 }
 
 #scroller {
@@ -65,6 +76,7 @@ body {
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
 	width:100%;
 	padding:0;
+
 }
 
 #scroller ul {

@@ -25,7 +25,10 @@ if (Meteor.isClient) {
    
    Template.mess_box.events[okcancel_events('#message')] = make_okcancel_handler({
      ok: function (text, event) {
-       console.log("Ben oui");
+       var user_name = Meteor.user().username
+       var ts = Date.now() / 1000;
+       Messages.insert({ name: user_name.value, message: text, time: ts});
+       event.target.value = "";
      }
    });
    

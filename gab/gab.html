@@ -6,9 +6,9 @@
 
 <div id="wrapper">
 <div id="scroller">
-
+<div id="chat_box">
 {{> messages}}
-
+</div>
 {{> mess_box}}
 
 
@@ -38,7 +38,8 @@
 </template>
 
 <template name="message">
-<p>{{message}}</p>
+
+<p><strong>{{name}}:  </strong>{{message}}</p>
 
 </template>
 
