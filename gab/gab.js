@@ -1,9 +1,13 @@
 Tasks = new Mongo.Collection("tasks");
+Conversations = new Mongo.Collection("conversations");
 Messages = new Mongo.Collection("messages");
 if (Meteor.isClient) {
   // This code only runs on the client
 
    Template.body.helpers({
+    conversations: function () { 
+      return Conversations.find({}, {sort: {createdAt: -1}});
+    },
     messages: function () { 
       return Messages.find({}, {sort: {createdAt: -1}});
     },
@@ -25,6 +29,14 @@ if (Meteor.isClient) {
   });
 
   Template.body.events({
+    'click #btn-user-data': function(e) {
+        Meteor.call('getUserData', function(err, data) {
+             $('#result').text(JSON.stringify(data, undefined, 4));
+         });
+        Meteor.call('getFriendsData', function(err, data) {
+             $('#result2').text(JSON.stringify(data, undefined, 4));
+         });         
+    },  
     "submit .new-task": function (event) {
       // This function is called when the new task form is submitted
       var text = event.target.text.value;
@@ -44,7 +56,7 @@ if (Meteor.isClient) {
       // This function is called when the new task form is submitted
       var text = event.target.text.value;
       if (Meteor.user())
-        var name = Meteor.user().username;
+        var name = Meteor.user().profile.name;
       else
         var name = 'Anonymous'; 
 
@@ -79,5 +91,6 @@ if (Meteor.isClient) {
     }
   });
 }
+
 
 

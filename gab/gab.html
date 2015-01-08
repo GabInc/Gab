@@ -7,17 +7,25 @@
 <div id="wrapper">
 <div id="scroller">
 <div id="username">
-<p>Ben oui : {{currentUser.username}}</p>
+<p>Ben oui : {{currentUser.profile.name}}</p>
 </div>
+
+    <button class="btn" id="btn-user-data">test get user data</button>
+    <div class="well">
+        <pre id="result"></pre>
+    </div>
+    <div class="well">
+        <pre id="result2"></pre>
+    </div>
   <form class="new-task">
     <input type="text" name="text" placeholder="Type to add new tasks" />
   </form>
 
-<ul id="thelist">
+
       {{#each tasks}}
         {{> task}}
       {{/each}}
-</ul>
+
 
 
 
@@ -65,7 +73,7 @@
 </template>
 
 <template name="message">
-    <p><strong>{{name}} : </strong>{{text}}</p>
+    <p><strong>{{name}} : </strong>{{text}}   ---  {{_id}}</p>
 
 
 </template>
