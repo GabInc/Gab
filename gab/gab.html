@@ -6,12 +6,30 @@
 
 <div id="wrapper">
 <div id="scroller">
-<div id="chat_box">
-{{> messages}}
+<div id="username">
+<p>Ben oui : {{currentUser.username}}</p>
 </div>
-{{> mess_box}}
+  <form class="new-task">
+    <input type="text" name="text" placeholder="Type to add new tasks" />
+  </form>
+
+<ul id="thelist">
+      {{#each tasks}}
+        {{> task}}
+      {{/each}}
+</ul>
 
 
+
+  <form class="new-message">
+    <input type="text" name="text" placeholder="Parle-moi de toi" />
+  </form>
+
+<div id="chat_box">
+      {{#each messages}}
+        {{> message}}
+      {{/each}}
+</div>
 
 </div>
 </div>
@@ -31,21 +49,8 @@
 {{/if}}
 
 </body>
-<template name="messages">
-{{#each messages}}
-{{> message}}
-{{/each}}
-</template>
 
-<template name="message">
 
-<p><strong>{{name}}:  </strong>{{message}}</p>
-
-</template>
-
-<template name="mess_box">
-<input type="text" id="message" placeholder="Your message">
-</template>
 
 
 <template name="task">
@@ -56,6 +61,12 @@
 
     <span class="text">{{text}}</span>
   </li>
+
+</template>
+
+<template name="message">
+    <p><strong>{{name}} : </strong>{{text}}</p>
+
 
 </template>
 
