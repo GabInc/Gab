@@ -2,4 +2,4 @@
 // AIzaSyA_ixWKfYl-JDugqJDzsxh_P1Gr3_4IbUk
 // 737942000577
 
-
+// il reste ce guide pour faire le setup de push notifications avec iOs https://github.com/raix/push/blob/master/docs/IOS.md
