@@ -12,7 +12,7 @@ if (Meteor.isClient) {
       return Posts.find({}, {sort: {createdAt: -1}});
     },
   });
-
+  
   Template.body.events({
     "submit .new-post": function (event) {
       var text = event.target.text.value;
@@ -32,6 +32,11 @@ if (Meteor.isClient) {
     },
     "click #message-icon": function () {
       Meteor.logout();
+    }
+  });
+  Template.post.events({
+    "click .delete": function () {
+      Posts.remove(this._id);
     }
   });
 }

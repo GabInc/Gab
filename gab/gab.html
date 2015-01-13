@@ -1,8 +1,5 @@
 <body>
   {{#if currentUser}}
-    <div id="header">
-      <span class="glyphicon glyphicon-pencil pull-right" id="new" aria-hidden="true"></span>
-    </div>
     {{> content}}
     <div id="footer">
       <div class="container">
@@ -36,6 +33,6 @@
 </template>
 
 <template name="post">
-    <li>{{text}}</li>
+    <li>{{ user_id }} - {{text}} <button type="button" class="delete close"><span>&times;</span></button></li>
 </template>
 
