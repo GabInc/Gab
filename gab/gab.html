@@ -1,47 +1,10 @@
 <body>
-    {{#if currentUser}}
-<div id="header">
-          <span class="glyphicon glyphicon-pencil pull-right" id="new" aria-hidden="true"></span>
-</div>
-
-<div id="wrapper">
-<div id="scroller">
-<div id="username">
-<p>Ben oui : {{currentUser.profile.name}}</p>
-</div>
-
-    <button class="btn" id="btn-user-data">test get user data</button>
-    <div class="well">
-        <pre id="result"></pre>
+  {{#if currentUser}}
+    <div id="header">
+      <span class="glyphicon glyphicon-pencil pull-right" id="new" aria-hidden="true"></span>
     </div>
-    <div class="well">
-        <pre id="result2"></pre>
-    </div>
-  <form class="new-task">
-    <input type="text" name="text" placeholder="Type to add new tasks" />
-  </form>
-
-
-      {{#each tasks}}
-        {{> task}}
-      {{/each}}
-
-
-
-
-  <form class="new-message">
-    <input type="text" name="text" placeholder="Parle-moi de toi" />
-  </form>
-
-<div id="chat_box">
-      {{#each messages}}
-        {{> message}}
-      {{/each}}
-</div>
-
-</div>
-</div>
-<div id="footer">
+    {{> content}}
+    <div id="footer">
       <div class="container">
         <ul class="list-inline">
           <li><span class="glyphicon glyphicon-home footer-icons" aria-hidden="true"></span></li>
@@ -51,30 +14,28 @@
           <li><span class="glyphicon glyphicon-th footer-icons" aria-hidden="true"></span></li>
         </ul>
       </div>
-</div>
-{{else}}
-{{> loginButtons}}
-{{/if}}
-
+    </div>
+  {{else}}
+    {{> loginButtons}}
+  {{/if}}
 </body>
 
-
-
-
-<template name="task">
-  <li class="{{#if checked}}checked{{/if}}">
-    <button class="delete">&times;</button>
-
-    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
-
-    <span class="text">{{text}}</span>
-  </li>
-
+<template name="content">
+  <div id="wrapper">
+    <form class="new-post">
+      <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">  
+    </form>
+    <div id="scroller">
+      <ul>
+        {{#each posts}}
+          {{> post}}
+        {{/each}}
+      </ul>
+    </div>
+  </div>
 </template>
 
-<template name="message">
-    <p><strong>{{name}} : </strong>{{text}}   ---  {{_id}}</p>
-
-
+<template name="post">
+    <li>{{text}}</li>
 </template>
 

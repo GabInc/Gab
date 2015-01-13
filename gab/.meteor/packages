@@ -9,13 +9,12 @@ autopublish
 insecure
 less
 accounts-password
-accounts-facebook
-accounts-google
-ian:accounts-ui-bootstrap-3
-ian:bootstrap-3
+twbs:bootstrap
 raix:iscroll
 meteorhacks:npm
 
-
 npm-container
 raix:push
+tap:i18n
+ian:accounts-ui-bootstrap-3
+email
