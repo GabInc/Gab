@@ -2,10 +2,7 @@ Tasks = new Mongo.Collection("tasks");
 Conversations = new Mongo.Collection("conversations");
 Posts = new Mongo.Collection("posts");
 
-
-
 if (Meteor.isClient) {
-  // This code only runs on the client
 
   Template.content.helpers({
     posts: function () { 
@@ -13,30 +10,34 @@ if (Meteor.isClient) {
     },
   });
   
+  Template.post.helpers({
+    username: function (id) {
+      return Meteor.users.findOne({_id:id}).username;
+    },
+  });
+  
   Template.body.events({
     "submit .new-post": function (event) {
       var text = event.target.text.value;
       if (Meteor.user())
-        var user_id = Meteor.userId();
+        var author_id = Meteor.userId();
       Posts.insert({
         text: text,
-        user_id: user_id,
-        createdAt: new Date() // current time
-        
+        author_id: author_id,
+        createdAt: new Date() 
       });
       event.target.text.value = "";
       return false;
     },    
-    "change .hide-completed input": function (event) {
-      Session.set("hideCompleted", event.target.checked);
-    },
     "click #message-icon": function () {
       Meteor.logout();
     }
   });
+
   Template.post.events({
     "click .delete": function () {
       Posts.remove(this._id);
     }
   });
+
 }
