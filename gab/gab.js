@@ -34,7 +34,7 @@ if (Meteor.isClient) {
       event.target.text.value = "";
       return false;
     },    
-    "click #message-icon": function () {
+    "click #logout": function () {
       Meteor.logout();
     }
   });
