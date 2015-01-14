@@ -2,6 +2,11 @@ Tasks = new Mongo.Collection("tasks");
 Conversations = new Mongo.Collection("conversations");
 Posts = new Mongo.Collection("posts");
 
+Posts.initEasySearch(['text'], {
+    'limit' : 20
+});
+
+
 if (Meteor.isClient) {
 
   Template.content.helpers({
