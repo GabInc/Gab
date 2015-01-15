@@ -6,6 +6,23 @@ Posts.initEasySearch(['text'], {
     'limit' : 20
 });
 
+/*EasySearch.createSearchIndex('users', {
+    'field' : ['username'],
+    'collection' : Meteor.users,
+    'query' : function (searchString) {
+        // Default query that will be used for searching
+        var query = EasySearch.getSearcher('mongo-db').defaultQuery(this, searchString);
+        // Your custom logic
+        query.username = { $ne: Meteor.user().username };
+        return query;
+    }
+});
+*/
+EasySearch.createSearchIndex('users', {
+    'field' : ['username'],
+    'collection' : Meteor.users,
+    'limit' : 20
+});
 
 if (Meteor.isClient) {
 

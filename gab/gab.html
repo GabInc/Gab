@@ -18,21 +18,35 @@
 </body>
 
 <template name="content">
-  <div id="wrapper">
-    <form class="new-post">
-      <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">  
-    </form>
-    <div id="scroller">
-      <ul>
-        {{#each posts}}
-          {{> post}}
-        {{/each}}
-      </ul>
+    <div id="wrapper">
+
+      {{> esInput index="users" placeholder="Search for friends" }}
+        {{> search_results}}
+      <form class="new-post">
+        <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">  
+      </form>
+      <div id="scroller">
+        <ul>
+          {{#each posts}}
+            {{> post}}
+          {{/each}}
+        </ul>
+
+      </div>
     </div>
-  </div>
 </template>
 
 <template name="post">
     <li>@{{ username author_id }} - {{text}}<button type="button" class="delete close"><span>&times;</span></button></li>
+</template>
+<template name="search_results">
+   <div class="search_results">
+       {{#esEach index="users"}}
+           {{> post2}}
+       {{/esEach}}
+   </div>
+</template>
+<template name="post2">
+    <li>{{ username }}<button type="button" class="delete close"><span>&times;</span></button></li>
 </template>
 

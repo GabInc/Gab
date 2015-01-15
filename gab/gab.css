@@ -107,3 +107,8 @@ body {
   height: 50px;
   background-color: #f5f5f5;
 }
+.search_results {
+  margin-top:15px;
+  width: 100%;
+  padding:10px;
+}
