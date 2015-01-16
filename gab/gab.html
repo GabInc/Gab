@@ -19,9 +19,9 @@
 
 <template name="content">
     <div id="wrapper">
-
+      {{> friends}}
       {{> esInput index="users" placeholder="Search for friends" }}
-        {{> search_results}}
+      {{> search_results}}
       <form class="new-post">
         <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">  
       </form>
@@ -40,13 +40,23 @@
     <li>@{{ username author_id }} - {{text}}<button type="button" class="delete close"><span>&times;</span></button></li>
 </template>
 <template name="search_results">
-   <div class="search_results">
+  <div class="search_results">
+    <ul>
        {{#esEach index="users"}}
-           {{> post2}}
+         {{> search_user}}
        {{/esEach}}
-   </div>
+    </ul>
+  </div>
 </template>
-<template name="post2">
-    <li>{{ username }}<button type="button" class="delete close"><span>&times;</span></button></li>
+<template name="search_user">
+  <li>
+    {{ username }}
+    <button type="button" id="info_button" class="friends_button glyphicon glyphicon-question-sign" aria-hidden="true"><span></span></button>
+    <button type="button" id="add_button" class="friends_button glyphicon glyphicon-plus" aria-hidden="true"><span></span></button>
+  </li>
 </template>
-
+<template name="friends">
+  <div>
+    friends: {{ #each friends }}{{id}}{{/each}}
+  </div>
+</template>

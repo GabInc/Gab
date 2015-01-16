@@ -2,22 +2,6 @@ Tasks = new Mongo.Collection("tasks");
 Conversations = new Mongo.Collection("conversations");
 Posts = new Mongo.Collection("posts");
 
-Posts.initEasySearch(['text'], {
-    'limit' : 20
-});
-
-/*EasySearch.createSearchIndex('users', {
-    'field' : ['username'],
-    'collection' : Meteor.users,
-    'query' : function (searchString) {
-        // Default query that will be used for searching
-        var query = EasySearch.getSearcher('mongo-db').defaultQuery(this, searchString);
-        // Your custom logic
-        query.username = { $ne: Meteor.user().username };
-        return query;
-    }
-});
-*/
 EasySearch.createSearchIndex('users', {
     'field' : ['username'],
     'collection' : Meteor.users,
@@ -37,7 +21,15 @@ if (Meteor.isClient) {
       return Meteor.users.findOne({_id:id}).username;
     },
   });
-  
+
+
+  Template.friends.helpers({   
+    friends: function () {
+      return Meteor.user().profile.friends;
+    },   
+  }); 
+
+
   Template.body.events({
     "submit .new-post": function (event) {
       var text = event.target.text.value;
@@ -61,5 +53,17 @@ if (Meteor.isClient) {
       Posts.remove(this._id);
     }
   });
-
+  Template.search_user.events({
+    "click #add_button": function () {
+      var u_id = Meteor.userId()
+      var friend_id = this._id
+      if (Meteor.user().profile.friends) {
+        var friends = Meteor.user().profile.friends;
+        //friends.update({},{id: friend_id})
+        Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
+      } else {
+        Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
+      }
+    }
+  });
 }
