@@ -24,9 +24,38 @@ if (Meteor.isClient) {
 
 
   Template.friends.helpers({   
-    friends: function () {
+    followed: function () {
       return Meteor.user().profile.friends;
-    },   
+    },
+    name: function (id) {
+      return Meteor.users.findOne({_id:id}).username;
+    },
+    friends:function () {
+      var followeds = Meteor.user().profile.friends;
+      var friends = [];
+      var friend;
+      for (f in followeds)
+      {
+        var u_id = Meteor.userId();
+        var friend_id = followeds[f].id;
+        var user = Meteor.users.findOne({_id:friend_id});
+	var friend_friends = user.profile.friends;
+	for (fr in friend_friends)
+	{
+	  var fr_id = friend_friends[fr].id;
+	  if (fr_id === u_id)
+	    friends.push(user);
+	}
+//  Voir si on peu pas améliorer avec indexOf ou de quoi d'autre
+//
+//        if (friend_friends.indexOf(u_id) < 0) 
+//          friends.push(user);
+//	  var indexof = friend_friends.indexOf(u_id);
+//	  console.log(u_id)
+//        console.log(friend_friends)
+      }
+      return friends;
+    },
   }); 
 
 
@@ -58,9 +87,7 @@ if (Meteor.isClient) {
       var u_id = Meteor.userId()
       var friend_id = this._id
       if (Meteor.user().profile.friends) {
-        var friends = Meteor.user().profile.friends;
-        //friends.update({},{id: friend_id})
-        Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
+        Meteor.users.update({_id:u_id}, { $addToSet: {"profile.friends": {"id": friend_id} } });
       } else {
         Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
       }

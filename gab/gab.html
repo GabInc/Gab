@@ -57,6 +57,18 @@
 </template>
 <template name="friends">
   <div>
-    friends: {{ #each friends }}{{id}}{{/each}}
+    Followed : 
+    {{ #each followed }}
+    <div>
+    {{ name id }}
+    </div>
+    {{/each}}
+    Friends : 
+    {{ #each friends }}
+    <div>
+    {{username}}
+    </div>
+    {{/each}}
+
   </div>
 </template>
