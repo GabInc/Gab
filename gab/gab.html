@@ -36,25 +36,58 @@
 
 <template name="content">
     <div id="wrapper">
-      {{> friends}}
+      <form class="new-post">
+       <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">
+      </form>
+       <div id="profile_box">
+	<ul>
+        {{#each posts}}
+        {{> post}}
+	{{/each}}
+        </ul>
+       </div>
+
       {{> esInput index="users" placeholder="Search for friends" }}
       {{> search_results}}
-      <form class="new-post">
-        <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">  
-      </form>
-      <div id="scroller">
+
+    
+      <div id="friends">
+<h3>Your <small>friends: </small></h3>
         <ul>
-          {{#each posts}}
-            {{> post}}
+        {{> friends}}
+        </ul>
+      </div>
+      <div id="conversations">
+      <h3>Your <small>conversations: </small></h3>
+        <ul>
+	{{> conversations}}
+	</ul>			    				    
+      </div>
+      {{> message_form}}
+       <div id="scroller">
+         {{> conversation}}
+         <ul>
+          {{#each messages}}
+            {{> message}}
           {{/each}}
         </ul>
+       </div>
 
-      </div>
     </div>
 </template>
 
+<template name="message_form">
+    <form id="new-message">
+      <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Parle-moi de toi?" }}">
+    </form>
+</template>
+
+
 <template name="post">
     <li>@{{ username author_id }} - {{text}}<button type="button" class="delete close"><span>&times;</span></button></li>
+</template>
+<template name="message">
+    <li>@{{ username author_id }} - {{text}}</li>
 </template>
 <template name="search_results">
   <div class="search_results">
@@ -73,7 +106,30 @@
   </li>
 </template>
 <template name="friends">
-  <div>
-    friends: {{ #each friends }}{{id}}{{/each}}
-  </div>
+    {{ #each friends.friends }}
+    
+      <li>
+      {{username}}
+      <button type="button" id="unfollow_button" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
+      <button type="button" id="new_conv" class="friends_button glyphicon glyphicon-comment" aria-hidden="true"><span></span></button>
+      </li>
+    
+    {{/each}}
+
+</template>
+<template name="conversations">
+{{ #each conversations }}
+      <li>
+        {{last_message this.id}}
+    <!--    <button type="button" id="delete_conversation" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
+    -->
+        <button type="button" id="open_conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
+      </li>
+
+{{/each}}
+</template>
+<template name="conversation">
+<div class="conversation">
+{{conversation}}
+</div>
 </template>
