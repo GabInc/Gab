@@ -14,15 +14,17 @@ EasySearch.createSearchIndex('users', {
 if (Meteor.isClient) {
 
   Meteor.startup(function() {
-    var u_id = Meteor.userId()
+    var u_id = Meteor.userId();
     var con = Conversations.find({started_by: u_id}, {sort: {createdAt: -1},limit: 1});
-    Session.set("active_conv", "Ben oui");
+    Session.set("active_conv", con );
+    console.log(con);
   });
 
 
   Template.content.helpers({
     posts: function () { 
-      return Posts.find({}, {sort: {createdAt: -1}});
+      var active_conv_id = Session.get("active_conv");
+      return Posts.find({conversation_id: active_conv_id}, {sort: {createdAt: -1}});
     },
   });
   
@@ -40,8 +42,7 @@ if (Meteor.isClient) {
   });
   Template.conversation.helpers({
     conversation: function (){
-      var active_con = Session.get("active_conv")
-      return active_con;
+      return Session.get("active_conv");
     },
   });
   Template.friends.helpers({   
@@ -77,10 +78,13 @@ if (Meteor.isClient) {
       var text = event.target.text.value;
       if (Meteor.user())
         var author_id = Meteor.userId();
+	var conversation_id = Session.get("active_conv"); 
       Posts.insert({
         text: text,
         author_id: author_id,
-        createdAt: new Date() 
+	conversation_id :conversation_id,
+        createdAt: new Date()
+
       });
       event.target.text.value = "";
       return false;
@@ -116,6 +120,14 @@ if (Meteor.isClient) {
 	started_by: u_id,
 	createdAt: new Date()
       });     
+    }
+  });
+  Template.conversations.events({
+    "click #delete_conversation": function () {
+      Conversations.remove(this._id);
+    },
+    "click #open_conversation": function () {
+      Session.set("active_conv", this._id)      
     }
   });
 }

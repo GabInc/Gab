@@ -35,6 +35,10 @@
 	{{> conversations}}
 	</ul>			    				    
       </div>
+      <form class="new-post">
+        <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">
+      </form>
+
       <div id="scroller">
          {{> conversation}}
          <ul>
@@ -44,9 +48,6 @@
         </ul>
 
       </div>
-      <form class="new-post">
-       <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">
-      </form>
 
     </div>
 </template>
@@ -87,13 +88,13 @@
       <li>
         {{participants}}
         <button type="button" id="delete_conversation" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
-        <button type="button" id="message_button" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
+        <button type="button" id="open_conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
       </li>
 
 {{/each}}
 </template>
 <template name="conversation">
-<div>
+<div class="conversation">
 {{conversation}}
 </div>
 </template>
