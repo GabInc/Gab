@@ -1,6 +1,7 @@
 Tasks = new Mongo.Collection("tasks");
 Conversations = new Mongo.Collection("conversations");
 Posts = new Mongo.Collection("posts");
+Messages = new Mongo.Collection("messages");
 
 EasySearch.createSearchIndex('users', {
     'field' : ['username'],
@@ -23,9 +24,12 @@ if (Meteor.isClient) {
 
   Template.content.helpers({
     posts: function () { 
-      var active_conv_id = Session.get("active_conv");
-      return Posts.find({conversation_id: active_conv_id}, {sort: {createdAt: -1}});
+      return Posts.find({}, {sort: {createdAt: -1}});
     },
+    messages: function () {
+      var active_conv_id = Session.get("active_conv");
+      return Messages.find({conversation_id: active_conv_id}, {sort: {createdAt: -1}});
+    },  
   });
   
   Template.post.helpers({
@@ -33,11 +37,20 @@ if (Meteor.isClient) {
       return Meteor.users.findOne({_id:id}).username;
     },
   });
-
+  Template.message.helpers({
+    username: function (id) {
+      return Meteor.users.findOne({_id:id}).username;
+    },
+  });  
   Template.conversations.helpers({
     conversations: function (){
-    // A ajuster...
-      return Conversations.find({}, {sort: {createdAt: -1}});
+    // A ajuster... pour si participants
+      var u_id = Meteor.userId();
+      return Conversations.find({started_by: u_id}, {sort: {createdAt: -1}});
+    },
+    last_message: function(id){
+      var last_message = Messages.find({conversation_id:id},{sort: {createdAt: -1},limit:1});
+      return last_message;
     },
   });
   Template.conversation.helpers({
@@ -78,20 +91,47 @@ if (Meteor.isClient) {
       var text = event.target.text.value;
       if (Meteor.user())
         var author_id = Meteor.userId();
-	var conversation_id = Session.get("active_conv"); 
       Posts.insert({
         text: text,
         author_id: author_id,
-	conversation_id :conversation_id,
         createdAt: new Date()
 
       });
       event.target.text.value = "";
       return false;
-    },    
+    },
+    
     "click #logout": function () {
       Meteor.logout();
     }
+  });
+  Template.friends.events({
+    "click #new_conv": function () {
+      var u_id = Meteor.userId();
+      var friend_id = this._id;
+      var participants = [u_id, friend_id]
+      Conversations.insert({
+        participants: participants,
+	started_by: u_id,
+	createdAt: new Date()
+      });
+    }
+  });
+  Template.message_form.events({
+    "submit #new-message": function (event) {
+      var text = event.target.text.value;
+      if (Meteor.user())
+        var author_id = Meteor.userId();
+	var conversation_id = Session.get("active_conv");
+      Messages.insert({
+        text: text,
+        author_id: author_id,
+        conversation_id :conversation_id,
+        createdAt: new Date()
+      });
+      event.target.text.value = "";
+      return false;
+    },  
   });
 
   Template.post.events({
@@ -101,25 +141,14 @@ if (Meteor.isClient) {
   });
   Template.search_user.events({
     "click #add_button": function () {
-      var u_id = Meteor.userId(i);
+      var u_id = Meteor.userId();
       var friend_id = this._id;
       if (Meteor.user().profile.friends) {
         Meteor.users.update({_id:u_id}, { $addToSet: {"profile.friends": {"id": friend_id} } });
       } else {
         Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
       }
-    }
-  });
-  Template.friends.events({
-    "click #message_button": function () {
-      var u_id = Meteor.userId();
-      var friend_id = this._id;
-      var participants = [u_id, friend_id];
-      Conversations.insert({
-        participants: participants,
-	started_by: u_id,
-	createdAt: new Date()
-      });     
+      console.log("ben oui")
     }
   });
   Template.conversations.events({
