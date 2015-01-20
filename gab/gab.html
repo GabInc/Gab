@@ -19,20 +19,35 @@
 
 <template name="content">
     <div id="wrapper">
-      {{> friends}}
       {{> esInput index="users" placeholder="Search for friends" }}
       {{> search_results}}
-      <form class="new-post">
-        <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">  
-      </form>
-      <div id="scroller">
+
+    
+      <div id="friends">
+<h3>Your <small>friends: </small></h3>
         <ul>
+        {{> friends}}
+        </ul>
+      </div>
+      <div id="conversations">
+      <h3>Your <small>conversations: </small></h3>
+        <ul>
+	{{> conversations}}
+	</ul>			    				    
+      </div>
+      <div id="scroller">
+         {{> conversation}}
+         <ul>
           {{#each posts}}
             {{> post}}
           {{/each}}
         </ul>
 
       </div>
+      <form class="new-post">
+       <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">
+      </form>
+
     </div>
 </template>
 
@@ -56,19 +71,29 @@
   </li>
 </template>
 <template name="friends">
-  <div>
-    Followed : 
-    {{ #each followed }}
-    <div>
-    {{ name id }}
-    </div>
-    {{/each}}
-    Friends : 
-    {{ #each friends }}
-    <div>
-    {{username}}
-    </div>
+    {{ #each friends.friends }}
+    
+      <li>
+      {{username}}
+      <button type="button" id="unfollow_button" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
+      <button type="button" id="message_button" class="friends_button glyphicon glyphicon-comment" aria-hidden="true"><span></span></button>
+      </li>
+    
     {{/each}}
 
-  </div>
+</template>
+<template name="conversations">
+{{ #each conversations }}
+      <li>
+        {{participants}}
+        <button type="button" id="delete_conversation" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
+        <button type="button" id="message_button" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
+      </li>
+
+{{/each}}
+</template>
+<template name="conversation">
+<div>
+{{conversation}}
+</div>
 </template>

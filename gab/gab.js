@@ -8,7 +8,17 @@ EasySearch.createSearchIndex('users', {
     'limit' : 20
 });
 
+
+
+
 if (Meteor.isClient) {
+
+  Meteor.startup(function() {
+    var u_id = Meteor.userId()
+    var con = Conversations.find({started_by: u_id}, {sort: {createdAt: -1},limit: 1});
+    Session.set("active_conv", "Ben oui");
+  });
+
 
   Template.content.helpers({
     posts: function () { 
@@ -22,18 +32,24 @@ if (Meteor.isClient) {
     },
   });
 
-
+  Template.conversations.helpers({
+    conversations: function (){
+    // A ajuster...
+      return Conversations.find({}, {sort: {createdAt: -1}});
+    },
+  });
+  Template.conversation.helpers({
+    conversation: function (){
+      var active_con = Session.get("active_conv")
+      return active_con;
+    },
+  });
   Template.friends.helpers({   
-    followed: function () {
-      return Meteor.user().profile.friends;
-    },
-    name: function (id) {
-      return Meteor.users.findOne({_id:id}).username;
-    },
     friends:function () {
       var followeds = Meteor.user().profile.friends;
       var friends = [];
-      var friend;
+      var folls = [];
+      var f;
       for (f in followeds)
       {
         var u_id = Meteor.userId();
@@ -43,18 +59,15 @@ if (Meteor.isClient) {
 	for (fr in friend_friends)
 	{
 	  var fr_id = friend_friends[fr].id;
-	  if (fr_id === u_id)
+	  if (fr_id === u_id){
 	    friends.push(user);
+	  } else {
+	  // A voir plus tard
+	  //  folls.push(user);
+	  }  
 	}
-//  Voir si on peu pas améliorer avec indexOf ou de quoi d'autre
-//
-//        if (friend_friends.indexOf(u_id) < 0) 
-//          friends.push(user);
-//	  var indexof = friend_friends.indexOf(u_id);
-//	  console.log(u_id)
-//        console.log(friend_friends)
       }
-      return friends;
+      return {friends: friends, followeds : folls};
     },
   }); 
 
@@ -84,13 +97,25 @@ if (Meteor.isClient) {
   });
   Template.search_user.events({
     "click #add_button": function () {
-      var u_id = Meteor.userId()
-      var friend_id = this._id
+      var u_id = Meteor.userId(i);
+      var friend_id = this._id;
       if (Meteor.user().profile.friends) {
         Meteor.users.update({_id:u_id}, { $addToSet: {"profile.friends": {"id": friend_id} } });
       } else {
         Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
       }
+    }
+  });
+  Template.friends.events({
+    "click #message_button": function () {
+      var u_id = Meteor.userId();
+      var friend_id = this._id;
+      var participants = [u_id, friend_id];
+      Conversations.insert({
+        participants: participants,
+	started_by: u_id,
+	createdAt: new Date()
+      });     
     }
   });
 }

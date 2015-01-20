@@ -131,3 +131,44 @@ body {
   line-height: 1.5;
   border-radius: 3px;
 }
+#friends {
+  margin:5px;
+}
+#friends ul {
+  list-style:none;
+  padding:0;
+  margin:0;
+  width:100%;
+  text-align:left;
+}
+
+#friends li {
+  padding:0 10px;
+  height:35px;
+  line-height:35px;
+  border-bottom:1px solid #ccc;
+  border-top:1px solid #fff;
+  background-color:#fafafa;
+  font-size:14px;
+}
+#conversations {
+  margin:5px;
+  }
+#conversations ul {
+  list-style:none;
+  padding:0;      
+  margin:0;
+  width:100%;
+  text-align:left;
+}
+#conversations li {
+  padding:0 10px;
+  height:35px;
+  line-height:35px;
+  border-bottom:1px solid #ccc;
+  border-top:1px solid #fff;
+  background-color:#fafafa;
+  font-size:14px;
+}
+.new-post {
+}
