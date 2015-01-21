@@ -110,21 +110,21 @@ if (Meteor.isClient) {
 	    friends.push(user);
 	}
       }
-      var u;
-      for (u in allusers){
-        var t_u = allusers[u];
-	var t_u_id = allusers[u]._id;
-	var frs = Meteor.users.findOne({_id:t_u_id}).profile.friends;
-	var fo;
-	for (fo in frs){
-	  var fo_id = frs[fo].id;
-	  if(fo_id === t_u_id)
-	    follby.push(t_u)
-	}
-      }
-      console.log(t_u);
-      console.log(t_u_id);
-      console.log(frs);
+
+//      var u;
+//      for (u in allusers){
+//        var t_u = allusers[u];
+//	var t_u_id = allusers[u]._id;
+//	var frs = allusers[u].profile.friends;
+//	var fo;
+//	for (fo in frs){
+//	  var fo_id = frs[fo].id;
+//	  if(fo_id === t_u._id)
+//	    follby.push(t_u)
+//	}
+//      }
+      
+      
       return {folls: folls, friends: friends, follby: follby};
     },
 //    followeds:function(){
@@ -179,6 +179,8 @@ if (Meteor.isClient) {
 	started_by: u_id,
 	createdAt: new Date()
       });
+      var last_conv_id = Conversations.findOne({started_by:u_id})._id;
+      console.log(last_conv_id);
 // Aller direct au messages...      
       Router.go('/messages/');
     }
