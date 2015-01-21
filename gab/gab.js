@@ -11,25 +11,56 @@ EasySearch.createSearchIndex('users', {
 
 
 
+Router.route('/', function () {
+  this.layout('ApplicationLayout');
+  this.render('Home');
+  this.render('Footer', {to: 'footer'});
+});
+
+Router.route('/profile', function () {
+  this.layout('ApplicationLayout');
+  this.render('profile');
+  this.render('Footer', {to: 'footer'});
+});
+
+Router.route('/messages', function () {
+  this.layout('ApplicationLayout');
+  this.render('messages');
+  this.render('Footer', {to: 'footer'});
+});
+Router.route('/messages/:_id', function () {
+  this.layout('ApplicationLayout');
+  this.render('message_box', {
+    data: function () {
+      var id = this.params._id;
+      templateData = { messages: Messages.find({conversation_id: id}, {sort: {createdAt: -1}}) };
+      return templateData;
+//      var test = "test";
+//      return test;
+    }
+  });
+  this.render('Footer', {to: 'footer'});
+}, {
+  name: 'conversations.show',
+  after: function () {
+    var id = this.params._id;
+    Session.set("active_conv", id);
+  }
+
+});  
+
+
 
 if (Meteor.isClient) {
 
   Meteor.startup(function() {
-    var u_id = Meteor.userId();
-    var con = Conversations.find({started_by: u_id}, {sort: {createdAt: -1},limit: 1});
-    Session.set("active_conv", con );
-    console.log(con);
   });
 
 
-  Template.content.helpers({
+  Template.profile.helpers({
     posts: function () { 
       return Posts.find({}, {sort: {createdAt: -1}});
     },
-    messages: function () {
-      var active_conv_id = Session.get("active_conv");
-      return Messages.find({conversation_id: active_conv_id}, {sort: {createdAt: -1}});
-    },  
   });
   
   Template.post.helpers({
@@ -49,14 +80,13 @@ if (Meteor.isClient) {
       return Conversations.find({started_by: u_id}, {sort: {createdAt: -1}});
     },
     last_message: function(id){
-      var last_message = Messages.find({conversation_id:id},{sort: {createdAt: -1},limit:1});
-      return last_message;
+      return Messages.findOne({conversation_id:id}).text;
+
     },
-  });
-  Template.conversation.helpers({
-    conversation: function (){
-      return Session.get("active_conv");
-    },
+    username: function(id){
+      var author_id = Messages.findOne({conversation_id:id}).author_id;
+      return Meteor.users.findOne({_id:author_id}).username;
+    },  
   });
   Template.friends.helpers({   
     friends:function () {
@@ -86,7 +116,7 @@ if (Meteor.isClient) {
   }); 
 
 
-  Template.body.events({
+  Template.profile.events({
     "submit .new-post": function (event) {
       var text = event.target.text.value;
       if (Meteor.user())
@@ -100,10 +130,20 @@ if (Meteor.isClient) {
       event.target.text.value = "";
       return false;
     },
-    
+  });
+  Template.Footer.events({
+    "click #home": function () {
+      Router.go('/');
+    },
+    "click #profile": function () {
+      Router.go('/profile');
+    },
     "click #logout": function () {
       Meteor.logout();
-    }
+    },
+    "click #messages": function () {
+      Router.go('/messages');
+    }  
   });
   Template.friends.events({
     "click #new_conv": function () {
@@ -115,6 +155,8 @@ if (Meteor.isClient) {
 	started_by: u_id,
 	createdAt: new Date()
       });
+// Aller direct au messages...      
+      Router.go('/messages/');
     }
   });
   Template.message_form.events({
@@ -152,6 +194,10 @@ if (Meteor.isClient) {
     }
   });
   Template.conversations.events({
+    "click #conversation": function () {
+      Router.go('conversations.show', {_id: this._id});
+
+    },
     "click #delete_conversation": function () {
       Conversations.remove(this._id);
     },
