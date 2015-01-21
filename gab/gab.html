@@ -1,23 +1,43 @@
+<template name="ApplicationLayout">
 <body>
+  <content>
+      {{> yield}}
+  </content>
+  
+  <footer>
+   {{> yield "footer"}}
+  </footer>
+</body>
+</template>
+
+
+<template name="Home">
   {{#if currentUser}}
-    {{> content }}
+    {{> home_content }}
+  {{else}}
+    {{> loginButtons}}
+  {{/if}}
+</template>
+
+
+<template name="Footer">
+  {{#if currentUser}}
     <div id="footer">
       <div class="container">
         <ul class="list-inline">
-          <li><span class="glyphicon glyphicon-home footer-icons" aria-hidden="true"></span></li>
-          <li><span class="glyphicon glyphicon-user footer-icons" aria-hidden="true"></span></li>
-          <li><span class="glyphicon glyphicon-comment footer-icons" aria-hidden="true"></span></li>
+          <li><span id="home" class="glyphicon glyphicon-home footer-icons" aria-hidden="true"></span></li>
+          <li><span id="profile" class="glyphicon glyphicon-user footer-icons" aria-hidden="true"></span></li>
+          <li><span id="messages" class="glyphicon glyphicon-comment footer-icons" aria-hidden="true"></span></li>
           <li><span class="glyphicon glyphicon-globe footer-icons" aria-hidden="true"></span></li>
           <li><span id="logout" class="glyphicon glyphicon-log-out footer-icons" aria-hidden="true"></span></li>
         </ul>
       </div>
     </div>
   {{else}}
-    {{> loginButtons}}
   {{/if}}
-</body>
+</template>
 
-<template name="content">
+<template name="profile">
     <div id="wrapper">
       <form class="new-post">
        <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">
@@ -29,10 +49,13 @@
 	{{/each}}
         </ul>
        </div>
+    </div>
+</template>
 
+<template name="home_content">
+    <div id="wrapper">
       {{> esInput index="users" placeholder="Search for friends" }}
       {{> search_results}}
-
     
       <div id="friends">
 <h3>Your <small>friends: </small></h3>
@@ -40,22 +63,32 @@
         {{> friends}}
         </ul>
       </div>
+    </div>
+ </template>   
+ <template name="messages">   
+    <div id="wrapper">
+
       <div id="conversations">
       <h3>Your <small>conversations: </small></h3>
         <ul>
 	{{> conversations}}
 	</ul>			    				    
       </div>
+    </div>
+
+</template>
+<template name="message_box">
+    <div id="wrapper">
       {{> message_form}}
+
+      {{test}}
        <div id="scroller">
-         {{> conversation}}
          <ul>
           {{#each messages}}
             {{> message}}
           {{/each}}
         </ul>
        </div>
-
     </div>
 </template>
 
@@ -102,17 +135,17 @@
 </template>
 <template name="conversations">
 {{ #each conversations }}
+
       <li>
-        {{last_message this.id}}
+      {{#if last_message this._id}}
+	@{{username this._id}} - {{last_message this._id}}
+      {{else}}
+        New
+      {{/if}}	
     <!--    <button type="button" id="delete_conversation" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
     -->
-        <button type="button" id="open_conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
+        <button type="button" id="conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
       </li>
 
 {{/each}}
-</template>
-<template name="conversation">
-<div class="conversation">
-{{conversation}}
-</div>
 </template>

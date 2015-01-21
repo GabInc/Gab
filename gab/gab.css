@@ -168,8 +168,6 @@ body {
 }
 #profile_box {
   margin:5px;
-  height:25%;
-  overflow-x:scroll;
 }
 #conversations {
   margin:5px;
