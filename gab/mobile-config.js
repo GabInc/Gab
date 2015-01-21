@@ -6,7 +6,7 @@ App.info({
 
 App.icons({
   'iphone': 'resources/icons/icon-60.png',
-  'iphone_2x': 'resources/icons/icon-60@2x.png'
+  'iphone_2x': 'resources/icons/icon-60@2x.png',
   'android_ldpi': 'resources/icons/icon-60.png',
   'android_mdpi': 'resources/icons/icon-60.png',
   'android_hdpi': 'resources/icons/icon-60@2x.png',
