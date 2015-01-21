@@ -56,14 +56,9 @@
     <div id="wrapper">
       {{> esInput index="users" placeholder="Search for friends" }}
       {{> search_results}}
-    
-      <div id="friends">
-<h3>Your <small>friends: </small></h3>
-        <ul>
+
         {{> friends}}
-        </ul>
-      </div>
-    </div>
+    </div>	
  </template>   
  <template name="messages">   
     <div id="wrapper">
@@ -122,16 +117,43 @@
   </li>
 </template>
 <template name="friends">
-    {{ #each friends.friends }}
-    
-      <li>
-      {{username}}
-      <button type="button" id="unfollow_button" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
-      <button type="button" id="new_conv" class="friends_button glyphicon glyphicon-comment" aria-hidden="true"><span></span></button>
-      </li>
-    
-    {{/each}}
 
+   <div class="friends">
+     <h3>Friends: </h3>
+     <ul>
+     {{ #each friends.friends }}
+    
+       <li>
+       {{username}}
+       <button type="button" id="unfollow_button" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
+       <button type="button" id="new_conv" class="friends_button glyphicon glyphicon-comment" aria-hidden="true"><span></span></button>
+       </li>
+    {{/each}}
+    </ul>
+   </div>
+   <div class="friends">
+     <h3>Followed:</h3>
+     <ul>
+
+     {{ #each friends.folls }}
+       <li>
+       {{username}}
+       <button type="button" id="unfollow_button" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
+       </li>
+     {{/each}}
+     </ul>
+   </div>
+   <div class="friends">
+     <h3>Followed by:</h3>
+     <ul>
+     {{ #each friends.follby }}
+       <li>
+       {{username}}
+       <button type="button" id="follow_button" class="friends_button glyphicon glyphicon-plus" aria-hidden="true"><span></span></button>
+       </li>
+     {{/each}}
+     </ul>
+   </div>  
 </template>
 <template name="conversations">
 {{ #each conversations }}

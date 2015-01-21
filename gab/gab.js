@@ -91,28 +91,52 @@ if (Meteor.isClient) {
   Template.friends.helpers({   
     friends:function () {
       var followeds = Meteor.user().profile.friends;
+      var allusers = Meteor.users.find().fetch();
       var friends = [];
       var folls = [];
+      var follby = [];
+      var u_id = Meteor.userId();
       var f;
       for (f in followeds)
       {
-        var u_id = Meteor.userId();
         var friend_id = followeds[f].id;
         var user = Meteor.users.findOne({_id:friend_id});
-	var friend_friends = user.profile.friends;
+	var friend_friends = Meteor.users.findOne({_id:friend_id}).profile.friends;
+        folls.push(user);
 	for (fr in friend_friends)
 	{
 	  var fr_id = friend_friends[fr].id;
-	  if (fr_id === u_id){
+	  if (fr_id === u_id)
 	    friends.push(user);
-	  } else {
-	  // A voir plus tard
-	  //  folls.push(user);
-	  }  
 	}
       }
-      return {friends: friends, followeds : folls};
+      var u;
+      for (u in allusers){
+        var t_u = allusers[u];
+	var t_u_id = allusers[u]._id;
+	var frs = Meteor.users.findOne({_id:t_u_id}).profile.friends;
+	var fo;
+	for (fo in frs){
+	  var fo_id = frs[fo].id;
+	  if(fo_id === t_u_id)
+	    follby.push(t_u)
+	}
+      }
+      console.log(t_u);
+      console.log(t_u_id);
+      console.log(frs);
+      return {folls: folls, friends: friends, follby: follby};
     },
+//    followeds:function(){
+//      var friends = Meteor.user().profile.friends;
+//      var followeds = [];
+//      var f;
+//      for (f in friends){
+//        var friend_id = friends[f].id;
+//        var user = Meteor.users.findOne({_id:friend_id});
+//	followeds.push(user);
+//      }
+//    },
   }); 
 
 
