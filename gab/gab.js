@@ -179,10 +179,13 @@ if (Meteor.isClient) {
 	started_by: u_id,
 	createdAt: new Date()
       });
-      var last_conv_id = Conversations.findOne({started_by:u_id})._id;
-      console.log(last_conv_id);
-// Aller direct au messages...      
-      Router.go('/messages/');
+      var last_conv_id = [];
+      var last_conv = Conversations.find({started_by: u_id}, {sort: {createdAt: -1},limit:1});
+      last_conv.forEach(function(doc){
+        last_conv_id.push(doc._id);
+	});
+      
+      Router.go('/messages/'+last_conv_id+'');
     }
   });
   Template.message_form.events({
