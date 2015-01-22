@@ -35,8 +35,6 @@ Router.route('/messages/:_id', function () {
       var id = this.params._id;
       templateData = { messages: Messages.find({conversation_id: id}, {sort: {createdAt: -1}}) };
       return templateData;
-//      var test = "test";
-//      return test;
     }
   });
   this.render('Footer', {to: 'footer'});
@@ -77,7 +75,23 @@ if (Meteor.isClient) {
     conversations: function (){
     // A ajuster... pour si participants
       var u_id = Meteor.userId();
-      return Conversations.find({started_by: u_id}, {sort: {createdAt: -1}});
+      var convs = Conversations.find();
+      var uconvs = [];
+      var c;
+      console.log(convs)
+      convs.forEach(function (conversation){
+        var participants = conversation.participants;
+        var p = participants.indexOf(u_id);
+        if (p > -1)
+	  uconvs.push(conversation);
+      });
+//      for (co in convs)
+//      {
+//        var parts = convs[co].participants;
+//	console.log(parts);
+//      }
+      return uconvs;  
+//      return Conversations.find({started_by: u_id}, {sort: {createdAt: -1}});
     },
     last_message: function(id){
       return Messages.findOne({conversation_id:id}).text;
