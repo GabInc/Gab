@@ -14,29 +14,40 @@ EasySearch.createSearchIndex('users', {
 Router.route('/', function () {
   this.layout('ApplicationLayout');
   this.render('Home');
+  this.render('navbar', {to: 'navbar'});
   this.render('Footer', {to: 'footer'});
 });
 
 Router.route('/profile', function () {
   this.layout('ApplicationLayout');
-  this.render('profile');
+  this.render('friends');
+  this.render('navbar', {to: 'navbar'});
   this.render('Footer', {to: 'footer'});
 });
 
 Router.route('/messages', function () {
   this.layout('ApplicationLayout');
   this.render('messages');
+  this.render('navbar', {to: 'navbar'});
   this.render('Footer', {to: 'footer'});
 });
+Router.route('/feed', function () {
+  this.layout('ApplicationLayout');
+  this.render('feed');
+  this.render('navbar', {to: 'navbar'});
+  this.render('Footer', {to: 'footer'});
+});
+
 Router.route('/messages/:_id', function () {
   this.layout('ApplicationLayout');
   this.render('message_box', {
     data: function () {
       var id = this.params._id;
-      templateData = { messages: Messages.find({conversation_id: id}, {sort: {createdAt: -1}}) };
+      templateData = { messages: Messages.find({conversation_id: id}, {sort: {createdAt: 1}}) };
       return templateData;
     }
   });
+  this.render('navbar', {to: 'navbar'});
   this.render('Footer', {to: 'footer'});
 }, {
   name: 'conversations.show',
@@ -55,7 +66,7 @@ if (Meteor.isClient) {
   });
 
 
-  Template.profile.helpers({
+  Template.feed.helpers({
     posts: function () { 
       return Posts.find({}, {sort: {createdAt: -1}});
     },
@@ -75,15 +86,16 @@ if (Meteor.isClient) {
     conversations: function (){
     // A ajuster... pour si participants
       var u_id = Meteor.userId();
-      var convs = Conversations.find();
+      var convs = Conversations.find({}, {sort: {createdAt: -1}});
       var uconvs = [];
       var c;
       console.log(convs)
       convs.forEach(function (conversation){
         var participants = conversation.participants;
-        var p = participants.indexOf(u_id);
-        if (p > -1)
-	  uconvs.push(conversation);
+	if (participants)
+          var p = participants.indexOf(u_id);
+          if (p > -1)
+	    uconvs.push(conversation);
       });
 //      for (co in convs)
 //      {
@@ -108,7 +120,7 @@ if (Meteor.isClient) {
       var allusers = Meteor.users.find().fetch();
       var friends = [];
       var folls = [];
-      var follby = [];
+//      var follby = [];
       var u_id = Meteor.userId();
       var f;
       for (f in followeds)
@@ -122,39 +134,54 @@ if (Meteor.isClient) {
 	  var fr_id = friend_friends[fr].id;
 	  if (fr_id === u_id)
 	    friends.push(user);
+	    console.log("user"+user+"");
 	}
       }
 
 //      var u;
 //      for (u in allusers){
 //        var t_u = allusers[u];
-//	var t_u_id = allusers[u]._id;
-//	var frs = allusers[u].profile.friends;
-//	var fo;
-//	for (fo in frs){
-//	  var fo_id = frs[fo].id;
-//	  if(fo_id === t_u._id)
-//	    follby.push(t_u)
-//	}
+//        var t_u_id = allusers[u]._id;
+//	  var frs = allusers[u].profile.friends;
+//	  var fo;
+//	  console.log("le user:"+t_u+"");
+//	  console.log("user id"+t_u_id+"");
+//	  console.log("user friends"+frs+"");
+//	  for (fo in frs){
+//	    var fo_id = frs[fo].id;
+//	    if(fo_id === t_u._id)
+//	      console.log("user add"+t_u+"");
+//	      follby.push(t_u)
+//     	  }
 //      }
       
       
-      return {folls: folls, friends: friends, follby: follby};
+      return {folls: folls, friends: friends};
     },
-//    followeds:function(){
-//      var friends = Meteor.user().profile.friends;
-//      var followeds = [];
-//      var f;
-//      for (f in friends){
-//        var friend_id = friends[f].id;
-//        var user = Meteor.users.findOne({_id:friend_id});
-//	followeds.push(user);
-//      }
-//    },
+    followers:function () {
+      var user_id = Meteor.userId();
+      var users = Meteor.users.find();
+      var followers = [];
+      users.forEach(function(doc){
+        var user_fs = doc.profile.friends;
+	var id = doc._id;
+	var u = Meteor.users.findOne({_id:id});
+	console.log(user_fs);
+        var x = user_fs.indexOf(user_id);
+	console.log("doc1"+u+"");
+	if (x > -1)
+	//ca veut pas pusher a voir???
+          followers.push(u);
+          console.log("doc2"+u+""); 
+	  
+      });
+      console.log(followers);
+      return followers;  
+    },
   }); 
 
 
-  Template.profile.events({
+  Template.feed.events({
     "submit .new-post": function (event) {
       var text = event.target.text.value;
       if (Meteor.user())
@@ -181,7 +208,11 @@ if (Meteor.isClient) {
     },
     "click #messages": function () {
       Router.go('/messages');
-    }  
+    },
+    "click #feed": function (){
+      Router.go('/feed');
+    },
+    
   });
   Template.friends.events({
     "click #new_conv": function () {
@@ -215,6 +246,8 @@ if (Meteor.isClient) {
         createdAt: new Date()
       });
       event.target.text.value = "";
+      var elem = document.getElementById('wrapper_messages');
+      elem.scrollTop = elem.scrollHeight;
       return false;
     },  
   });

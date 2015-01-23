@@ -1,23 +1,19 @@
 <template name="ApplicationLayout">
 <body>
+  <navbar>
+      {{> yield "navbar"}}
+  </navbar>
   <content>
       {{> yield}}
   </content>
-  
+ 
+ 
+
   <footer>
    {{> yield "footer"}}
   </footer>
 </body>
 </template>
-
-
-<template name="Home">
-  {{#if currentUser}}
-    {{> home_content }}
-  {{else}}
-  {{/if}}
-</template>
-
 
 <template name="Footer">
   {{#if currentUser}}
@@ -27,12 +23,15 @@
           <li><span id="home" class="glyphicon glyphicon-home footer-icons" aria-hidden="true"></span></li>
           <li><span id="profile" class="glyphicon glyphicon-user footer-icons" aria-hidden="true"></span></li>
           <li><span id="messages" class="glyphicon glyphicon-comment footer-icons" aria-hidden="true"></span></li>
-          <li><span class="glyphicon glyphicon-globe footer-icons" aria-hidden="true"></span></li>
+          <li><span id="feed" class="glyphicon glyphicon-globe footer-icons" aria-hidden="true"></span></li>
           <li><span id="logout" class="glyphicon glyphicon-log-out footer-icons" aria-hidden="true"></span></li>
         </ul>
       </div>
     </div>
   {{else}}
+  {{/if}}
+</template>
+<template name="navbar">
     <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -43,59 +42,60 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Gab</a>
+          <a class="navbar-brand" href="#">{{_ "Gab" }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            {{> loginButtons}}
+	    {{> loginButtons}}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+</template>
+<template name="Home">
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/arcade.svg" class="img" alt="Responsive image">
-          <p>Hey</p>
+          <p>{{_ "Hey" }}</p>
         </div>
       </div>
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/angel-face.svg" class="img" alt="Responsive image">
-          <p>Hey</p>
+          <p>{{_ "Hey" }}</p>
         </div>
       </div>
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/broken-glasses.svg" class="img" alt="Responsive image">
-          <p>Hey</p>
+          <p>{{_ "Hey" }}</p>
         </div>
       </div>
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/fingers-crossed.svg" class="img" alt="Responsive image">
-          <p>Hey</p>
+          <p>{{_ "Hey" }}</p>
         </div>
       </div>
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/running-news.svg" class="img" alt="Responsive image">
-          <p>Hey</p>
+          <p>{{_ "Hey" }}</p>
         </div>
       </div>
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/tv-couch.svg" class="img" alt="Responsive image">
-          <p>Hey</p>
+          <p>{{_ "Hey" }}</p>
         </div>
       </div>
     </div>
   </div>
-  {{/if}}
 </template>
 
-<template name="profile">
+<template name="feed">
     <div id="wrapper">
       <form class="new-post">
        <input name="text" class="form-control input-lg" type="text" placeholder="{{_ "Update your public profile" }}">
@@ -110,19 +110,19 @@
     </div>
 </template>
 
-<template name="home_content">
+<!--<template name="">
     <div id="wrapper">
       {{> esInput index="users" placeholder="Search for friends" }}
       {{> search_results}}
 
         {{> friends}}
     </div>	
- </template>   
+ </template>-->   
  <template name="messages">   
     <div id="wrapper">
 
       <div id="conversations">
-      <h3>Your <small>conversations: </small></h3>
+      <h3>{{_ "Your"}} <small>{{_ "conversations"}}: </small></h3>
         <ul>
 	{{> conversations}}
 	</ul>			    				    
@@ -131,10 +131,8 @@
 
 </template>
 <template name="message_box">
-    <div id="wrapper">
-      {{> message_form}}
+    <div id="wrapper_messages">
 
-      {{test}}
        <div id="scroller">
          <ul>
           {{#each messages}}
@@ -143,6 +141,7 @@
         </ul>
        </div>
     </div>
+    {{> message_form}}
 </template>
 
 <template name="message_form">
@@ -175,9 +174,11 @@
   </li>
 </template>
 <template name="friends">
-
+ <div id="wrapper">
+   {{> esInput index="users" placeholder="Search for friends" }}
+   {{> search_results}}
    <div class="friends">
-     <h3>Friends: </h3>
+     <h3>{{_ "Friends"}}</h3>
      <ul>
      {{ #each friends.friends }}
     
@@ -190,7 +191,7 @@
     </ul>
    </div>
    <div class="friends">
-     <h3>Followed:</h3>
+     <h3>{{_ "Following" }}</h3>
      <ul>
 
      {{ #each friends.folls }}
@@ -202,9 +203,9 @@
      </ul>
    </div>
    <div class="friends">
-     <h3>Followed by:</h3>
+     <h3>{{_ "Followers" }}</h3>
      <ul>
-     {{ #each friends.follby }}
+     {{ #each followers }}
        <li>
        {{username}}
        <button type="button" id="follow_button" class="friends_button glyphicon glyphicon-plus" aria-hidden="true"><span></span></button>
@@ -212,6 +213,9 @@
      {{/each}}
      </ul>
    </div>  
+ </div>  
+
+
 </template>
 <template name="conversations">
 {{ #each conversations }}

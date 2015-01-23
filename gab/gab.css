@@ -1,3 +1,10 @@
+#new-message {
+  bottom:48px; left:0;
+  width:100%;
+  position:absolute; z-index:2;
+  height:46px;
+}
+
 .icons {
   border: 3px solid white;
   padding: 10px;
@@ -61,7 +68,14 @@ body {
 	border-top:1px solid #444;
 }
 
+#wrapper_messages {
+        position:absolute; z-index:1;
+        top:45px; bottom:94px; left:0;
+        width:100%;
+        background:#aaa;
+	overflow:auto;
 
+}
 
 #wrapper {
 	position:absolute; z-index:1;
