@@ -84,7 +84,6 @@ if (Meteor.isClient) {
   });  
   Template.conversations.helpers({
     conversations: function (){
-    // A ajuster... pour si participants
       var u_id = Meteor.userId();
       var convs = Conversations.find({}, {sort: {createdAt: -1}});
       var uconvs = [];
@@ -97,13 +96,7 @@ if (Meteor.isClient) {
           if (p > -1)
 	    uconvs.push(conversation);
       });
-//      for (co in convs)
-//      {
-//        var parts = convs[co].participants;
-//	console.log(parts);
-//      }
       return uconvs;  
-//      return Conversations.find({started_by: u_id}, {sort: {createdAt: -1}});
     },
     last_message: function(id){
       return Messages.findOne({conversation_id:id}).text;
@@ -120,7 +113,6 @@ if (Meteor.isClient) {
       var allusers = Meteor.users.find().fetch();
       var friends = [];
       var folls = [];
-//      var follby = [];
       var u_id = Meteor.userId();
       var f;
       for (f in followeds)
@@ -137,25 +129,6 @@ if (Meteor.isClient) {
 	    console.log("user"+user+"");
 	}
       }
-
-//      var u;
-//      for (u in allusers){
-//        var t_u = allusers[u];
-//        var t_u_id = allusers[u]._id;
-//	  var frs = allusers[u].profile.friends;
-//	  var fo;
-//	  console.log("le user:"+t_u+"");
-//	  console.log("user id"+t_u_id+"");
-//	  console.log("user friends"+frs+"");
-//	  for (fo in frs){
-//	    var fo_id = frs[fo].id;
-//	    if(fo_id === t_u._id)
-//	      console.log("user add"+t_u+"");
-//	      follby.push(t_u)
-//     	  }
-//      }
-      
-      
       return {folls: folls, friends: friends};
     },
     followers:function () {
