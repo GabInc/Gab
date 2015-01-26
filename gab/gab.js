@@ -192,19 +192,28 @@ if (Meteor.isClient) {
       var u_id = Meteor.userId();
       var friend_id = this._id;
       var participants = [u_id, friend_id]
-      Conversations.insert({
-        participants: participants,
-	started_by: u_id,
-	createdAt: new Date()
-      });
-      var last_conv_id = [];
-      var last_conv = Conversations.find({started_by: u_id}, {sort: {createdAt: -1},limit:1});
-      last_conv.forEach(function(doc){
+      var participants_inv = [friend_id, u_id]
+      if (Conversations.findOne({participants: participants})) {
+	var conv_id = Conversations.findOne({participants: participants})._id;
+        Router.go('/messages/'+conv_id+'');
+//      } else if (Conversations.findOne({participants: participants_inv})){
+//        console.log("ben oui 2");
+//	var conv = Conversations.findOne({participants: participants_inv});
+      } else {
+        Conversations.insert({
+          participants: participants,
+	  started_by: u_id,
+	  createdAt: new Date()
+        });
+      
+        var last_conv_id = [];
+        var last_conv = Conversations.find({started_by: u_id}, {sort: {createdAt: -1},limit:1});
+        last_conv.forEach(function(doc){
         last_conv_id.push(doc._id);
 	});
-      
-      Router.go('/messages/'+last_conv_id+'');
-    }
+        Router.go('/messages/'+last_conv_id+'');
+      }
+    }  
   });
   Template.message_form.events({
     "submit #new-message": function (event) {
