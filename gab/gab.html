@@ -244,7 +244,7 @@
 <template name="conversations">
 {{ #each conversations }}
 
-      <li>
+      <li class="conversations">
       {{#if last_message this._id}}
 	@{{username this._id}} - {{last_message this._id}}
       {{else}}
@@ -252,7 +252,8 @@
       {{/if}}	
     <!--    <button type="button" id="delete_conversation" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
     -->
-        <button type="button" id="conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
+        <button style="float:right;" type="button" id="conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
+        <p>{{_ "With" }} : {{other_user this._id}}</p>
       </li>
 
 {{/each}}

@@ -54,7 +54,10 @@
 .new-post {
   margin-top: 20px;
 }
-
+li p {
+  float:right;
+  margin-right:10px;
+}
 body,ul,li {
 	padding:0;
 	margin:0;

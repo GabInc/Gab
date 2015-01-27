@@ -142,7 +142,6 @@ if (Meteor.isClient) {
       var convs = Conversations.find({}, {sort: {createdAt: -1}});
       var uconvs = [];
       var c;
-      console.log(convs)
       convs.forEach(function (conversation){
         var participants = conversation.participants;
 	if (participants)
@@ -155,6 +154,17 @@ if (Meteor.isClient) {
     last_message: function(id){
       return Messages.findOne({conversation_id:id}).text;
 
+    },
+    other_user: function(id){
+      var conv_participants = Conversations.findOne({_id:id}).participants;
+      var user_id = Meteor.userId();
+      var index = conv_participants.indexOf(user_id);
+      if (index > -1) {
+        conv_participants.splice(index, 1);
+      }
+      var o_id = conv_participants[0];
+      var name = Meteor.users.findOne({_id:o_id}).username;
+      return name;
     },
     username: function(id){
       var author_id = Messages.findOne({conversation_id:id}).author_id;
@@ -180,7 +190,6 @@ if (Meteor.isClient) {
 	  var fr_id = friend_friends[fr].id;
 	  if (fr_id === u_id)
 	    friends.push(user);
-	    console.log("user"+user+"");
 	}
       }
       return {folls: folls, friends: friends};
@@ -193,9 +202,7 @@ if (Meteor.isClient) {
         var user_fs = doc.profile.friends;
 	var id = doc._id;
 	var u = Meteor.users.findOne({_id:id});
-	console.log(user_fs);
         var x = user_fs.indexOf(user_id);
-	console.log("doc1"+u+"");
 	if (x > -1)
 	//ca veut pas pusher a voir???
           followers.push(u);
@@ -250,9 +257,6 @@ if (Meteor.isClient) {
       if (Conversations.findOne({participants: participants})) {
 	var conv_id = Conversations.findOne({participants: participants})._id;
         Router.go('/messages/'+conv_id+'');
-//      } else if (Conversations.findOne({participants: participants_inv})){
-//        console.log("ben oui 2");
-//	var conv = Conversations.findOne({participants: participants_inv});
       } else {
         Conversations.insert({
           participants: participants,
@@ -348,7 +352,6 @@ if (Meteor.isClient) {
       } else {
         Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
       }
-      console.log("ben oui")
     }
   });
   Template.conversations.events({
