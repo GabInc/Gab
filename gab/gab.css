@@ -1,3 +1,30 @@
+.greatings h2,h3 {
+  color:white;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+#search_form {
+  margin-top:10px;
+
+}
+.inner-addon { 
+    position: relative; 
+    }
+
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 7.5px;
+  pointer-events: none;
+}
+
+.left-addon .glyphicon  { left:  0px;}
+
+.right-addon .glyphicon { right: 0px;}
+
+.left-addon input  { padding-left:  30px; }
+
+.right-addon input { padding-right: 30px; }
+
 #new-message {
   bottom:48px; left:0;
   width:100%;
@@ -13,6 +40,7 @@
 
 .icons p {
   color: white;
+  font-size:16px;
 }
 
 .icons img {

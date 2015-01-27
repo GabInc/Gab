@@ -42,7 +42,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">{{_ "Gab" }}</a>
+	  <form id="search_form">
+           <div class="inner-addon left-addon">
+	    <i class="glyphicon glyphicon-search"></i> 
+	    <input type="text" class="search square">
+	   </div>
+	  </form> 
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -55,46 +60,63 @@
 <template name="Home">
   <div class="container-fluid">
     <div class="row">
+      <div class="col-xs-12 greatings">
+        <h2>{{_ "Hello " }}{{#if currentUser}}{{currentUser.username}}{{/if}}</h2>
+        <h3>{{_ "It's " }}{{current_day.day}} {{current_day.part}}{{_ " and right now, you could " }}</h3>
+      </div>
+
+    </div>
+    <div class="row">
+      {{#each activities}}
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <img src="/arcade.svg" class="img" alt="Responsive image">
-          <p>{{_ "Hey" }}</p>
+          <p>{{name}}</p>
         </div>
       </div>
-      <div class="col-xs-4 col-sm-2">
-        <div class="icons">
-          <img src="/angel-face.svg" class="img" alt="Responsive image">
-          <p>{{_ "Hey" }}</p>
-        </div>
-      </div>
-      <div class="col-xs-4 col-sm-2">
-        <div class="icons">
-          <img src="/broken-glasses.svg" class="img" alt="Responsive image">
-          <p>{{_ "Hey" }}</p>
-        </div>
-      </div>
-      <div class="col-xs-4 col-sm-2">
-        <div class="icons">
-          <img src="/fingers-crossed.svg" class="img" alt="Responsive image">
-          <p>{{_ "Hey" }}</p>
-        </div>
-      </div>
-      <div class="col-xs-4 col-sm-2">
-        <div class="icons">
-          <img src="/running-news.svg" class="img" alt="Responsive image">
-          <p>{{_ "Hey" }}</p>
-        </div>
-      </div>
-      <div class="col-xs-4 col-sm-2">
-        <div class="icons">
-          <img src="/tv-couch.svg" class="img" alt="Responsive image">
-          <p>{{_ "Hey" }}</p>
-        </div>
-      </div>
+      {{/each}}
     </div>
   </div>
 </template>
+<template name="Admin">
+<div style="height:100%;background-color:white;">
+  {{#if currentUser}}
+<p>Admin ici</p>
 
+<button id="del_convs" class="btn btn-sm">Delete all conversations</button>
+<button id="del_mess" class="btn btn-sm">Delete all messages</button>
+<button id="del_posts" class="btn btn-sm">Delete all posts</button>
+<button id="del_tags" class="btn btn-sm">Delete all tags</button>
+<button id="del_acts" class="btn btn-sm">Delete all Activities</button>    
+    <div class="panel panel-default" style="margin:10px;">
+      <p>New activity</p>
+      <form id="new-act" style="padding:10px;">
+        <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Activity name here" }}">
+        <input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
+	<input style="margin-top:10px;" class="btn" type="submit" value="Create">
+      </form>
+    </div>
+    <div class="panel panel-default" style="margin:10px;">
+      <p>New tag</p>
+      <form id="new-tag" style="padding:10px;">
+        <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
+	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
+        <input style="margin-top:10px;" class="btn" type="submit" value="Create">
+      </form>
+    </div> 
+    <div class="panel panel-default" style="margin:10px;">
+      <p>New link</p>
+      <form id="new-link" style="padding:10px;">
+        <input style="margin-top:10px;" name="url" class="form-control input-lg" type="text" placeholder="{{_ "Url here" }}">
+        <input style="margin-top:10px;" class="btn" type="submit" value="Create">
+      </form>
+    </div>
+
+{{else}}
+
+{{/if}}
+</div>
+</template>
 <template name="feed">
     <div id="wrapper">
       <form class="new-post">
@@ -134,11 +156,13 @@
     <div id="wrapper_messages">
 
        <div id="scroller">
+        <div>
          <ul>
           {{#each messages}}
             {{> message}}
           {{/each}}
         </ul>
+        </div>
        </div>
     </div>
     {{> message_form}}

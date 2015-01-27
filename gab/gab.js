@@ -2,6 +2,10 @@ Tasks = new Mongo.Collection("tasks");
 Conversations = new Mongo.Collection("conversations");
 Posts = new Mongo.Collection("posts");
 Messages = new Mongo.Collection("messages");
+Tags = new Mongo.Collection("tags");
+Activities = new Mongo.Collection("activities");
+Links = new Mongo.Collection("links");
+
 
 EasySearch.createSearchIndex('users', {
     'field' : ['username'],
@@ -17,7 +21,9 @@ Router.route('/', function () {
   this.render('navbar', {to: 'navbar'});
   this.render('Footer', {to: 'footer'});
 });
-
+Router.route('/admin', function () {
+  this.render('Admin');
+});
 Router.route('/profile', function () {
   this.layout('ApplicationLayout');
   this.render('friends');
@@ -58,7 +64,28 @@ Router.route('/messages/:_id', function () {
 
 });  
 
+if (Meteor.isServer) {
 
+  Meteor.startup(function() {
+    return Meteor.methods({
+      removeAllConvs: function() {
+	return Conversations.remove({});
+      },
+      removeAllPosts: function() {
+        return Posts.remove({});
+      },
+      removeAllMess: function() {
+        return Messages.remove({});
+      },
+      removeAllTags: function() {
+        return Tags.remove({});
+      },
+      removeAllActs: function() {
+        return Activities.remove({});
+      },	
+    });
+  });
+}
 
 if (Meteor.isClient) {
 
@@ -71,7 +98,34 @@ if (Meteor.isClient) {
       return Posts.find({}, {sort: {createdAt: -1}});
     },
   });
-  
+  Template.Home.helpers({
+    activities: function () {
+      return Activities.find({});
+    },
+    current_day: function () {
+      var d = new Date();
+      var weekday = new Array(7);
+      weekday[0]=  "Sunday";
+      weekday[1] = "Monday";
+      weekday[2] = "Tuesday";
+      weekday[3] = "Wednesday";
+      weekday[4] = "Thursday";
+      weekday[5] = "Friday";
+      weekday[6] = "Saturday";
+
+      var day = weekday[d.getDay()];
+      if ( d.getHours() < 12 && d.getHours() >= 5){
+        var part = "morning";
+      } else if ( d.getHours() >= 12 && d.getHours() <= 17 ){
+        var part = "afternoon";
+      } else if (d.getHours() > 17 && d.getHours() <= 24 ){
+        var part = "evening";
+      } else {
+        var part = "night";
+      }
+      return {day: day, part: part};
+    },
+  });
   Template.post.helpers({
     username: function (id) {
       return Meteor.users.findOne({_id:id}).username;
@@ -238,6 +292,52 @@ if (Meteor.isClient) {
     "click .delete": function () {
       Posts.remove(this._id);
     }
+  });
+  Template.Admin.events({
+    "submit #new-tag": function (event) {
+      var name = event.target.name.value;
+      var slug = event.target.slug.value;
+      Tags.insert({
+        name: name,
+	slug: slug,
+	createdAt: new Date()
+      });
+      event.target.text.value = "";
+      return false;
+    },
+    "submit #new-act": function (event) {
+      var name = event.target.name.value;
+      var slug = event.target.slug.value;
+      Activities.insert({
+        name: name,
+        slug: slug,
+        createdAt: new Date()
+      });
+    },
+    "submit #new-link": function (event) {
+      var url = event.target.url.value;
+      Links.insert({
+        url: url,
+        createdAt: new Date()
+      });    
+    },
+
+
+    "click #del_convs": function () {
+      Meteor.call('removeAllConvs');
+    },
+    "click #del_mess": function () {
+      Meteor.call('removeAllMess');
+    },
+    "click #del_tags": function () {
+      Meteor.call('removeAllTags');
+    },
+    "click #del_posts": function () {
+      Meteor.call('removeAllPosts');
+    },
+    "click #del_acts": function () {
+      Meteor.call('removeAllActs');
+    },
   });
   Template.search_user.events({
     "click #add_button": function () {
