@@ -82,12 +82,24 @@
 <div style="height:100%;background-color:white;">
   {{#if currentUser}}
 <p>Admin ici</p>
-
+<p>ON TOUCHE PAS AUX PITONS, MERCI</p>
 <button id="del_convs" class="btn btn-sm">Delete all conversations</button>
 <button id="del_mess" class="btn btn-sm">Delete all messages</button>
 <button id="del_posts" class="btn btn-sm">Delete all posts</button>
 <button id="del_tags" class="btn btn-sm">Delete all tags</button>
 <button id="del_acts" class="btn btn-sm">Delete all Activities</button>    
+    <div class="panel panel-default" style="margin:10px;">
+     <div id="users_admin"> 
+      <ul>
+         <li style="background-color: lightgrey;">{{_ "Username" }}<button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Make staff" }}</button></li>
+      {{#each allusers}}
+         <li>{{username}}
+           <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
+        </li>
+      {{/each}}	
+      </ul>
+     </div> 
+    </div>
     <div class="panel panel-default" style="margin:10px;">
       <p>New activity</p>
       <form id="new-act" style="padding:10px;">
@@ -132,14 +144,6 @@
     </div>
 </template>
 
-<!--<template name="">
-    <div id="wrapper">
-      {{> esInput index="users" placeholder="Search for friends" }}
-      {{> search_results}}
-
-        {{> friends}}
-    </div>	
- </template>-->   
  <template name="messages">   
     <div id="wrapper">
 
@@ -155,13 +159,13 @@
 <template name="message_box">
     <div id="wrapper_messages">
 
-       <div id="scroller">
-        <div>
-         <ul>
+       <div id="scroller" class="mess_scroller">
+        <div class="conv_wrapper">
+         <ul class="conversations_ul">
           {{#each messages}}
             {{> message}}
           {{/each}}
-        </ul>
+         </ul>
         </div>
        </div>
     </div>

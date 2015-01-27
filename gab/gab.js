@@ -22,7 +22,13 @@ Router.route('/', function () {
   this.render('Footer', {to: 'footer'});
 });
 Router.route('/admin', function () {
-  this.render('Admin');
+  this.render('Admin', {
+    data: function(){
+    var id = this.params._id;
+    templateData = { allusers: Meteor.users.find({})};
+    return templateData;
+    }
+  });
 });
 Router.route('/profile', function () {
   this.layout('ApplicationLayout');
@@ -118,7 +124,7 @@ if (Meteor.isClient) {
         var part = "morning";
       } else if ( d.getHours() >= 12 && d.getHours() <= 17 ){
         var part = "afternoon";
-      } else if (d.getHours() > 17 && d.getHours() <= 24 ){
+      } else if (d.getHours() > 17 && d.getHours() <= 23 ){
         var part = "evening";
       } else {
         var part = "night";
@@ -200,16 +206,32 @@ if (Meteor.isClient) {
       var followers = [];
       users.forEach(function(doc){
         var user_fs = doc.profile.friends;
+	console.log("user_fs: "+user_fs+"");
+	var z;
 	var id = doc._id;
 	var u = Meteor.users.findOne({_id:id});
-        var x = user_fs.indexOf(user_id);
-	if (x > -1)
+	for (z in user_fs){
+	  var y = user_fs[z].id;
+          if (y === user_id){
+	    console.log("ben oui");
+	    followers.push(u);
+	  } 
+	  console.log(y);
+	}
+//	var id = doc._id;
+//	console.log("id: "+id+"");
+//	var u = Meteor.users.findOne({_id:id});
+//	console.log("user: "+u+"");
+//	console.log("userid: "+user_id+"")
+ //       var x = user_fs.indexOf(user_id);
+//	console.log(x);
+//	if (x > -1)
 	//ca veut pas pusher a voir???
-          followers.push(u);
-          console.log("doc2"+u+""); 
+//          followers.push(u);
+//          console.log("doc2"+u+""); 
 	  
       });
-      console.log(followers);
+//      console.log(followers);
       return followers;  
     },
   }); 
@@ -271,7 +293,17 @@ if (Meteor.isClient) {
 	});
         Router.go('/messages/'+last_conv_id+'');
       }
-    }  
+    },
+    "click #follow_button": function () {
+      var u_id = Meteor.userId();
+      var friend_id = this._id;
+      if (Meteor.user().profile.friends) {
+        Meteor.users.update({_id:u_id}, { $addToSet: {"profile.friends": {"id": friend_id} } });
+      } else {
+        Meteor.users.update({_id:u_id}, { $set: {"profile.friends": [{"id": friend_id}] } });
+      }
+    },
+
   });
   Template.message_form.events({
     "submit #new-message": function (event) {
@@ -325,7 +357,12 @@ if (Meteor.isClient) {
         createdAt: new Date()
       });    
     },
-
+    "click #make_staff": function() {
+      var id = this._id;
+      var user = Meteor.users.findOne({_id:id});
+      Meteor.users.update({_id:id},{$set: {"profile": {"is_staff": true } } });
+      console.log(user);
+    },
 
     "click #del_convs": function () {
       Meteor.call('removeAllConvs');
