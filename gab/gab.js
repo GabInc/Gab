@@ -91,8 +91,17 @@ if (Meteor.isServer) {
       },	
     });
   });
-}
 
+  Meteor.users.allow({
+    update: function (userId, doc, fields, modifier) {
+      var user =  Meteor.users.find({_id: userId}).profile.is_staff;
+      if (user === true) {
+        console.log("Ben oui chef");
+        return true;
+      }
+    }
+  });
+}  
 if (Meteor.isClient) {
 
   Meteor.startup(function() {

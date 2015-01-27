@@ -42,12 +42,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-	  <form id="search_form">
+    <!-- 	  <form id="search_form">
            <div class="inner-addon left-addon">
 	    <i class="glyphicon glyphicon-search"></i> 
 	    <input type="text" class="search square">
 	   </div>
-	  </form> 
+	  </form> -->
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -82,7 +82,7 @@
 <div style="height:100%;background-color:white;">
   {{#if currentUser}}
 <p>Admin ici</p>
-<p>ON TOUCHE PAS AUX PITONS, MERCI</p>
+<h2>ON TOUCHE PAS AUX PITONS, MERCI</h2>
 <button id="del_convs" class="btn btn-sm">Delete all conversations</button>
 <button id="del_mess" class="btn btn-sm">Delete all messages</button>
 <button id="del_posts" class="btn btn-sm">Delete all posts</button>
@@ -93,7 +93,7 @@
       <ul>
          <li style="background-color: lightgrey;">{{_ "Username" }}<button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Make staff" }}</button></li>
       {{#each allusers}}
-         <li>{{username}}
+         <li>{{username}} - {{#if profile.is_staff}} staff {{else}} pas staff {{/if}}
            <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
         </li>
       {{/each}}	
@@ -146,13 +146,12 @@
 
  <template name="messages">   
     <div id="wrapper">
-
-      <div id="conversations">
+     <div id="scroller">
       <h3>{{_ "Your"}} <small>{{_ "conversations"}}: </small></h3>
         <ul>
 	{{> conversations}}
-	</ul>			    				    
-      </div>
+	</ul>	
+      </div>	
     </div>
 
 </template>
@@ -257,7 +256,7 @@
     <!--    <button type="button" id="delete_conversation" class="friends_button glyphicon glyphicon-remove" aria-hidden="true"><span></span></button>
     -->
         <button style="float:right;" type="button" id="conversation" class="friends_button glyphicon glyphicon-pencil" aria-hidden="true"><span></span></button>
-        <p>{{_ "With" }} : {{other_user this._id}}</p>
+        <div style="float:right;">{{_ "With" }} : {{other_user this._id}}</div>
       </li>
 
 {{/each}}
