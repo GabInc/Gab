@@ -81,21 +81,33 @@
 <template name="Admin">
 <div style="height:100%;background-color:white;">
   {{#if currentUser}}
-<p>Admin ici</p>
+<p>Salut {{currentUser.username}}</p>
+{{#if currentUser.profile.is_staff}}
 <h2>ON TOUCHE PAS AUX PITONS, MERCI</h2>
 <button id="del_convs" class="btn btn-sm">Delete all conversations</button>
 <button id="del_mess" class="btn btn-sm">Delete all messages</button>
 <button id="del_posts" class="btn btn-sm">Delete all posts</button>
 <button id="del_tags" class="btn btn-sm">Delete all tags</button>
 <button id="del_acts" class="btn btn-sm">Delete all Activities</button>    
+{{/if}}    
     <div class="panel panel-default" style="margin:10px;">
      <div id="users_admin"> 
       <ul>
-         <li style="background-color: lightgrey;">{{_ "Username" }}<button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Make staff" }}</button></li>
+         <li style="background-color: lightgrey;">{{_ "Username" }}
+	   {{#if currentUser.profile.is_staff}}
+	   <button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Change status" }}</button>
+	   {{/if}}
+	   </li>
       {{#each allusers}}
          <li>{{username}} - {{#if profile.is_staff}} staff {{else}} pas staff {{/if}}
-           <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
-        </li>
+           {{#if currentUser.profile.is_staff}}
+	   {{#if profile.is_staff}}
+	   <button type="button" id="remove_staff" class="friends_button glyphicon glyphicon-thumbs-down" aria-hidden="true"><span></span></button>
+           {{else}}
+	   <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
+	   {{/if}}
+	   {{/if}}
+	</li>
       {{/each}}	
       </ul>
      </div> 
@@ -120,7 +132,12 @@
       <p>New link</p>
       <form id="new-link" style="padding:10px;">
         <input style="margin-top:10px;" name="url" class="form-control input-lg" type="text" placeholder="{{_ "Url here" }}">
-        <input style="margin-top:10px;" class="btn" type="submit" value="Create">
+        <select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">
+	  <option value="fr">{{_ "French" }}</option>
+	  <option value="en">{{_ "English" }}</option>
+	  <option value="es">{{_ "Spanish" }}</option>
+	</select>
+	<input style="margin-top:10px;" class="btn" type="submit" value="Create">
       </form>
     </div>
 

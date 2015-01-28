@@ -25,7 +25,8 @@ Router.route('/admin', function () {
   this.render('Admin', {
     data: function(){
     var id = this.params._id;
-    templateData = { allusers: Meteor.users.find({})};
+    var current_userid = Meteor.userId();
+    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}})};
     return templateData;
     }
   });
@@ -94,10 +95,13 @@ if (Meteor.isServer) {
 
   Meteor.users.allow({
     update: function (userId, doc, fields, modifier) {
-      var user =  Meteor.users.find({_id: userId}).profile.is_staff;
-      if (user === true) {
-        console.log("Ben oui chef");
+      if (Meteor.users.findOne({_id: userId}).profile.is_staff === true){
+//      console.log(user);
+//      if (user === true) {
+    //  console.log("Ben oui chef");
         return true;
+      } else {
+        return false;
       }
     }
   });
@@ -361,8 +365,14 @@ if (Meteor.isClient) {
     },
     "submit #new-link": function (event) {
       var url = event.target.url.value;
+      if (event.target.lang.value){
+        var lang = event.target.lang.value;
+      }	else {
+        var lang = "en";
+      }
       Links.insert({
         url: url,
+	language: lang,
         createdAt: new Date()
       });    
     },
@@ -370,7 +380,11 @@ if (Meteor.isClient) {
       var id = this._id;
       var user = Meteor.users.findOne({_id:id});
       Meteor.users.update({_id:id},{$set: {"profile": {"is_staff": true } } });
-      console.log(user);
+    },
+    "click #remove_staff": function() {
+      var id = this._id;
+      var user = Meteor.users.findOne({_id:id});
+      Meteor.users.update({_id:id},{$set: {"profile": {"is_staff": false } } });
     },
 
     "click #del_convs": function () {
