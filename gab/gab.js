@@ -5,8 +5,12 @@ Messages = new Mongo.Collection("messages");
 Tags = new Mongo.Collection("tags");
 Activities = new Mongo.Collection("activities");
 Links = new Mongo.Collection("links");
-
-
+//Images = new FS.Collection("images", {
+//  stores: [new FS.Store.FileSystem("images", {path: "~/images"})]
+//  });
+Images = new FS.Collection("images", {
+stores: [new FS.Store.FileSystem("images")]
+});
 EasySearch.createSearchIndex('users', {
     'field' : ['username'],
     'collection' : Meteor.users,
@@ -26,7 +30,7 @@ Router.route('/admin', function () {
     data: function(){
     var id = this.params._id;
     var current_userid = Meteor.userId();
-    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}})};
+    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find()};
     return templateData;
     }
   });
@@ -95,7 +99,7 @@ if (Meteor.isServer) {
 
   Meteor.users.allow({
     update: function (userId, doc, fields, modifier) {
-      if (Meteor.users.findOne({_id: userId}).profile.is_staff === true){
+      if (Meteor.users.findOne({_id: userId}).profile.cat.is_staff === true){
 //      console.log(user);
 //      if (user === true) {
     //  console.log("Ben oui chef");
@@ -116,6 +120,12 @@ if (Meteor.isClient) {
     posts: function () { 
       return Posts.find({}, {sort: {createdAt: -1}});
     },
+  });
+  Template.Admin.helpers({
+    images: function(){
+      return Images.find({});
+    },
+  
   });
   Template.Home.helpers({
     activities: function () {
@@ -182,7 +192,11 @@ if (Meteor.isClient) {
         conv_participants.splice(index, 1);
       }
       var o_id = conv_participants[0];
-      var name = Meteor.users.findOne({_id:o_id}).username;
+      if (Meteor.users.findOne({_id:o_id}).username){
+        var name = Meteor.users.findOne({_id:o_id}).username;
+      } else {
+        var name = "No name";
+      }
       return name;
     },
     username: function(id){
@@ -192,8 +206,11 @@ if (Meteor.isClient) {
   });
   Template.friends.helpers({   
     friends:function () {
-      var followeds = Meteor.user().profile.friends;
-      var allusers = Meteor.users.find().fetch();
+      if (Meteor.user()){
+        var followeds = Meteor.user().profile.friends;
+      } else {
+        var followeds = [];
+      }	
       var friends = [];
       var folls = [];
       var u_id = Meteor.userId();
@@ -215,22 +232,28 @@ if (Meteor.isClient) {
     },
     followers:function () {
       var user_id = Meteor.userId();
-      var users = Meteor.users.find();
+      if (Meteor.users.find()){
+        var users = Meteor.users.find();
+      } else {
+        var users = []
+      }
       var followers = [];
       users.forEach(function(doc){
-        var user_fs = doc.profile.friends;
-	console.log("user_fs: "+user_fs+"");
-	var z;
-	var id = doc._id;
-	var u = Meteor.users.findOne({_id:id});
-	for (z in user_fs){
-	  var y = user_fs[z].id;
-          if (y === user_id){
-	    console.log("ben oui");
-	    followers.push(u);
-	  } 
-	  console.log(y);
-	}
+        if (doc.profile){
+	  var user_fs = doc.profile.friends;
+	  console.log("user: "+doc+"");
+	  console.log("user_fs: "+user_fs+"");
+	  var z;
+	  var id = doc._id;
+	  var u = Meteor.users.findOne({_id:id});
+	  for (z in user_fs){
+	    var y = user_fs[z].id;
+            if (y === user_id){
+	      console.log("ben oui");
+	      followers.push(u);
+	    } 
+	    console.log(y);
+	  }
 //	var id = doc._id;
 //	console.log("id: "+id+"");
 //	var u = Meteor.users.findOne({_id:id});
@@ -242,7 +265,7 @@ if (Meteor.isClient) {
 	//ca veut pas pusher a voir???
 //          followers.push(u);
 //          console.log("doc2"+u+""); 
-	  
+	}  
       });
 //      console.log(followers);
       return followers;  
@@ -283,6 +306,11 @@ if (Meteor.isClient) {
     },
     
   });
+  Template.navbar.events({
+    "click #admin": function () {
+      Router.go('/admin');
+    },
+  });
   Template.friends.events({
     "click #new_conv": function () {
       var u_id = Meteor.userId();
@@ -292,6 +320,9 @@ if (Meteor.isClient) {
       if (Conversations.findOne({participants: participants})) {
 	var conv_id = Conversations.findOne({participants: participants})._id;
         Router.go('/messages/'+conv_id+'');
+      } else if (Conversations.findOne({participants: participants_inv})){
+          var conv_id = Conversations.findOne({participants: participants_inv})._id;
+	  Router.go('/messages/'+conv_id+'');
       } else {
         Conversations.insert({
           participants: participants,
@@ -343,6 +374,11 @@ if (Meteor.isClient) {
     }
   });
   Template.Admin.events({
+    "submit #new-img": function (event) {
+      FS.Utility.eachFile(event, function(file) {
+      			Images.insert(file);
+					});
+    },
     "submit #new-tag": function (event) {
       var name = event.target.name.value;
       var slug = event.target.slug.value;
@@ -357,9 +393,11 @@ if (Meteor.isClient) {
     "submit #new-act": function (event) {
       var name = event.target.name.value;
       var slug = event.target.slug.value;
+      var file_name = event.target.file_name.value;
       Activities.insert({
         name: name,
         slug: slug,
+	file_name: file_name,
         createdAt: new Date()
       });
     },
@@ -379,12 +417,12 @@ if (Meteor.isClient) {
     "click #make_staff": function() {
       var id = this._id;
       var user = Meteor.users.findOne({_id:id});
-      Meteor.users.update({_id:id},{$set: {"profile": {"is_staff": true } } });
+      Meteor.users.update({_id:id},{$set: {"profile.cat": {"is_staff": true } } });
     },
     "click #remove_staff": function() {
       var id = this._id;
       var user = Meteor.users.findOne({_id:id});
-      Meteor.users.update({_id:id},{$set: {"profile": {"is_staff": false } } });
+      Meteor.users.update({_id:id},{$set: {"profile.cat": {"is_staff": false } } });
     },
 
     "click #del_convs": function () {

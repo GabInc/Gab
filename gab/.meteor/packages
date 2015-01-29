@@ -20,3 +20,7 @@ ian:accounts-ui-bootstrap-3
 email
 matteodem:easy-search
 iron:router
+cfs:standard-packages
+cfs:filesystem
+cfs:gridfs
+cfs:s3

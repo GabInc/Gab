@@ -51,6 +51,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+	    {{#if currentUser.profile.cat.is_staff}}
+              <li><button style="padding-bottom: 15px;padding-top: 15px;" id="admin" class="btn btn-link">ADMIN</button></li>
+	    {{/if}}
 	    {{> loginButtons}}
           </ul>
         </div><!--/.nav-collapse -->
@@ -70,7 +73,7 @@
       {{#each activities}}
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
-          <img src="/arcade.svg" class="img" alt="Responsive image">
+          <img src="/{{file_name}}" class="img" alt="Responsive image">
           <p>{{name}}</p>
         </div>
       </div>
@@ -80,32 +83,25 @@
 </template>
 <template name="Admin">
 <div style="height:100%;background-color:white;">
-  {{#if currentUser}}
+  {{#if currentUser.profile.cat.is_staff}}
 <p>Salut {{currentUser.username}}</p>
-{{#if currentUser.profile.is_staff}}
-<h2>ON TOUCHE PAS AUX PITONS, MERCI</h2>
 <button id="del_convs" class="btn btn-sm">Delete all conversations</button>
 <button id="del_mess" class="btn btn-sm">Delete all messages</button>
 <button id="del_posts" class="btn btn-sm">Delete all posts</button>
 <button id="del_tags" class="btn btn-sm">Delete all tags</button>
 <button id="del_acts" class="btn btn-sm">Delete all Activities</button>    
-{{/if}}    
     <div class="panel panel-default" style="margin:10px;">
      <div id="users_admin"> 
       <ul>
          <li style="background-color: lightgrey;">{{_ "Username" }}
-	   {{#if currentUser.profile.is_staff}}
 	   <button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Change status" }}</button>
-	   {{/if}}
 	   </li>
       {{#each allusers}}
-         <li>{{username}} - {{#if profile.is_staff}} staff {{else}} pas staff {{/if}}
-           {{#if currentUser.profile.is_staff}}
-	   {{#if profile.is_staff}}
+         <li>{{username}} - {{#if profile.cat.is_staff}} staff {{else}} pas staff {{/if}}
+	   {{#if profile.cat.is_staff}}
 	   <button type="button" id="remove_staff" class="friends_button glyphicon glyphicon-thumbs-down" aria-hidden="true"><span></span></button>
            {{else}}
 	   <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
-	   {{/if}}
 	   {{/if}}
 	</li>
       {{/each}}	
@@ -117,8 +113,17 @@
       <form id="new-act" style="padding:10px;">
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Activity name here" }}">
         <input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
+	<input style="margin-top:10px;" name="file_name" class="form-control input-lg" type="text" placeholder="{{_ "File name here" }}">
 	<input style="margin-top:10px;" class="btn" type="submit" value="Create">
       </form>
+    </div>
+
+    <div class="panel panel-default" style="margin:10px;">
+    		<form id="new-img">
+		  <input id="fileInput" type="file" name="file" multiple="multiple"> 
+		  <input style="margin-top:10px;" class="btn" type="submit" value="Add">
+		</form>
+
     </div>
     <div class="panel panel-default" style="margin:10px;">
       <p>New tag</p>
@@ -131,8 +136,31 @@
     <div class="panel panel-default" style="margin:10px;">
       <p>New link</p>
       <form id="new-link" style="padding:10px;">
-        <input style="margin-top:10px;" name="url" class="form-control input-lg" type="text" placeholder="{{_ "Url here" }}">
-        <select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">
+        url:
+	<input style="margin-top:10px;" name="url" class="form-control input-lg" type="text" placeholder="{{_ "Url here" }}">
+        tags:
+        <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" name="tags" class="form-control input-lg" type="text" multiple>
+         {{# each tags}}
+          <option value="{{this._id}}">{{name}}</option>
+	 {{/each}}
+	</select>
+
+	actvities:
+        <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" name="activities" class="form-control input-lg" type="text" multiple>
+	 {{# each activities}}
+	 <option value="{{this._id}}">{{name}}</option>
+	 {{/each}}
+	</select>
+	time:
+	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" name="times" class="form-control input-lg" type="text" multiple>
+         <option value="morning">{{_ "Morning" }}</option>
+	 <option value="afternoon">{{_ "Afternoon" }}</option>
+	 <option value="evening">{{_ "Evening" }}</option>
+	 <option value="night">{{_ "Night" }}</option>
+	</select>
+	language:
+	<select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">
+	  <option value="">---------</option>
 	  <option value="fr">{{_ "French" }}</option>
 	  <option value="en">{{_ "English" }}</option>
 	  <option value="es">{{_ "Spanish" }}</option>
@@ -142,7 +170,7 @@
     </div>
 
 {{else}}
-
+Voir pour le 404...
 {{/if}}
 </div>
 </template>
