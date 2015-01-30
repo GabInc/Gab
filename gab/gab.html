@@ -73,7 +73,7 @@
       {{#each activities}}
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
-          <img src="/{{file_name}}" class="img" alt="Responsive image">
+          <a href="/act/{{slug}}"><img src="/{{file_name}}" class="img" alt="Responsive image"></a>
           <p>{{name}}</p>
         </div>
       </div>
@@ -81,15 +81,40 @@
     </div>
   </div>
 </template>
+<template name="activity">
+<h1 style="color:white;">{{activity.name}}</h1>
+{{#each tags}}
+<a href="/tag/{{slug}}"><h3 style="color:white;">{{name}}</h3></a>
+{{/each}}
+</template>
+
+<template name="tag">
+<h1 style="color:white;">{{tag.name}}</h1>
+{{#each tags}}
+<a href="/links/{{slug}}"><h3 style="color:white;">{{name}}</h3></a>
+{{/each}}
+
+</template>
+
+<template name="links">
+<h1 style="color:white;">{{tag.name}}</h1>
+{{#each links}}
+<a href="#"><h3 style="color:white;">{{url}}</h3></a>
+{{/each}}
+
+</template>
 <template name="Admin">
 <div style="height:100%;background-color:white;">
   {{#if currentUser.profile.cat.is_staff}}
 <p>Salut {{currentUser.username}}</p>
+Ne pas toucher aux pitons, merci
 <button id="del_convs" class="btn btn-sm">Delete all conversations</button>
 <button id="del_mess" class="btn btn-sm">Delete all messages</button>
 <button id="del_posts" class="btn btn-sm">Delete all posts</button>
-<button id="del_tags" class="btn btn-sm">Delete all tags</button>
-<button id="del_acts" class="btn btn-sm">Delete all Activities</button>    
+<button id="del_tags" class="btn btn-sm">Delete all main tags</button>
+<button id="del_childtags" class="btn btn-sm">Delete all child tags</button>
+<button id="del_acts" class="btn btn-sm">Delete all Activities</button>
+<button id="del_links" class="btn btn-sm">Delete all links</button>
     <div class="panel panel-default" style="margin:10px;">
      <div id="users_admin"> 
       <ul>
@@ -114,11 +139,18 @@
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Activity name here" }}">
         <input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
 	<input style="margin-top:10px;" name="file_name" class="form-control input-lg" type="text" placeholder="{{_ "File name here" }}">
+	time of the day:
+	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="times" name="times" class="form-control input-lg" type="text" multiple>
+          <option value="morning">{{_ "Morning" }}</option>
+          <option value="afternoon">{{_ "Afternoon" }}</option>
+          <option value="evening">{{_ "Evening" }}</option>
+          <option value="night">{{_ "Night" }}</option>
+        </select>
 	<input style="margin-top:10px;" class="btn" type="submit" value="Create">
       </form>
     </div>
 
-    <div class="panel panel-default" style="margin:10px;">
+    <div class="panel panel-default" style="margin:10px;display:none;">
     		<form id="new-img">
 		  <input id="fileInput" type="file" name="file" multiple="multiple"> 
 		  <input style="margin-top:10px;" class="btn" type="submit" value="Add">
@@ -126,37 +158,43 @@
 
     </div>
     <div class="panel panel-default" style="margin:10px;">
-      <p>New tag</p>
+      <p>New main tag</p>
       <form id="new-tag" style="padding:10px;">
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
 	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
-        <input style="margin-top:10px;" class="btn" type="submit" value="Create">
+        actvities:
+	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="activities" name="activities" class="form-control input-lg" type="text" multiple>
+          {{# each activities}}
+          <option value="{{this._id}}">{{name}}</option>
+          {{/each}}
+        </select>
+	<input style="margin-top:10px;" class="btn" type="submit" value="Create">
       </form>
     </div> 
     <div class="panel panel-default" style="margin:10px;">
+      <p>New child tag</p>
+      <form id="new-child-tag" style="padding:10px;">
+        <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
+	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
+        main tags:
+	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="tags" name="tags" class="form-control input-lg" type="text" multiple>
+         {{# each tags}}
+           <option value="{{this._id}}">{{name}}</option>
+         {{/each}}
+        </select>					    
+	<input style="margin-top:10px;" class="btn" type="submit" value="Create">
+      </form>	
+    </div>  
+    <div class="panel panel-default" style="margin:10px;">
       <p>New link</p>
-      <form id="new-link" style="padding:10px;">
+      <form id="new-link" style="padding:10px;" method="post">
         url:
 	<input style="margin-top:10px;" name="url" class="form-control input-lg" type="text" placeholder="{{_ "Url here" }}">
         tags:
-        <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" name="tags" class="form-control input-lg" type="text" multiple>
-         {{# each tags}}
+        <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="ctags" name="ctags" class="form-control input-lg" type="text" multiple>
+         {{# each childtags}}
           <option value="{{this._id}}">{{name}}</option>
 	 {{/each}}
-	</select>
-
-	actvities:
-        <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" name="activities" class="form-control input-lg" type="text" multiple>
-	 {{# each activities}}
-	 <option value="{{this._id}}">{{name}}</option>
-	 {{/each}}
-	</select>
-	time:
-	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" name="times" class="form-control input-lg" type="text" multiple>
-         <option value="morning">{{_ "Morning" }}</option>
-	 <option value="afternoon">{{_ "Afternoon" }}</option>
-	 <option value="evening">{{_ "Evening" }}</option>
-	 <option value="night">{{_ "Night" }}</option>
 	</select>
 	language:
 	<select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">

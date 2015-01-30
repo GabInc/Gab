@@ -3,6 +3,7 @@ Conversations = new Mongo.Collection("conversations");
 Posts = new Mongo.Collection("posts");
 Messages = new Mongo.Collection("messages");
 Tags = new Mongo.Collection("tags");
+Childtags = new Mongo.Collection("childtags");
 Activities = new Mongo.Collection("activities");
 Links = new Mongo.Collection("links");
 //Images = new FS.Collection("images", {
@@ -30,7 +31,7 @@ Router.route('/admin', function () {
     data: function(){
     var id = this.params._id;
     var current_userid = Meteor.userId();
-    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find()};
+    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find(), childtags: Childtags.find()};
     return templateData;
     }
   });
@@ -53,6 +54,76 @@ Router.route('/feed', function () {
   this.render('feed');
   this.render('navbar', {to: 'navbar'});
   this.render('Footer', {to: 'footer'});
+});
+Router.route('/act/:slug', function () {
+  this.layout('ApplicationLayout');
+  this.render('activity', {
+    data: function () {
+      var slug = this.params.slug;
+      if (Activities.findOne({slug: slug})){
+        var act_id = Activities.findOne({slug: slug})._id;
+	var alltags = Tags.find();
+	console.log(alltags);
+        var maintags = []
+        alltags.forEach(function (doc){
+          var tag_acts = doc.activities;
+	  if (tag_acts)
+	    var x = tag_acts.indexOf(act_id);
+	    if (x > -1)
+	      maintags.push(doc);
+	});
+      }  
+      templateData = {activity: Activities.findOne({slug: slug}), tags: maintags};
+      return templateData;
+    }  
+  });
+});
+
+Router.route('/tag/:slug', function () {
+  this.layout('ApplicationLayout');
+  this.render('tag', {
+    data: function () {
+      var slug = this.params.slug;
+      if (Tags.findOne({slug: slug})){
+        var tag_id = Tags.findOne({slug: slug})._id;
+        var allchildtags = Childtags.find();
+	var childtags = []
+	allchildtags.forEach(function (doc){
+          var tag_tags = doc.tags;
+	  if (tag_tags)
+	    var x = tag_tags.indexOf(tag_id);
+	    if (x > -1)
+	      childtags.push(doc);
+	});
+      }
+      templateData = {tag: Tags.findOne({slug: slug}), tags: childtags};
+      return templateData;
+    }
+  });
+});
+
+Router.route('/links/:slug', function () {
+  this.layout('ApplicationLayout');
+  this.render('links', {
+    data: function () {
+      var slug = this.params.slug;
+      if (Childtags.findOne({slug: slug})){
+        var ctag_id = Childtags.findOne({slug: slug})._id;
+	var alllinks = Links.find();
+	var links = []
+	alllinks.forEach(function (doc){
+          var link_tags = doc.tags;
+	  if (link_tags)
+	    var x = link_tags.indexOf(ctag_id);
+	    if (x > -1)
+	      links.push(doc);
+	});
+      }
+      templateData = {tag: Childtags.findOne({slug: slug}), links: links};
+      return templateData;
+	    
+    }
+  });
 });
 
 Router.route('/messages/:_id', function () {
@@ -93,6 +164,12 @@ if (Meteor.isServer) {
       },
       removeAllActs: function() {
         return Activities.remove({});
+      },
+      removeAllLinks: function() {
+        return Links.remove({});
+      },
+      removeAllChildtags: function() {
+        return Childtags.remove({});
       },	
     });
   });
@@ -382,22 +459,35 @@ if (Meteor.isClient) {
     "submit #new-tag": function (event) {
       var name = event.target.name.value;
       var slug = event.target.slug.value;
+      var activities = $('#activities').val();
       Tags.insert({
         name: name,
 	slug: slug,
+	activities: activities,
 	createdAt: new Date()
       });
-      event.target.text.value = "";
-      return false;
+    },
+    "submit #new-child-tag": function (event) {
+      var name = event.target.name.value;
+      var slug = event.target.slug.value;
+      var tags = $('#tags').val();
+      Childtags.insert({
+         name: name,
+	 slug: slug,
+	 tags: tags,
+	 createdAt: new Date()
+      });
     },
     "submit #new-act": function (event) {
       var name = event.target.name.value;
       var slug = event.target.slug.value;
       var file_name = event.target.file_name.value;
+      var times = $('#times').val();
       Activities.insert({
         name: name,
         slug: slug,
 	file_name: file_name,
+	times: times,
         createdAt: new Date()
       });
     },
@@ -408,9 +498,11 @@ if (Meteor.isClient) {
       }	else {
         var lang = "en";
       }
+      var ctags = $('#ctags').val();
       Links.insert({
         url: url,
 	language: lang,
+	tags: ctags,
         createdAt: new Date()
       });    
     },
@@ -440,6 +532,12 @@ if (Meteor.isClient) {
     "click #del_acts": function () {
       Meteor.call('removeAllActs');
     },
+    "click #del_links": function () {
+      Meteor.call('removeAllLinks');
+    },
+    "click #del_childtags": function () {
+      Meteor.call('removeAllChildtags');
+    },  
   });
   Template.search_user.events({
     "click #add_button": function () {
