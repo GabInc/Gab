@@ -6,12 +6,8 @@ Tags = new Mongo.Collection("tags");
 Childtags = new Mongo.Collection("childtags");
 Activities = new Mongo.Collection("activities");
 Links = new Mongo.Collection("links");
-//Images = new FS.Collection("images", {
-//  stores: [new FS.Store.FileSystem("images", {path: "~/images"})]
-//  });
-Images = new FS.Collection("images", {
-stores: [new FS.Store.FileSystem("images")]
-});
+
+
 EasySearch.createSearchIndex('users', {
     'field' : ['username'],
     'collection' : Meteor.users,
@@ -84,6 +80,7 @@ Router.route('/tag/:slug', function () {
   this.render('tag', {
     data: function () {
       var slug = this.params.slug;
+      var no_child = false;
       if (Tags.findOne({slug: slug})){
         var tag_id = Tags.findOne({slug: slug})._id;
         var allchildtags = Childtags.find();
@@ -92,11 +89,22 @@ Router.route('/tag/:slug', function () {
           var tag_tags = doc.tags;
 	  if (tag_tags)
 	    var x = tag_tags.indexOf(tag_id);
-	    if (x > -1)
+	    if (x > -1 )
 	      childtags.push(doc);
 	});
+	if (childtags) 
+	  var no_child = true;
+          var alllinks = Links.find();
+	  var links = []
+          alllinks.forEach(function (doc){
+	    var link_tags = doc.tags;
+            if (link_tags)
+              var x = link_tags.indexOf(tag_id);
+              if (x > -1)
+                links.push(doc);
+	  });										     
       }
-      templateData = {tag: Tags.findOne({slug: slug}), tags: childtags};
+      templateData = {links: links, tag: Tags.findOne({slug: slug}), tags: childtags, no_child: no_child};
       return templateData;
     }
   });
@@ -205,9 +213,9 @@ if (Meteor.isClient) {
   
   });
   Template.Home.helpers({
-    activities: function () {
-      return Activities.find({});
-    },
+//    activities: function () {
+//      return Activities.find({});
+//    },
     current_day: function () {
       var d = new Date();
       var weekday = new Array(7);
@@ -229,7 +237,16 @@ if (Meteor.isClient) {
       } else {
         var part = "night";
       }
-      return {day: day, part: part};
+      var activities = [];
+      var all_activities = Activities.find({});
+      all_activities.forEach(function (doc){
+        var times = doc.times;
+	if (times)
+	  var x = times.indexOf(part);
+	    if (x > -1)
+	      activities.push(doc);
+      });
+      return {day: day, part: part, activities: activities,};
     },
   });
   Template.post.helpers({

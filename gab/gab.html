@@ -70,7 +70,7 @@
 
     </div>
     <div class="row">
-      {{#each activities}}
+      {{#each current_day.activities}}
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
           <a href="/act/{{slug}}"><img src="/{{file_name}}" class="img" alt="Responsive image"></a>
@@ -90,10 +90,16 @@
 
 <template name="tag">
 <h1 style="color:white;">{{tag.name}}</h1>
+{{# if no_child}}
+{{#each links}}
+<a href="http://{{url}}" target="_blank"><h3 style="color:white;">{{url}}</h3></a>
+{{/each}}
+{{else}}
 {{#each tags}}
 <a href="/links/{{slug}}"><h3 style="color:white;">{{name}}</h3></a>
 {{/each}}
-
+<h1 style="color:white;">sdfgsdfg</h1>
+{{/if}}
 </template>
 
 <template name="links">
@@ -195,6 +201,9 @@ Ne pas toucher aux pitons, merci
          {{# each childtags}}
           <option value="{{this._id}}">{{name}}</option>
 	 {{/each}}
+	 {{# each tags}}
+          <option value="{{this._id}}">{{name}}</option>
+         {{/each}}
 	</select>
 	language:
 	<select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">
