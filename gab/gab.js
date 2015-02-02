@@ -92,7 +92,8 @@ Router.route('/tag/:slug', function () {
 	    if (x > -1 )
 	      childtags.push(doc);
 	});
-	if (childtags) 
+	console.log("childtags:"+childtags+"");
+	if (childtags.length == 0) 
 	  var no_child = true;
           var alllinks = Links.find();
 	  var links = []
@@ -104,6 +105,7 @@ Router.route('/tag/:slug', function () {
                 links.push(doc);
 	  });										     
       }
+      console.log("no child:"+no_child+"");
       templateData = {links: links, tag: Tags.findOne({slug: slug}), tags: childtags, no_child: no_child};
       return templateData;
     }
