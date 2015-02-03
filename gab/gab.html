@@ -1,10 +1,16 @@
 <template name="ApplicationLayout">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 <body>
   <navbar>
       {{> yield "navbar"}}
   </navbar>
   <content>
+  <div class="container-fluid">
+    <div class="row hidden-xs hidden-sm logo"><p style="color:white;font-size:20px;">Logo ici</p></div>
       {{> yield}}
+  </div>    
   </content>
  
  
@@ -61,7 +67,6 @@
     </nav>
 </template>
 <template name="Home">
-  <div class="container-fluid">
     <div class="row">
       <div class="col-xs-12 greatings">
         <h2>{{_ "Hello " }}{{#if currentUser}}{{currentUser.username}}{{/if}}</h2>
@@ -73,32 +78,67 @@
       {{#each current_day.activities}}
       <div class="col-xs-4 col-sm-2">
         <div class="icons">
+	  <p>{{name}}</p>
           <a href="/act/{{slug}}"><img src="/{{file_name}}" class="img" alt="Responsive image"></a>
-          <p>{{name}}</p>
         </div>
       </div>
       {{/each}}
     </div>
-  </div>
 </template>
 <template name="activity">
-<h1 style="color:white;">{{activity.name}}</h1>
-{{#each tags}}
-<a href="/tag/{{slug}}"><h3 style="color:white;">{{name}}</h3></a>
-{{/each}}
+{{#if activity}}
+  <div class="back-button">&#60;</div>
+  <div class="act-desc">{{activity.desc}}</div>
+  <div class="row">
+  {{#each tags}}
+    <div class="col-xs-4 col-sm-2">
+      <div class="act_icons">
+        <a href="/tag/{{slug}}">
+          <p>{{name}}</p>
+        </a>
+      </div>
+    </div>
+
+  {{/each}}
+  </div>
+{{/if}}
 </template>
 
 <template name="tag">
-<h1 style="color:white;">{{tag.name}}</h1>
+  <div class="back-button">&#60;</div>
+  <div class="act-desc">{{tag.desc}}</div>
+  <div class="row">
+  
 {{# if no_child}}
+
+<h3 style="color:white;">A voir????</h3>
+
 {{#each links}}
 <a href="http://{{url}}" target="_blank"><h3 style="color:white;">{{url}}</h3></a>
 {{/each}}
 {{else}}
-{{#each tags}}
-<a href="/links/{{slug}}"><h3 style="color:white;">{{name}}</h3></a>
+  {{#each tags}}  
+    <div class="col-xs-4 col-sm-2">  
+	<div class="tag_icons">
+          <p>{{tag.name}}</p>
+	  <div class="subtitle" ><p>{{tag.desc}}</p></div>
+	  <div id="tag{{this._id}}" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" role="listbox">
+              {{#each addIndex links}} 
+              <div class="item {{#if equals index 0}}active{{/if}}">
+                <a style="color:white;" href="http://{{value.url}}">{{value.url}}</a>
+	      </div>
+	      {{/each}}
+	    </div>
+
+	    <a class="left carousel-control" href="#tag{{this._id}}" role="button" data-slide="prev">&#60;</a>
+	    <a class="right carousel-control" href="#tag{{this._id}}" role="button" data-slide="next">&#62;</a>
+	  </div>
+        </div>
+    </div>
 {{/each}}
 {{/if}}
+  </div>
 </template>
 
 <template name="links">
@@ -142,7 +182,8 @@ Ne pas toucher aux pitons, merci
       <p>New activity</p>
       <form id="new-act" style="padding:10px;">
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Activity name here" }}">
-        <input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
+        <input style="margin-top:10px;" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Activity description here" }}">
+	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
 	<input style="margin-top:10px;" name="file_name" class="form-control input-lg" type="text" placeholder="{{_ "File name here" }}">
 	time of the day:
 	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="times" name="times" class="form-control input-lg" type="text" multiple>
@@ -165,7 +206,8 @@ Ne pas toucher aux pitons, merci
     <div class="panel panel-default" style="margin:10px;">
       <p>New main tag</p>
       <form id="new-tag" style="padding:10px;">
-        <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
+	<input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
+	<input style="margin-top:10px;" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Tag description here" }}">
 	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
         actvities:
 	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="activities" name="activities" class="form-control input-lg" type="text" multiple>
@@ -180,6 +222,7 @@ Ne pas toucher aux pitons, merci
       <p>New child tag</p>
       <form id="new-child-tag" style="padding:10px;">
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
+	<input style="margin-top:10px;" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Tag description here" }}">
 	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
         main tags:
 	<select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="tags" name="tags" class="form-control input-lg" type="text" multiple>

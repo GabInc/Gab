@@ -59,7 +59,6 @@ Router.route('/act/:slug', function () {
       if (Activities.findOne({slug: slug})){
         var act_id = Activities.findOne({slug: slug})._id;
 	var alltags = Tags.find();
-	console.log(alltags);
         var maintags = []
         alltags.forEach(function (doc){
           var tag_acts = doc.activities;
@@ -90,9 +89,21 @@ Router.route('/tag/:slug', function () {
 	  if (tag_tags)
 	    var x = tag_tags.indexOf(tag_id);
 	    if (x > -1 )
-	      childtags.push(doc);
+	      var ctag_id = doc._id
+	      var links = []
+	      var alllinks = Links.find();
+	      alllinks.forEach(function (link){
+                var link_tags = link.tags;
+		if (link_tags)
+		  var x = link_tags.indexOf(ctag_id);
+		  if (x > -1)
+		    links.push(link);
+	      });
+	      console.log(links)
+	      var tag_link = {tag: doc, links: links}
+	      childtags.push(tag_link);
 	});
-	console.log("childtags:"+childtags+"");
+	// Voir avec Gab si encore necessaire
 	if (childtags.length == 0) 
 	  var no_child = true;
           var alllinks = Links.find();
@@ -105,7 +116,6 @@ Router.route('/tag/:slug', function () {
                 links.push(doc);
 	  });										     
       }
-      console.log("no child:"+no_child+"");
       templateData = {links: links, tag: Tags.findOne({slug: slug}), tags: childtags, no_child: no_child};
       return templateData;
     }
@@ -156,6 +166,17 @@ Router.route('/messages/:_id', function () {
 
 });  
 
+
+UI.registerHelper('addIndex', function (all) {
+    return _.map(all, function(val, index) {
+     return {index: index, value: val};
+    });
+});
+
+UI.registerHelper('equals', function (a, b) {
+    return a === b;
+});
+
 if (Meteor.isServer) {
 
   Meteor.startup(function() {
@@ -187,9 +208,6 @@ if (Meteor.isServer) {
   Meteor.users.allow({
     update: function (userId, doc, fields, modifier) {
       if (Meteor.users.findOne({_id: userId}).profile.cat.is_staff === true){
-//      console.log(user);
-//      if (user === true) {
-    //  console.log("Ben oui chef");
         return true;
       } else {
         return false;
@@ -337,33 +355,17 @@ if (Meteor.isClient) {
       users.forEach(function(doc){
         if (doc.profile){
 	  var user_fs = doc.profile.friends;
-	  console.log("user: "+doc+"");
-	  console.log("user_fs: "+user_fs+"");
 	  var z;
 	  var id = doc._id;
 	  var u = Meteor.users.findOne({_id:id});
 	  for (z in user_fs){
 	    var y = user_fs[z].id;
             if (y === user_id){
-	      console.log("ben oui");
 	      followers.push(u);
 	    } 
-	    console.log(y);
 	  }
-//	var id = doc._id;
-//	console.log("id: "+id+"");
-//	var u = Meteor.users.findOne({_id:id});
-//	console.log("user: "+u+"");
-//	console.log("userid: "+user_id+"")
- //       var x = user_fs.indexOf(user_id);
-//	console.log(x);
-//	if (x > -1)
-	//ca veut pas pusher a voir???
-//          followers.push(u);
-//          console.log("doc2"+u+""); 
 	}  
       });
-//      console.log(followers);
       return followers;  
     },
   }); 
@@ -469,6 +471,16 @@ if (Meteor.isClient) {
       Posts.remove(this._id);
     }
   });
+  Template.activity.events({
+    "click .back-button": function (){
+      history.back();
+    } 
+  });
+  Template.tag.events({
+    "click .back-button": function (){
+      history.back();
+    }
+  });  
   Template.Admin.events({
     "submit #new-img": function (event) {
       FS.Utility.eachFile(event, function(file) {
@@ -477,10 +489,12 @@ if (Meteor.isClient) {
     },
     "submit #new-tag": function (event) {
       var name = event.target.name.value;
+      var desc = event.target.desc.value;
       var slug = event.target.slug.value;
       var activities = $('#activities').val();
       Tags.insert({
         name: name,
+	desc: desc,
 	slug: slug,
 	activities: activities,
 	createdAt: new Date()
@@ -488,10 +502,12 @@ if (Meteor.isClient) {
     },
     "submit #new-child-tag": function (event) {
       var name = event.target.name.value;
+      var desc = event.target.desc.value;
       var slug = event.target.slug.value;
       var tags = $('#tags').val();
       Childtags.insert({
          name: name,
+	 desc: desc,
 	 slug: slug,
 	 tags: tags,
 	 createdAt: new Date()
@@ -499,11 +515,13 @@ if (Meteor.isClient) {
     },
     "submit #new-act": function (event) {
       var name = event.target.name.value;
+      var desc = event.target.desc.value;
       var slug = event.target.slug.value;
       var file_name = event.target.file_name.value;
       var times = $('#times').val();
       Activities.insert({
         name: name,
+	desc: desc,
         slug: slug,
 	file_name: file_name,
 	times: times,
