@@ -19,15 +19,15 @@ EasySearch.createSearchIndex('users', {
 Router.route('/', function () {
   this.layout('ApplicationLayout');
   this.render('Home');
-  this.render('navbar', {to: 'navbar'});
-  this.render('Footer', {to: 'footer'});
+//  this.render('navbar', {to: 'navbar'});
+//  this.render('Footer', {to: 'footer'});
 });
 Router.route('/admin', function () {
   this.render('Admin', {
     data: function(){
     var id = this.params._id;
     var current_userid = Meteor.userId();
-    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find(), childtags: Childtags.find()};
+    templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find(), childtags: Childtags.find(), links: Links.find(),};
     return templateData;
     }
   });
@@ -99,8 +99,10 @@ Router.route('/tag/:slug', function () {
 		  if (x > -1)
 		    links.push(link);
 	      });
-	      console.log(links)
-	      var tag_link = {tag: doc, links: links}
+	      //compter le length
+	      var length = links.length;
+	      console.log(length)
+	      var tag_link = {tag: doc, length: length, links: links}
 	      childtags.push(tag_link);
 	});
 	// Voir avec Gab si encore necessaire
@@ -227,10 +229,6 @@ if (Meteor.isClient) {
     },
   });
   Template.Admin.helpers({
-    images: function(){
-      return Images.find({});
-    },
-  
   });
   Template.Home.helpers({
 //    activities: function () {
@@ -239,23 +237,23 @@ if (Meteor.isClient) {
     current_day: function () {
       var d = new Date();
       var weekday = new Array(7);
-      weekday[0]=  "Sunday";
-      weekday[1] = "Monday";
-      weekday[2] = "Tuesday";
-      weekday[3] = "Wednesday";
-      weekday[4] = "Thursday";
-      weekday[5] = "Friday";
-      weekday[6] = "Saturday";
+      weekday[0]=  "dimanche";
+      weekday[1] = "lundi";
+      weekday[2] = "mardi";
+      weekday[3] = "mercredi";
+      weekday[4] = "jeudi";
+      weekday[5] = "vendredi";
+      weekday[6] = "samedi";
 
       var day = weekday[d.getDay()];
       if ( d.getHours() < 12 && d.getHours() >= 5){
-        var part = "morning";
+        var part = "matin";
       } else if ( d.getHours() >= 12 && d.getHours() <= 17 ){
-        var part = "afternoon";
+        var part = "après-midi";
       } else if (d.getHours() > 17 && d.getHours() <= 23 ){
-        var part = "evening";
+        var part = "soir";
       } else {
-        var part = "night";
+        var part = "nuit";
       }
       var activities = [];
       var all_activities = Activities.find({});
@@ -273,6 +271,28 @@ if (Meteor.isClient) {
     username: function (id) {
       return Meteor.users.findOne({_id:id}).username;
     },
+  });
+  Template.tag.helpers({
+    currentIndex: function (slug){
+      $(document).ready(function(){
+      var num = document.getElementsByClassName('scores')[0].id;
+      });
+      //var num = document.querySelectorAll('.scores').id;
+      console.log(num);
+      return num;
+    },
+   //var totalItems = $('.item').length;
+   //var currentIndex = $('div.active').index() + 1;
+   //$('.num').html(''+currentIndex+'/'+totalItems+'');
+
+   //$('#myCarousel').carousel({
+     //  interval: 2000
+       //});
+
+       //$('#myCarousel').bind('slid', function() {
+        //   currentIndex = $('div.active').index() + 1;
+	  //    $('.num').html(''+currentIndex+'/'+totalItems+'');
+	    //  });//
   });
   Template.message.helpers({
     username: function (id) {
@@ -482,11 +502,19 @@ if (Meteor.isClient) {
     }
   });  
   Template.Admin.events({
-    "submit #new-img": function (event) {
-      FS.Utility.eachFile(event, function(file) {
-      			Images.insert(file);
-					});
+    "click .del_act": function () {
+      Activities.remove(this._id);
     },
+    "click .del_tag": function () {
+      Tags.remove(this._id);
+    },
+    "click .del_ctag": function () {
+      Childtags.remove(this._id);
+    },
+    "click .del_link": function () {
+      Links.remove(this._id);
+    },
+
     "submit #new-tag": function (event) {
       var name = event.target.name.value;
       var desc = event.target.desc.value;
@@ -533,7 +561,7 @@ if (Meteor.isClient) {
       if (event.target.lang.value){
         var lang = event.target.lang.value;
       }	else {
-        var lang = "en";
+        var lang = "fr";
       }
       var ctags = $('#ctags').val();
       Links.insert({

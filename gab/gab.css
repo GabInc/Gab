@@ -1,10 +1,33 @@
+.glyphicon {
+  color:white;
+}
+
+.glyphicon-chevron-left {
+  font-weight:lighter;
+}
+.acts [class*="col-"] {
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+  padding-left:5px;
+  padding-right:5px;
+  margin-right:-4px;
+}
+.acts {
+  margin-top:20px;
+  text-align:center;
+  overflow:hidden;
+}
 .mess_scroller {
   height:100%;
 }
-.greatings h2,h3 {
+.greatings {
+  margin-top: 75px;
+}
+.greatings p {
+  font-weight: normal;
+  font-size:32px;
   color:white;
-  margin-top: 10px;
-  margin-bottom: 5px;
 }
 #search_form {
   margin-top:10px;
@@ -37,6 +60,7 @@
 .back-button {
   color: white;
   cursor:pointer;
+  width:40px;
 }
 .act-desc {
   margin-top:15px; 
@@ -54,7 +78,8 @@
 }
 .icons p {
   color: white;
-  font-size:16px;
+  font-weight:lighter;
+  font-size:18px;
 }
 .tag_icons {
   border: 1.5px solid rgba(255,255,255, .5);
@@ -73,22 +98,84 @@
 .item {
   text-align:center;
 }
+
+.item a {
+  color:white;
+  text-decoration:underline;
+}
+.slide_control {
+  margin-top:5px;
+  margin-right:0px;
+  margin-left:0px;
+}
+.slide_button {
+  color:white;
+}
+.slide_counter {
+  text-align:center;
+
+}
+.panel ul {
+  list-style:none;
+  padding:0;
+  margin:0;
+  width:100%;
+  text-align:left;
+}
+.act_link:hover{
+  color: white;
+  text-decoration:none;
+}
+.act_link{
+  color: white;
+  text-decoration:none;
+}
+.panel li {
+  padding:0 10px;
+  height:40px;
+  line-height:40px;
+  background-color:#fafafa;
+  font-size:14px;
+  border-bottom:1px solid black;
+}
+.right {
+  float:right;
+}
+.left {
+  float:left;
+}
 .act_icons {
   border: 1.5px solid rgba(255,255,255, .5);
   padding: 10px;
   margin-top: 20px;
   text-align:center;
+  height:180px;
+  line-height:180px;
 }
 .act_icons p {
-  line-height:150px;
   color: white;
   font-size:16px;
-  vertical-align:middle;
+  height:130px;
+  line-height:130px;
+  text-align:center;
 }
 
-
+.act_icons span {
+  width:100%;
+  vertical-align:middle;
+  display:inline-block;
+  line-height:normal;
+}
+.tag_name {
+  height: 100%;
+  vertical-align:middle;
+  line-height:normal;
+  text-align:center;
+  display:inline-block;
+}
 .icons img {
   display: block;
+  margin-top:40px;
   margin-left: auto;
   margin-right: auto;
   width: 10vw;

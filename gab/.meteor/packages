@@ -24,3 +24,4 @@ cfs:standard-packages
 cfs:filesystem
 cfs:gridfs
 cfs:s3
+jquery
