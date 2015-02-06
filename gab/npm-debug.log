@@ -1,0 +1,255 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', '-g', 'mup' ]
+2 info using npm@1.3.10
+3 info using node@v0.10.25
+4 verbose cache add [ 'mup', null ]
+5 verbose cache add name=undefined spec="mup" args=["mup",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'mup',
+6 verbose parsed url   path: 'mup',
+6 verbose parsed url   href: 'mup' }
+7 silly lockFile 19bdb584-mup mup
+8 verbose lock mup /home/gab/.npm/19bdb584-mup.lock
+9 silly lockFile 19bdb584-mup mup
+10 silly lockFile 19bdb584-mup mup
+11 verbose addNamed [ 'mup', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 49f77549-mup mup@
+14 verbose lock mup@ /home/gab/.npm/49f77549-mup.lock
+15 silly addNameRange { name: 'mup', range: '*', hasData: false }
+16 verbose url raw mup
+17 verbose url resolving [ 'https://registry.npmjs.org/', './mup' ]
+18 verbose url resolved https://registry.npmjs.org/mup
+19 info trying registry request attempt 1 at 18:42:28
+20 http GET https://registry.npmjs.org/mup
+21 http 200 https://registry.npmjs.org/mup
+22 silly registry.get cb [ 200,
+22 silly registry.get   { date: 'Fri, 06 Feb 2015 18:42:28 GMT',
+22 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+22 silly registry.get     etag: '"9EMEZBZL89SJ5WMLNP8B5MXH1"',
+22 silly registry.get     'content-type': 'application/json',
+22 silly registry.get     'cache-control': 'max-age=60',
+22 silly registry.get     'content-length': '54210',
+22 silly registry.get     'accept-ranges': 'bytes',
+22 silly registry.get     via: '1.1 varnish',
+22 silly registry.get     age: '0',
+22 silly registry.get     'x-served-by': 'cache-atl6228-ATL',
+22 silly registry.get     'x-cache': 'MISS',
+22 silly registry.get     'x-cache-hits': '0',
+22 silly registry.get     'x-timer': 'S1423248148.652877,VS0,VE22',
+22 silly registry.get     vary: 'Accept',
+22 silly registry.get     'keep-alive': 'timeout=10, max=50',
+22 silly registry.get     connection: 'Keep-Alive' } ]
+23 silly addNameRange number 2 { name: 'mup', range: '*', hasData: true }
+24 silly addNameRange versions [ 'mup',
+24 silly addNameRange   [ '0.1.2',
+24 silly addNameRange     '0.1.3',
+24 silly addNameRange     '0.1.4',
+24 silly addNameRange     '0.1.5',
+24 silly addNameRange     '0.1.6',
+24 silly addNameRange     '0.1.7',
+24 silly addNameRange     '0.1.8',
+24 silly addNameRange     '0.1.9',
+24 silly addNameRange     '0.1.10',
+24 silly addNameRange     '0.1.11',
+24 silly addNameRange     '0.1.12',
+24 silly addNameRange     '0.1.13',
+24 silly addNameRange     '0.2.0',
+24 silly addNameRange     '0.3.0',
+24 silly addNameRange     '0.4.0',
+24 silly addNameRange     '0.4.1',
+24 silly addNameRange     '0.4.2',
+24 silly addNameRange     '0.4.3',
+24 silly addNameRange     '0.4.4',
+24 silly addNameRange     '0.4.5',
+24 silly addNameRange     '0.4.6',
+24 silly addNameRange     '0.4.7',
+24 silly addNameRange     '0.5.0',
+24 silly addNameRange     '0.5.1',
+24 silly addNameRange     '0.5.2',
+24 silly addNameRange     '0.5.3',
+24 silly addNameRange     '0.6.0',
+24 silly addNameRange     '0.6.1',
+24 silly addNameRange     '0.6.3',
+24 silly addNameRange     '0.6.4',
+24 silly addNameRange     '0.6.5',
+24 silly addNameRange     '0.6.7',
+24 silly addNameRange     '0.6.8',
+24 silly addNameRange     '0.6.9',
+24 silly addNameRange     '0.6.10',
+24 silly addNameRange     '0.6.11',
+24 silly addNameRange     '0.6.12',
+24 silly addNameRange     '0.7.0',
+24 silly addNameRange     '0.7.1',
+24 silly addNameRange     '0.7.2',
+24 silly addNameRange     '0.7.3',
+24 silly addNameRange     '0.7.4',
+24 silly addNameRange     '0.7.5',
+24 silly addNameRange     '0.7.6',
+24 silly addNameRange     '0.7.7' ] ]
+25 verbose addNamed [ 'mup', '0.7.7' ]
+26 verbose addNamed [ '0.7.7', '0.7.7' ]
+27 silly lockFile e2a10439-mup-0-7-7 mup@0.7.7
+28 verbose lock mup@0.7.7 /home/gab/.npm/e2a10439-mup-0-7-7.lock
+29 silly lockFile ee053deb-stry-npmjs-org-mup-mup-0-7-7-tgz https://registry.npmjs.org/mup/-/mup-0.7.7.tgz
+30 verbose lock https://registry.npmjs.org/mup/-/mup-0.7.7.tgz /home/gab/.npm/ee053deb-stry-npmjs-org-mup-mup-0-7-7-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/mup/-/mup-0.7.7.tgz',
+31 verbose addRemoteTarball   'a71e54450455781298e62584b3a70dd7e94b846f' ]
+32 info retry fetch attempt 1 at 18:42:28
+33 verbose fetch to= /home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/tmp.tgz
+34 http GET https://registry.npmjs.org/mup/-/mup-0.7.7.tgz
+35 http 200 https://registry.npmjs.org/mup/-/mup-0.7.7.tgz
+36 verbose tar unpack /home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/tmp.tgz
+37 silly lockFile ab7e783b-48780-0-2968736789189279-package tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+38 verbose lock tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package /home/gab/.npm/ab7e783b-48780-0-2968736789189279-package.lock
+39 silly lockFile bdde2060-48780-0-2968736789189279-tmp-tgz tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/tmp.tgz
+40 verbose lock tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/tmp.tgz /home/gab/.npm/bdde2060-48780-0-2968736789189279-tmp-tgz.lock
+41 silly gunzTarPerm modes [ '755', '644' ]
+42 silly gunzTarPerm extractEntry package.json
+43 silly gunzTarPerm extractEntry README.md
+44 silly gunzTarPerm extractEntry bin/mup
+45 silly gunzTarPerm extractEntry example/mup.json
+46 silly gunzTarPerm extractEntry example/settings.json
+47 silly gunzTarPerm extractEntry lib/actions.js
+48 silly gunzTarPerm extractEntry lib/config.js
+49 silly gunzTarPerm extractEntry lib/helpers.js
+50 silly gunzTarPerm extractEntry lib/build.sh
+51 silly gunzTarPerm extractEntry lib/taskLists/index.js
+52 silly gunzTarPerm extractEntry lib/taskLists/linux.js
+53 silly gunzTarPerm extractEntry lib/taskLists/sunos.js
+54 silly gunzTarPerm extractEntry scripts/linux/install-mongodb.sh
+55 silly gunzTarPerm extractEntry scripts/linux/install-node.sh
+56 silly gunzTarPerm extractEntry scripts/linux/install-phantomjs.sh
+57 silly gunzTarPerm extractEntry scripts/linux/setup-env.sh
+58 silly gunzTarPerm extractEntry scripts/sunos/install-node.sh
+59 silly gunzTarPerm extractEntry scripts/sunos/setup-env.sh
+60 silly gunzTarPerm extractEntry templates/linux/deploy.sh
+61 silly gunzTarPerm extractEntry templates/linux/env.sh
+62 silly gunzTarPerm extractEntry templates/linux/meteor.conf
+63 silly gunzTarPerm extractEntry templates/linux/mongodb.conf
+64 silly gunzTarPerm extractEntry templates/sunos/deploy.sh
+65 silly gunzTarPerm extractEntry templates/sunos/env.sh
+66 silly gunzTarPerm extractEntry templates/sunos/run.sh
+67 silly gunzTarPerm extractEntry templates/sunos/service-manifest.xml
+68 silly lockFile ab7e783b-48780-0-2968736789189279-package tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+69 silly lockFile ab7e783b-48780-0-2968736789189279-package tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+70 silly lockFile bdde2060-48780-0-2968736789189279-tmp-tgz tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/tmp.tgz
+71 silly lockFile bdde2060-48780-0-2968736789189279-tmp-tgz tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/tmp.tgz
+72 verbose tar pack [ '/home/gab/.npm/mup/0.7.7/package.tgz',
+72 verbose tar pack   '/home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package' ]
+73 verbose tarball /home/gab/.npm/mup/0.7.7/package.tgz
+74 verbose folder /home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+75 silly lockFile ab7e783b-48780-0-2968736789189279-package tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+76 verbose lock tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package /home/gab/.npm/ab7e783b-48780-0-2968736789189279-package.lock
+77 silly lockFile 590f6e4e-me-gab-npm-mup-0-7-7-package-tgz tar:///home/gab/.npm/mup/0.7.7/package.tgz
+78 verbose lock tar:///home/gab/.npm/mup/0.7.7/package.tgz /home/gab/.npm/590f6e4e-me-gab-npm-mup-0-7-7-package-tgz.lock
+79 silly lockFile ab7e783b-48780-0-2968736789189279-package tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+80 silly lockFile ab7e783b-48780-0-2968736789189279-package tar:///home/gab/tmp/npm-31523-lJV8qW_-/1423248148780-0.2968736789189279/package
+81 silly lockFile 590f6e4e-me-gab-npm-mup-0-7-7-package-tgz tar:///home/gab/.npm/mup/0.7.7/package.tgz
+82 silly lockFile 590f6e4e-me-gab-npm-mup-0-7-7-package-tgz tar:///home/gab/.npm/mup/0.7.7/package.tgz
+83 silly lockFile f6e62194-home-gab-npm-mup-0-7-7-package /home/gab/.npm/mup/0.7.7/package
+84 verbose lock /home/gab/.npm/mup/0.7.7/package /home/gab/.npm/f6e62194-home-gab-npm-mup-0-7-7-package.lock
+85 silly lockFile f6e62194-home-gab-npm-mup-0-7-7-package /home/gab/.npm/mup/0.7.7/package
+86 silly lockFile f6e62194-home-gab-npm-mup-0-7-7-package /home/gab/.npm/mup/0.7.7/package
+87 verbose tar unpack /home/gab/.npm/mup/0.7.7/package.tgz
+88 silly lockFile 00e02433-r-home-gab-npm-mup-0-7-7-package tar:///home/gab/.npm/mup/0.7.7/package
+89 verbose lock tar:///home/gab/.npm/mup/0.7.7/package /home/gab/.npm/00e02433-r-home-gab-npm-mup-0-7-7-package.lock
+90 silly lockFile 590f6e4e-me-gab-npm-mup-0-7-7-package-tgz tar:///home/gab/.npm/mup/0.7.7/package.tgz
+91 verbose lock tar:///home/gab/.npm/mup/0.7.7/package.tgz /home/gab/.npm/590f6e4e-me-gab-npm-mup-0-7-7-package-tgz.lock
+92 silly gunzTarPerm modes [ '755', '644' ]
+93 silly gunzTarPerm extractEntry package.json
+94 silly gunzTarPerm extractEntry README.md
+95 silly gunzTarPerm extractEntry bin/mup
+96 silly gunzTarPerm extractEntry example/mup.json
+97 silly gunzTarPerm extractEntry example/settings.json
+98 silly gunzTarPerm extractEntry lib/actions.js
+99 silly gunzTarPerm extractEntry lib/config.js
+100 silly gunzTarPerm extractEntry lib/helpers.js
+101 silly gunzTarPerm extractEntry lib/build.sh
+102 silly gunzTarPerm extractEntry lib/taskLists/index.js
+103 silly gunzTarPerm extractEntry lib/taskLists/linux.js
+104 silly gunzTarPerm extractEntry lib/taskLists/sunos.js
+105 silly gunzTarPerm extractEntry scripts/linux/install-mongodb.sh
+106 silly gunzTarPerm extractEntry scripts/linux/install-node.sh
+107 silly gunzTarPerm extractEntry scripts/linux/install-phantomjs.sh
+108 silly gunzTarPerm extractEntry scripts/linux/setup-env.sh
+109 silly gunzTarPerm extractEntry scripts/sunos/install-node.sh
+110 silly gunzTarPerm extractEntry scripts/sunos/setup-env.sh
+111 silly gunzTarPerm extractEntry templates/linux/deploy.sh
+112 silly gunzTarPerm extractEntry templates/linux/env.sh
+113 silly gunzTarPerm extractEntry templates/linux/meteor.conf
+114 silly gunzTarPerm extractEntry templates/linux/mongodb.conf
+115 silly gunzTarPerm extractEntry templates/sunos/deploy.sh
+116 silly gunzTarPerm extractEntry templates/sunos/env.sh
+117 silly gunzTarPerm extractEntry templates/sunos/run.sh
+118 silly gunzTarPerm extractEntry templates/sunos/service-manifest.xml
+119 silly lockFile 00e02433-r-home-gab-npm-mup-0-7-7-package tar:///home/gab/.npm/mup/0.7.7/package
+120 silly lockFile 00e02433-r-home-gab-npm-mup-0-7-7-package tar:///home/gab/.npm/mup/0.7.7/package
+121 silly lockFile 590f6e4e-me-gab-npm-mup-0-7-7-package-tgz tar:///home/gab/.npm/mup/0.7.7/package.tgz
+122 silly lockFile 590f6e4e-me-gab-npm-mup-0-7-7-package-tgz tar:///home/gab/.npm/mup/0.7.7/package.tgz
+123 verbose chmod /home/gab/.npm/mup/0.7.7/package.tgz 644
+124 verbose chown /home/gab/.npm/mup/0.7.7/package.tgz [ 1000, 1000 ]
+125 silly lockFile ee053deb-stry-npmjs-org-mup-mup-0-7-7-tgz https://registry.npmjs.org/mup/-/mup-0.7.7.tgz
+126 silly lockFile ee053deb-stry-npmjs-org-mup-mup-0-7-7-tgz https://registry.npmjs.org/mup/-/mup-0.7.7.tgz
+127 silly lockFile e2a10439-mup-0-7-7 mup@0.7.7
+128 silly lockFile e2a10439-mup-0-7-7 mup@0.7.7
+129 silly lockFile 49f77549-mup mup@
+130 silly lockFile 49f77549-mup mup@
+131 silly resolved [ { name: 'mup',
+131 silly resolved     version: '0.7.7',
+131 silly resolved     description: 'Production Quality Meteor Deployments',
+131 silly resolved     dependencies:
+131 silly resolved      { nodemiral: '0.3.x',
+131 silly resolved        cjson: '0.3.x',
+131 silly resolved        uuid: '1.4.x',
+131 silly resolved        colors: '0.6.x',
+131 silly resolved        rimraf: '2.x.x',
+131 silly resolved        underscore: '1.7.0' },
+131 silly resolved     bin: { mup: './bin/mup' },
+131 silly resolved     author:
+131 silly resolved      { name: 'Arunoda Susiripala',
+131 silly resolved        email: 'arunoda.susiripala@gmail.com' },
+131 silly resolved     repository: { type: 'git', url: 'git://github.com/arunoda/meteor-up.git' },
+131 silly resolved     license: 'MIT',
+131 silly resolved     readme: '# Meteor Up\n\n#### Production Quality Meteor Deployments\n\nMeteor Up (mup for short) is a command line tool that allows you to deploy any [Meteor](http://meteor.com) app to your own server. It supports only Debian/Ubuntu flavours and Open Solaris at the moments. (PRs are welcome)\n\n> Screencast: [How to deploy a Meteor app with Meteor Up (by Sacha Grief)](https://www.youtube.com/watch?v=WLGdXtZMmiI)\n\n**Table of Contents**\n\n- [Features](#features)\n- [Server Configuration](#server-configuration)\n- [Installation](#installation)\n- [Creating a Meteor Up Project](#creating-a-meteor-up-project)\n- [Example File](#example-file)\n- [Setting Up a Server](#setting-up-a-server)\n    - [Server Setup Details](#server-setup-details)\n- [Deploying an App](#deploying-an-app)\n    - [Deploy Wait Time](#deploy-wait-time)\n    - [Multiple Deployment Targets](#multiple-deployment-targets)\n- [Access Logs](#access-logs)\n- [Reconfiguring & Restarting](#reconfiguring--restarting)\n- [Accessing the Database](#accessing-the-database)\n- [Multiple Deployments](#multiple-deployments)\n- [Multiple OS Support](#multiple-os-support)\n- [Updating](#updating)\n- [Troubleshooting](#troubleshooting)\n- [Binary Npm Module Support](#binary-npm-module-support)\n- [Additional Resources](#additional-resources)\n\n### Features\n\n* Single command server setup\n* Single command deployment\n* Multi server deployment\n* Environmental Variables management\n* Support for [`settings.json`](http://docs.meteor.com/#meteor_settings)\n* Password or Private Key(pem) based server authentication\n* Access, logs from the terminal (supports log tailing)\n* Support for multiple meteor deployments (experimental)\n\n### Server Configuration\n\n* Auto-Restart if the app crashed (using forever)\n* Auto-Start after the server reboot (using upstart)\n* Stepdown User Privileges\n* Revert to the previous version, if the deployment failed\n* Secured MongoDB Installation (Optional)\n* Pre-Installed PhantomJS (Optional)\n\n### Installation\n\n    npm install -g mup\n\nIf you are looking for password-based authentication, you need to [install sshpass](https://gist.github.com/arunoda/7790979) on your local development machine.\n\n### Creating a Meteor Up Project\n\n    mkdir ~/my-meteor-deployment\n    cd ~/my-meteor-deployment\n    mup init\n\nThis will create two files in your Meteor Up project directory:\n\n  * mup.json - Meteor Up configuration file\n  * settings.json - Settings for Meteor\'s [settings API](http://docs.meteor.com/#meteor_settings)\n\n`mup.json` is commented and easy to follow (it supports JavaScript comments).\n\n### Example File\n\n```js\n{\n  // Server authentication info\n  "servers": [\n    {\n      "host": "hostname",\n      "username": "root",\n      "password": "password"\n      // or pem file (ssh based authentication)\n      // WARNING: Keys protected by a passphrase are not supported\n      //"pem": "~/.ssh/id_rsa"\n      // Also, for non-standard ssh port use this\n      //"sshOptions": { "Port" : 49154 }\n    }\n  ],\n\n  // Install MongoDB on the server. Does not destroy the local MongoDB on future setups\n  "setupMongo": true,\n\n  // WARNING: Node.js is required! Only skip if you already have Node.js installed on server.\n  "setupNode": true,\n\n  // WARNING: nodeVersion defaults to 0.10.33 if omitted. Do not use v, just the version number.\n  "nodeVersion": "0.10.33",\n\n  // Install PhantomJS on the server\n  "setupPhantom": true,\n\n  // Application name (no spaces).\n  "appName": "meteor",\n\n  // Location of app (local directory). This can reference \'~\' as the users home directory.\n  // i.e., "app": "~/Meteor/my-app",\n  // This is the same as the line below.\n  "app": "/Users/arunoda/Meteor/my-app",\n\n  // Configure environment\n  "env": {\n    "PORT": 80,\n    "ROOT_URL": "http://myapp.com",\n    "MONGO_URL": "mongodb://arunoda:fd8dsjsfh7@hanso.mongohq.com:10023/MyApp",\n    "MAIL_URL": "smtp://postmaster%40myapp.mailgun.org:adj87sjhd7s@smtp.mailgun.org:587/"\n  },\n\n  // Meteor Up checks if the app comes online just after the deployment.\n  // Before mup checks that, it will wait for the number of seconds configured below.\n  "deployCheckWaitTime": 15\n}\n```\n\n### Setting Up a Server\n\n    mup setup\n\nThis will setup the server for the `mup` deployments. It will take around 2-5 minutes depending on the server\'s performance and network availability.\n\n#### Ssh based authentication\n\nPlease ensure your key file (pem) is not protected by a passphrase. Also the setup process will require NOPASSWD access to sudo. (Since Meteor needs port 80, sudo access is required.)\n\nYou can add your user to the sudo group:\n\n    sudo adduser *username*  sudo\n\nAnd you also need to add NOPASSWD to the sudoers file:\n\n    sudo visudo\n\n    # replace this line\n    %sudo  ALL=(ALL) ALL\n\n    # by this line\n    %sudo ALL=(ALL) NOPASSWD:ALL  \n\nWhen this process is not working you might encounter the following error:\n\n    \'sudo: no tty present and no askpass program specified\'\n\n#### Server Setup Details\n\nThis is how Meteor Up will configure the server for you based on the given `appName` or using "meteor" as default appName. This information will help you customize the server for your needs.\n\n* your app lives at `/opt/<appName>/app`\n* mup uses `upstart` with a config file at `/etc/init/<appName>.conf`\n* you can start and stop the app with upstart: `start <appName>` and `stop <appName>`\n* logs are located at: `/var/log/upstart/<appName>.log`\n* MongoDB installed and bound to the local interface (cannot access from the outside)\n* the database is named `<appName>`\n\nFor more information see [`lib/taskLists.js`](https://github.com/arunoda/meteor-up/blob/master/lib/taskLists.js).\n\n### Deploying an App\n\n    mup deploy\n\nThis will bundle the Meteor project and deploy it to the server.\n\n#### Deploy Wait Time\n\nMeteor Up checks if the deployment is successful or not just after the deployment. By default, it will wait 10 seconds before the check. You can configure the wait time with the `deployCheckWaitTime` option in the `mup.json`.\n\n#### Multiple Deployment Targets\n\nYou can use an array to deploy to multiple servers at once.\n\nTo deploy to *different* environments (e.g. staging, production, etc.), use separate Meteor Up configurations in separate directories, with each directory containing separate `mup.json` and `settings.json` files, and the `mup.json` files\' `app` field pointing back to your app\'s local directory.\n\n#### Custom Meteor Binary\n\nSometimes, you might be using `mrt`, or Meteor from a git checkout. By default, Meteor Up uses `meteor`. You can ask Meteor Up to use the correct binary with the `meteorBinary` option.\n\n~~~js\n{\n  ...\n  "meteorBinary": "~/bin/meteor/meteor"\n  ...\n}\n~~~\n\n### Access Logs\n\n    mup logs -f\n\nMup can tail logs from the server and supports all the options of `tail`.\n\n### Reconfiguring & Restarting\n\nAfter you\'ve edit environmental variables or `settings.json`, you can reconfigure the app without deploying again. Use the following command for that.\n\n    mup reconfig\n\nThis will also restart the app, so you can use it for that purpose even if you haven\'t changed the configuration file.\n\n### Accessing the Database\n\nYou can\'t access the MongoDB from the outside the server. To access the MongoDB shell you need to log into your server via SSH first and then run the following command:\n\n    mongo appName\n\n### Multiple OS Support\n\nMeteor UP supports multiple operating systems:\n\n* linux - Any Ubuntu/Debian based OS\n* sunos - Open Solaris based OS (i.e: SmartOS)\n\nAll you have to do is specify the type of `os` (default `linux` if omitted) when defining the server info:\n\n~~~js\n{\n  "servers": [\n    {\n      "host": "my-linux-box",\n      "username": "root",\n      "password": "password"\n    },\n    {\n      "host": "my-solaris-box",\n      "username": "root",\n      "password": "password",\n      "os": "sunos"\n    }\n  ],\n}\n~~~\n\n### Multiple Deployments\n\nMeteor Up supports multiple deployments to a single server. Meteor Up only does the deployment; if you need to configure subdomains, you need to manually setup a reverse proxy yourself.\n\nLet\'s assume, we need to deploy production and staging versions of the app to the same server. The production app runs on port 80 and the staging app runs on port 8000.\n\nWe need to have two separate Meteor Up projects. For that, create two directories and initialize Meteor Up and add the necessary configurations.\n\nIn the staging `mup.json`, add a field called `appName` with the value `staging`. You can add any name you prefer instead of `staging`. Since we are running our staging app on port 8000, add an environment variable called `PORT` with the value 8000.\n\nNow setup both projects and deploy as you need.\n\n### Updating\n\nTo update `mup` to the latest version, just type:\n\n    npm update mup -g\n\nYou should try and keep `mup` up to date in order to keep up with the latest Meteor changes. But note that if you need to update your Node version, you\'ll have to run `mup setup` again before deploying.\n\n### Troubleshooting\n\n#### Check Logs\nIf you suddenly can\'t deploy your app anymore, first use the `mup logs -f` command to check the logs for error messages.\n\nOne of the most common problems is your Node version getting out of date. In that case, see “Updating” section above.\n\n#### Verbose Output\nIf you need to see the output of `meteor-up` (to see more precisely where it\'s failing or hanging, for example), run it like so:\n\n    DEBUG=* mup <command>\n\nwhere `<command>` is one of the `mup` commands such as `setup`, `deploy`, etc.\n\n### Binary Npm Module Support\n\nSome of the Meteor core packages as well some of the community packages comes with npm modules which has been written in `C` or `C++`. These modules are platform dependent. \nSo, we need to do special handling, before running the bundle generated from `meteor bundle`.\n(meteor up uses the meteor bundle)\n\nFortunately, Meteor Up **will take care** of that job for you and it will detect binary npm modules and re-build them before running your app on the given server.\n\n> * Meteor 0.9 adds a similar feature where it allows package developers to publish their packages for different architecures, if their packages has binary npm modules.\n> * As a side effect of that, if you are using a binary npm module inside your app via `meteorhacks:npm` package, you won\'t be able to deploy into `*.meteor.com`.\n> * But, you\'ll be able to deploy with Meteor Up since we are re-building binary modules on the server.\n\n### Additional Resources\n\n* [Using Meteor Up with Nitrous.io](https://github.com/arunoda/meteor-up/wiki/Using-Meteor-Up-with-Nitrous.io)\n* [Change Ownership of Additional Directories](https://github.com/arunoda/meteor-up/wiki/Change-Ownership-of-Additional-Directories)\n* [Using Meteor Up with NginX vhosts](https://github.com/arunoda/meteor-up/wiki/Using-Meteor-Up-with-NginX-vhosts)\n',
+131 silly resolved     readmeFilename: 'README.md',
+131 silly resolved     bugs: { url: 'https://github.com/arunoda/meteor-up/issues' },
+131 silly resolved     _id: 'mup@0.7.7',
+131 silly resolved     dist: { shasum: '8563187b6c3e2a441036f1d8e1a9c5ded2ea6dd1' },
+131 silly resolved     _from: 'mup@',
+131 silly resolved     _resolved: 'https://registry.npmjs.org/mup/-/mup-0.7.7.tgz' } ]
+132 info install mup@0.7.7 into /usr/local/lib
+133 info installOne mup@0.7.7
+134 info /usr/local/lib/node_modules/mup unbuild
+135 info preuninstall mup@0.7.7
+136 info uninstall mup@0.7.7
+137 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild mup@0.7.7
+138 verbose /usr/local/bin,[object Object] binRoot
+139 info /usr/local/lib/node_modules/mup unbuild
+140 info preuninstall mup@0.7.7
+141 info uninstall mup@0.7.7
+142 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild mup@0.7.7
+143 verbose /usr/local/bin,[object Object] binRoot
+144 error error rolling back Error: EACCES, unlink '/usr/local/bin/mup'
+144 error error rolling back  mup@0.7.7 { [Error: EACCES, unlink '/usr/local/bin/mup'] errno: 3, code: 'EACCES', path: '/usr/local/bin/mup' }
+145 error Error: EACCES, unlink '/usr/local/bin/mup'
+145 error  { [Error: EACCES, unlink '/usr/local/bin/mup'] errno: 3, code: 'EACCES', path: '/usr/local/bin/mup' }
+146 error Please try running this command again as root/Administrator.
+147 error System Linux 3.18.3-x86_64-linode51
+148 error command "/usr/bin/nodejs" "/usr/bin/npm" "install" "-g" "mup"
+149 error cwd /home/gab/Gab/gab
+150 error node -v v0.10.25
+151 error npm -v 1.3.10
+152 error path /usr/local/bin/mup
+153 error code EACCES
+154 error errno 3
+155 error stack Error: EACCES, unlink '/usr/local/bin/mup'
+156 verbose exit [ 3, true ]
