@@ -135,7 +135,7 @@
             <div class="carousel-inner" role="listbox">
               {{#each addIndex links}} 
               <div class="item {{#if equals index 0}}active scores{{/if}}" id="{{index}}">
-                <a href="#" onclick="window.open('http://{{value.url}}', '_blank', 'location=yes','closebuttoncaption=Return'); return false;">{{value.url}}</a>
+                <a href="#" onclick="var ref = window.open('http://{{value.url}}','_blank','location=yes,toolbar=yes','closebuttoncaption=Return'); return false;">{{value.url}}</a>
 	      </div>
 	      {{/each}}
 	    </div> 
@@ -261,9 +261,6 @@ Ne pas toucher aux pitons, merci
          {{# each childtags}}
           <option value="{{this._id}}">{{name}}</option>
 	 {{/each}}
-	 {{# each tags}}
-          <option value="{{this._id}}">{{name}}</option>
-         {{/each}}
 	</select>
 	language:
 	<select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">
