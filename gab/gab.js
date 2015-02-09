@@ -82,13 +82,14 @@ Router.route('/tag/:slug', function () {
       var no_child = false;
       if (Tags.findOne({slug: slug})){
         var tag_id = Tags.findOne({slug: slug})._id;
+	console.log(tag_id)
         var allchildtags = Childtags.find();
 	var childtags = []
 	allchildtags.forEach(function (doc){
           var tag_tags = doc.tags;
-	  if (tag_tags)
+	  if (tag_tags){
 	    var x = tag_tags.indexOf(tag_id);
-	    if (x > -1 )
+	    if (x > -1 ){
 	      var ctag_id = doc._id
 	      var links = []
 	      var alllinks = Links.find();
@@ -101,24 +102,15 @@ Router.route('/tag/:slug', function () {
 	      });
 	      //compter le length
 	      var length = links.length;
-	      console.log(length)
+	      console.log(x)
 	      var tag_link = {tag: doc, length: length, links: links}
 	      childtags.push(tag_link);
+	      console.log(childtags);
+	    }  
+	  }    
 	});
-	// Voir avec Gab si encore necessaire
-	if (childtags.length == 0) 
-	  var no_child = true;
-          var alllinks = Links.find();
-	  var links = []
-          alllinks.forEach(function (doc){
-	    var link_tags = doc.tags;
-            if (link_tags)
-              var x = link_tags.indexOf(tag_id);
-              if (x > -1)
-                links.push(doc);
-	  });										     
       }
-      templateData = {links: links, tag: Tags.findOne({slug: slug}), tags: childtags, no_child: no_child};
+      templateData = {tag: Tags.findOne({slug: slug}), tags: childtags, no_child: no_child};
       return templateData;
     }
   });
@@ -390,7 +382,15 @@ if (Meteor.isClient) {
     },
   }); 
 
-
+  Template.ApplicationLayout.events({
+    "touchstart #lo": function (){
+      var divMouseDown;
+      divMouseDown = setTimeout(function() {
+        console.log("Ben oui");
+	Router.go('/admin');
+      }, 3000);
+    },
+  });
   Template.feed.events({
     "submit .new-post": function (event) {
       var text = event.target.text.value;

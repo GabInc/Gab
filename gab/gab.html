@@ -6,7 +6,7 @@
       {{> yield "navbar"}}
   </navbar>
   <content>
-  <div class="container-fluid">
+  <div class="container">
     <div class="row hidden-xs logo"><p style="color:white;font-size:20px;">Logo ici</p></div>
       {{> yield}}
   </div>    
@@ -65,7 +65,7 @@
     </nav>
 </template>
 <template name="Home">
-    <div class="row greatings">
+    <div class="row greatings" id="lo">
       <div class="col-xs-12">
         <p>{{_ "Salut " }}{{#if currentUser}}{{currentUser.username}}{{/if}}!<br />
         {{_ "En ce " }}{{current_day.day}} {{current_day.part}},{{_ " tu pourrais  " }}</p>
@@ -77,7 +77,7 @@
       <div class="col-xs-4 col-sm-2">
        <div class="icons">
         <a class="act_link" href="/act/{{slug}}"> 
-	  <p>{{name}}</p>
+	  <div class="act_name"><p class="wrap">{{name}}</p></div>
           <img src="/{{file_name}}" class="img" alt="Responsive image">
         </a>	
        </div>
@@ -127,11 +127,11 @@
 -->
 <div class="row acts">
   {{#each tags}}  
-    <div class="col-xs-4 col-sm-2">  
+    <div class="col-xs-4 col-sm-4 col-md-2">  
 	<div class="tag_icons">
           <p>{{tag.name}}</p>
 	  <div class="subtitle" ><p>{{tag.desc}}</p></div>
-	  <div id="tag{{this._id}}" class="carousel slide" data-ride="carousel">
+	  <div id="tag{{tag.slug}}" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner" role="listbox">
               {{#each addIndex links}} 
               <div class="item {{#if equals index 0}}active scores{{/if}}" id="{{index}}">
@@ -141,13 +141,13 @@
 	    </div> 
 		<div class="row slide_control">
 	          <div class="col-xs-4">
-	            <a class="slide_button" href="#tag{{this._id}}" role="button" data-slide="prev">&#60;</a>
+	            <a class="slide_button" href="#tag{{tag.slug}}" role="button" data-slide="prev">&#60;</a>
 	          </div>
 	          <div class="col-xs-4 slide_counter">
 	            <div class="num">{{currentIndex tag.slug}}</div>/{{length}}
 	          </div>
 	          <div class="col-xs-4">
-	            <a class="right slide_button" href="#tag{{this._id}}" role="button" data-slide="next">&#62;</a>
+	            <a class="right slide_button" href="#tag{{tag.slug}}" role="button" data-slide="next">&#62;</a>
                   </div>
 	        </div>
           </div>
@@ -166,11 +166,13 @@
 
 </template>
 <template name="Admin">
+
+
 {{> loginButtons}}
 <div style="height:100%;background-color:white;">
   {{#if currentUser.profile.cat.is_staff}}
 <p>Salut {{currentUser.username}}</p>
-Ne pas toucher aux pitons, merci
+<!--Ne pas toucher aux pitons, merci
 <button id="del_convs" class="btn btn-sm">Delete all conversations</button>
 <button id="del_mess" class="btn btn-sm">Delete all messages</button>
 <button id="del_posts" class="btn btn-sm">Delete all posts</button>
@@ -178,24 +180,7 @@ Ne pas toucher aux pitons, merci
 <button id="del_childtags" class="btn btn-sm">Delete all child tags</button>
 <button id="del_acts" class="btn btn-sm">Delete all Activities</button>
 <button id="del_links" class="btn btn-sm">Delete all links</button>
-    <div class="panel panel-default" style="margin:10px;">
-     <div id="users_admin"> 
-      <ul>
-         <li style="background-color: lightgrey;">{{_ "Username" }}
-	   <button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Change status" }}</button>
-	   </li>
-      {{#each allusers}}
-         <li>{{username}} - {{#if profile.cat.is_staff}} staff {{else}} pas staff {{/if}}
-	   {{#if profile.cat.is_staff}}
-	   <button type="button" id="remove_staff" class="friends_button glyphicon glyphicon-thumbs-down" aria-hidden="true"><span></span></button>
-           {{else}}
-	   <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
-	   {{/if}}
-	</li>
-      {{/each}}	
-      </ul>
-     </div> 
-    </div>
+-->    
     <div class="panel panel-default" style="margin:10px;">
       <p>New activity</p>
       <form id="new-act" style="padding:10px;">
@@ -305,6 +290,24 @@ Ne pas toucher aux pitons, merci
       </ul>
     </div>
 
+    <div class="panel panel-default" style="margin:10px;">
+      <div id="users_admin">
+       <ul>
+       <li style="background-color: lightgrey;">{{_ "Username" }}
+         <button type="button" class="friends_button" aria-hidden="true" disabled>{{_ "Change status" }}</button>
+       </li>
+      {{#each allusers}}
+       <li>{{username}} - {{#if profile.cat.is_staff}} staff {{else}} pas staff {{/if}}
+        {{#if profile.cat.is_staff}}
+       <button type="button" id="remove_staff" class="friends_button glyphicon glyphicon-thumbs-down" aria-hidden="true"><span></span></button>
+       {{else}}
+       <button type="button" id="make_staff" class="friends_button glyphicon glyphicon-thumbs-up" aria-hidden="true"><span></span></button>
+       {{/if}}
+       </li>
+       {{/each}}
+       </ul>
+      </div>
+     </div>
 
 
 {{else}}

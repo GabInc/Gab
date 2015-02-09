@@ -18,6 +18,12 @@
   text-align:center;
   overflow:hidden;
 }
+.act_name {
+  max-height:10px;
+}
+p.wrap {
+  word-wrap:break-word;
+}
 .mess_scroller {
   height:100%;
 }
