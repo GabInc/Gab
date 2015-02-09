@@ -1,7 +1,18 @@
-<template name="ApplicationLayout">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{_ "Ben oui la description"}}">
+  <meta name="author" content="">
+  <title>{{_ "Gab" }}</title>
+
+  <!-- Le canonical url -->
+  <link rel="canonical" href="" />
+
+
 </head>
+
+<template name="ApplicationLayout">
+<body>
   <navbar>
       {{> yield "navbar"}}
   </navbar>
@@ -17,6 +28,7 @@
   <footer>
    {{> yield "footer"}}
   </footer>
+</body>
 </template>
 
 <template name="Footer">
@@ -261,7 +273,26 @@
     Activities:
       <ul>
       {{# each activities}}
-       <li>{{name}}<button type="button" class="del_act close"><span>&times;</span></button></li>
+        <li>{{name}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
+
+        <div class="modal fade" id="del_mod{{this._id}}">
+         <div class="modal-dialog">
+           <div class="modal-content">
+             <div class="modal-header">
+	       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	       <h4 class="modal-title">{{_ "Delete " }}: {{name}}</h4>
+             </div>
+             <div class="modal-body">
+               <p>{{_ "Are your sure you want to delete the activity named : " }}{{name}}</p>
+             </div>
+	     <div class="modal-footer">
+	       <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "Cancel" }}</button>
+	       <button type="button" class="del_act btn btn-primary">{{_ "Delete" }}</button>
+	     </div>
+	   </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      
       {{/each}}
       </ul>
     </div>
@@ -269,7 +300,24 @@
     Tags:
       <ul>
       {{# each tags}}
-       <li>{{name}}<button type="button" class="del_tag close"><span>&times;</span></button></li>
+       <li>{{name}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
+       <div class="modal fade" id="del_mod{{this._id}}">
+         <div class="modal-dialog">
+	   <div class="modal-content">
+	     <div class="modal-header">
+	       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	       <h4 class="modal-title">{{_ "Delete " }}: {{name}}</h4>
+	     </div>
+	     <div class="modal-body">
+               <p>{{_ "Are your sure you want to delete the tag named : " }}{{name}}</p>
+	     </div>
+	     <div class="modal-footer">
+	       <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "Cancel" }}</button>
+	       <button type="button" class="del_tag btn btn-primary">{{_ "Delete" }}</button>
+             </div>     
+	   </div><!-- /.modal-content -->          
+	 </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->			      
       {{/each}}
       </ul>
     </div>
@@ -277,7 +325,24 @@
     Sub-tags:  
       <ul>
       {{# each childtags}}
-       <li>{{name}}<button type="button" class="del_ctag close"><span>&times;</span></button></li>
+       <li>{{name}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
+        <div class="modal fade" id="del_mod{{this._id}}">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">{{_ "Delete " }}: {{name}}</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>{{_ "Are your sure you want to delete the childtag named : " }}{{name}}</p>
+              </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "Cancel" }}</button>
+		<button type="button" class="del_ctag btn btn-primary">{{_ "Delete" }}</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>  
       {{/each}}
       </ul>
     </div>
@@ -285,7 +350,24 @@
     Links:  
       <ul>
       {{# each links}}
-       <li>{{url}}<button type="button" class="del_link close"><span>&times;</span></button></li>
+       <li>{{url}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
+         <div class="modal fade" id="del_mod{{this._id}}">
+	   <div class="modal-dialog">
+	     <div class="modal-content">
+	       <div class="modal-header">
+	         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		 <h4 class="modal-title">{{_ "Delete " }}: {{url}}</h4>
+	       </div>
+	       <div class="modal-body">
+	         <p>{{_ "Are your sure you want to delete the link : " }}{{url}}</p>
+	       </div>
+	       <div class="modal-footer">
+	         <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "Cancel" }}</button>
+		 <button type="button" class="del_link btn btn-primary">{{_ "Delete" }}</button>
+	       </div>
+	     </div>
+	   </div>
+	 </div>  
       {{/each}}
       </ul>
     </div>
@@ -311,7 +393,6 @@
 
 
 {{else}}
-Voir pour le 404...
 {{/if}}
 </div>
 </template>
