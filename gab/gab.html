@@ -1,12 +1,7 @@
 <head>
+  <meta name="fragment" content="!">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{{_ "Ben oui la description"}}">
-  <meta name="author" content="">
-  <title>{{_ "Gab" }}</title>
-
-  <!-- Le canonical url -->
-  <link rel="canonical" href="" />
 
 
 </head>
@@ -68,7 +63,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
 	    {{#if currentUser.profile.cat.is_staff}}
-              <li><button style="padding-bottom: 15px;padding-top: 15px;" id="admin" class="btn btn-link">ADMIN</button></li>
+              <li><button style="padding-bottom: 15px;padding-top: 15px;" id="home" class="btn btn-link">HOME</button></li>
 	    {{/if}}
 	    {{> loginButtons}}
           </ul>
@@ -143,7 +138,7 @@
 	<div class="tag_icons">
           <p>{{tag.name}}</p>
 	  <div class="subtitle" ><p>{{tag.desc}}</p></div>
-	  <div id="tag{{tag.slug}}" class="carousel slide" data-ride="carousel">
+	  <div id="{{tag._id}}" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner" role="listbox">
               {{#each addIndex links}} 
               <div class="item {{#if equals index 0}}active scores{{/if}}" id="{{index}}">
@@ -153,13 +148,13 @@
 	    </div> 
 		<div class="row slide_control">
 	          <div class="col-xs-4">
-	            <a class="slide_button" href="#tag{{tag.slug}}" role="button" data-slide="prev">&#60;</a>
+	            <a class="slide_button" href="#{{tag._id}}" role="button" data-slide="prev">&#60;</a>
 	          </div>
 	          <div class="col-xs-4 slide_counter">
-	            <div class="num">{{currentIndex tag.slug}}</div>/{{length}}
+	            <div class="num">{{currentIndex tag._id}}/{{length}}</div>
 	          </div>
 	          <div class="col-xs-4">
-	            <a class="right slide_button" href="#tag{{tag.slug}}" role="button" data-slide="next">&#62;</a>
+	            <a class="right slide_button" href="#{{tag._id}}" role="button" data-slide="next">&#62;</a>
                   </div>
 	        </div>
           </div>
@@ -180,8 +175,7 @@
 <template name="Admin">
 
 
-{{> loginButtons}}
-<div style="height:100%;background-color:white;">
+<div class="admin" style="height:100%;background-color:white;">
   {{#if currentUser.profile.cat.is_staff}}
 <p>Salut {{currentUser.username}}</p>
 <!--Ne pas toucher aux pitons, merci
@@ -195,7 +189,7 @@
 -->    
     <div class="panel panel-default" style="margin:10px;">
       <p>New activity</p>
-      <form id="new-act" style="padding:10px;">
+      <form id="new-act" method="POST" style="padding:10px;">
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Activity name here" }}">
         <input style="margin-top:10px;" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Activity description here" }}">
 	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
@@ -211,16 +205,9 @@
       </form>
     </div>
 
-    <div class="panel panel-default" style="margin:10px;display:none;">
-    		<form id="new-img">
-		  <input id="fileInput" type="file" name="file" multiple="multiple"> 
-		  <input style="margin-top:10px;" class="btn" type="submit" value="Add">
-		</form>
-
-    </div>
     <div class="panel panel-default" style="margin:10px;">
       <p>New main tag</p>
-      <form id="new-tag" style="padding:10px;">
+      <form id="new-tag" method="POST" style="padding:10px;">
 	<input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
 	<input style="margin-top:10px;" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Tag description here" }}">
 	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
@@ -235,7 +222,7 @@
     </div> 
     <div class="panel panel-default" style="margin:10px;">
       <p>New child tag</p>
-      <form id="new-child-tag" style="padding:10px;">
+      <form id="new-child-tag" method="POST" style="padding:10px;">
         <input style="margin-top:10px;" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
 	<input style="margin-top:10px;" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Tag description here" }}">
 	<input style="margin-top:10px;" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
@@ -250,7 +237,7 @@
     </div>  
     <div class="panel panel-default" style="margin:10px;">
       <p>New link</p>
-      <form id="new-link" style="padding:10px;" method="post">
+      <form id="new-link" style="padding:10px;" method="POST">
         url:
 	<input style="margin-top:10px;" name="url" class="form-control input-lg" type="text" placeholder="{{_ "Url here" }}">
         tags:
@@ -273,9 +260,12 @@
     Activities:
       <ul>
       {{# each activities}}
-        <li>{{name}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
-
-        <div class="modal fade" id="del_mod{{this._id}}">
+        <li>{{name}}
+	
+	  <button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}" style="float:right;"><span>&times;</span></button>
+          <button type="button" class="btn btn-xs editact" style="float:right;margin-right:15px;">{{_ "edit" }}</button>
+        </li>
+	<div class="modal fade" id="del_mod{{this._id}}">
          <div class="modal-dialog">
            <div class="modal-content">
              <div class="modal-header">
@@ -300,7 +290,10 @@
     Tags:
       <ul>
       {{# each tags}}
-       <li>{{name}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
+       <li>{{name}}
+       <button type="button" style="float:right;" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button>
+       <button type="button" class="btn btn-xs edittag" style="float:right;margin-right:15px;">{{_ "edit" }}</button>
+       </li>
        <div class="modal fade" id="del_mod{{this._id}}">
          <div class="modal-dialog">
 	   <div class="modal-content">
@@ -325,7 +318,10 @@
     Sub-tags:  
       <ul>
       {{# each childtags}}
-       <li>{{name}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
+       <li>{{name}}
+         <button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button>
+         <button type="button" class="btn btn-xs editctag" style="float:right;margin-right:15px;">{{_ "edit" }}</button>
+       </li>
         <div class="modal fade" id="del_mod{{this._id}}">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -350,8 +346,12 @@
     Links:  
       <ul>
       {{# each links}}
-       <li>{{url}}<button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button></li>
-         <div class="modal fade" id="del_mod{{this._id}}">
+       <li>{{url}}
+         <button type="button" class="close" data-toggle="modal" data-target="#del_mod{{this._id}}"><span>&times;</span></button>
+         <button type="button" class="btn btn-xs editlink" style="float:right;margin-right:15px;">{{_ "edit" }}</button>
+       </li>
+         
+	 <div class="modal fade" id="del_mod{{this._id}}">
 	   <div class="modal-dialog">
 	     <div class="modal-content">
 	       <div class="modal-header">
@@ -394,6 +394,90 @@
 
 {{else}}
 {{/if}}
+</div>
+</template>
+<template name="edittag">
+<div class="admin" style=background-color:white;>
+Edit : {{tag.name}}
+  <form id="edit-tag" method="POST" style="padding:10px;">
+    <input style="margin-top:10px;" value="{{tag.name}}" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Tag name here" }}">
+    <input style="margin-top:10px;" value="{{tag.desc}}" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Tag description here" }}">
+    <input style="margin-top:10px;" value="{{tag.slug}}" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Tag slug here" }}">
+    <input style="margin-top:10px;display:none;" value="{{tag._id}}" name="id" class="form-control input-lg" type="text">
+    <input style="margin-top:10px;display:none;" value="{{tag.createdAt}}" name="date" class="form-control input-lg">
+    actvities:
+    <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="activities" name="activities" class="form-control input-lg" type="text" multiple>
+    {{# each activities}}
+      <option value="{{this._id}}" {{selected this._id ../tag._id}}>{{name}}</option>
+    {{/each}}
+    </select>
+    <input style="margin-top:10px;" class="btn" type="submit" value="Save">
+  </form>
+</div>
+</template>
+<template name="editctag">
+<div class="admin" style=background-color:white;>
+Edit : {{ctag.name}}
+  <form id="edit-ctag" method="POST" style="padding:10px;">
+    <input style="margin-top:10px;" value="{{ctag.name}}" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Child tag name here" }}">
+    <input style="margin-top:10px;" value="{{ctag.desc}}" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Child tag description here" }}">
+    <input style="margin-top:10px;" value="{{ctag.slug}}" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Child tag slug here" }}">
+    <input style="margin-top:10px;display:none;" value="{{ctag._id}}" name="id" class="form-control input-lg" type="text">
+    <input style="margin-top:10px;display:none;" value="{{ctag.createdAt}}" name="date" class="form-control input-lg">
+    tags:
+    <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="tags" name="tags" class="form-control input-lg" type="text" multiple>
+    {{# each tags}}
+      <option value="{{this._id}}" {{selected this._id ../ctag._id}}>{{name}}</option>
+    {{/each}}
+    </select>
+    <input style="margin-top:10px;" class="btn" type="submit" value="Save">
+  </form>
+</div>  
+</template>
+<template name="editlink">
+<div class="admin" style=background-color:white;>
+  <form id="edit-link" method="POST" style="padding:10px;">
+    <input style="margin-top:10px;" value="{{link.url}}" name="url" class="form-control input-lg" type="text" placeholder="{{_ "URL" }}">
+    <input style="margin-top:10px;display:none;" value="{{link._id}}" name="id" class="form-control input-lg" type="text">
+    <input style="margin-top:10px;display:none;" value="{{link.createdAt}}" name="date" class="form-control input-lg">
+    child tags:
+    <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="ctags" name="ctags" class="form-control input-lg" type="text" multiple>
+    {{# each ctags}}
+      <option value="{{this._id}}" {{selected this._id ../link._id}}>{{name}}</option> 
+    {{/each}}
+    </select>
+    language:
+    <select style="margin-top:10px;" name="lang" class="form-control input-lg" type="text" placeholder="{{_ "Chose a language" }}">
+      <option value="fr" {{selected_lang "fr" link._id}}>{{_ "French" }}</option>
+      <option value="en" {{selected_lang "en" link._id}}>{{_ "English" }}</option>
+      <option value="es" {{selected_lang "es" link._id}}>{{_ "Spanish" }}</option>
+    </select>
+    <input style="margin-top:10px;" class="btn" type="submit" value="Save">
+  </form>
+</div>
+</template>
+
+
+<template name="editactivity">
+<div class="admin" style=background-color:white;>
+
+Edit : {{act.name}}
+  <form id="edit-act" method="POST" style="padding:10px;">
+    <input style="margin-top:10px;" value="{{act.name}}" name="name" class="form-control input-lg" type="text" placeholder="{{_ "Activity name here" }}">
+    <input style="margin-top:10px;" value="{{act.desc}}" name="desc" class="form-control input-lg" type="text" placeholder="{{_ "Activity description here" }}">
+    <input style="margin-top:10px;" value="{{act.slug}}" name="slug" class="form-control input-lg" type="text" placeholder="{{_ "Activity slug here" }}">
+    <input style="margin-top:10px;" value="{{act.file_name}}" name="file_name" class="form-control input-lg" type="text" placeholder="{{_ "File name here" }}">
+    <input style="margin-top:10px;display:none;" value="{{act._id}}" name="id" class="form-control input-lg" type="text">
+    <input style="margin-top:10px;display:none;" value="{{act.createdAt}}" name="date" class="form-control input-lg">
+    time of the day:
+    <select style="margin-top:10px;max-height:800px;overflow-y:scroll;" id="times" name="times" class="form-control input-lg" type="text" multiple>
+      <option value="matin" {{selected "matin" act._id}}>{{_ "Matin" }}</option>
+      <option value="après-midi" {{selected "après-midi" act._id}}>{{_ "Après-midi" }}</option>
+      <option value="soir" {{selected "soir" act._id}}>{{_ "Soir" }}</option>
+      <option value="nuit" {{selected "nuit" act._id}}>{{_ "Nuit" }}</option>
+    </select>
+    <input style="margin-top:10px;" class="btn" type="submit" value="Save">
+  </form>
 </div>
 </template>
 <template name="feed">

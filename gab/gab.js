@@ -19,15 +19,63 @@ EasySearch.createSearchIndex('users', {
 Router.route('/', function () {
   this.layout('ApplicationLayout');
   this.render('Home');
-//  this.render('navbar', {to: 'navbar'});
-//  this.render('Footer', {to: 'footer'});
 });
 Router.route('/admin', function () {
+  this.layout('ApplicationLayout');
+  this.render('navbar', {to: 'navbar'});
   this.render('Admin', {
     data: function(){
     var id = this.params._id;
     var current_userid = Meteor.userId();
     templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find(), childtags: Childtags.find(), links: Links.find(),};
+    return templateData;
+    }
+  });
+});
+Router.route('/editactivity/:_id', function () {
+  this.layout('ApplicationLayout');
+  this.render('navbar', {to: 'navbar'});
+  this.render('editactivity', {
+    data: function () {
+    var id = this.params._id;
+    var act = Activities.findOne({_id: id});
+    templateData = {act: act};
+    return templateData;
+    }
+  });
+});
+Router.route('/edittag/:_id', function () {
+  this.layout('ApplicationLayout');
+  this.render('navbar', {to: 'navbar'});
+  this.render('edittag', {
+    data: function () {
+    var id = this.params._id;
+    var tag = Tags.findOne({_id: id});
+    templateData = {tag: tag, activities: Activities.find(),};
+    return templateData;
+    }
+  });
+});
+Router.route('/editctag/:_id', function () {
+  this.layout('ApplicationLayout');
+  this.render('navbar', {to: 'navbar'});
+  this.render('editctag', {
+    data: function () {
+    var id = this.params._id;
+    var ctag = Childtags.findOne({_id: id});
+    templateData = {ctag: ctag, tags: Tags.find(),};
+    return templateData;
+    }
+  });  
+});
+Router.route('/editlink/:_id', function () {
+  this.layout('ApplicationLayout');
+  this.render('navbar', {to: 'navbar'});
+  this.render('editlink', {
+    data: function () {
+    var id = this.params._id;
+    var link = Links.findOne({_id: id});
+    templateData = {link: link, ctags: Childtags.find(),};
     return templateData;
     }
   });
@@ -82,7 +130,6 @@ Router.route('/tag/:slug', function () {
       var no_child = false;
       if (Tags.findOne({slug: slug})){
         var tag_id = Tags.findOne({slug: slug})._id;
-	console.log(tag_id)
         var allchildtags = Childtags.find();
 	var childtags = []
 	allchildtags.forEach(function (doc){
@@ -102,10 +149,8 @@ Router.route('/tag/:slug', function () {
 	      });
 	      //compter le length
 	      var length = links.length;
-	      console.log(x)
 	      var tag_link = {tag: doc, length: length, links: links}
 	      childtags.push(tag_link);
-	      console.log(childtags);
 	    }  
 	  }    
 	});
@@ -265,32 +310,97 @@ if (Meteor.isClient) {
     },
   });
   Template.tag.helpers({
-    currentIndex: function (slug){
-      $(document).ready(function(){
-      var num = document.getElementsByClassName('scores')[0].id;
+    currentIndex: function (id){
+      var txt = "1";
+      var car_id = ("#"+id+"");
+      console.log(car_id);
+      $(car_id).on('slid.bs.carousel', function () {
+        var carouselData = $(car_id).data('bs.carousel');
+	var currentIndex = carouselData.getActiveIndex();
+	var txt = (currentIndex + 1);
+	console.log(txt);
       });
-      //var num = document.querySelectorAll('.scores').id;
-      console.log(num);
-      return num;
+      return txt;
     },
-   //var totalItems = $('.item').length;
-   //var currentIndex = $('div.active').index() + 1;
-   //$('.num').html(''+currentIndex+'/'+totalItems+'');
-
-   //$('#myCarousel').carousel({
-     //  interval: 2000
-       //});
-
-       //$('#myCarousel').bind('slid', function() {
-        //   currentIndex = $('div.active').index() + 1;
-	  //    $('.num').html(''+currentIndex+'/'+totalItems+'');
-	    //  });//
   });
   Template.message.helpers({
     username: function (id) {
       return Meteor.users.findOne({_id:id}).username;
     },
-  });  
+  });
+  Template.editactivity.helpers({
+    selected: function (time,id) {
+      if(Activities.findOne({_id: id}).times){
+        var times = Activities.findOne({_id: id}).times;
+        var t = times.indexOf(time);
+	  if (t > -1){
+	    return "selected"
+	  } else {
+	    return "";
+	  }
+      } else {
+        return "";
+      }
+    },
+  });
+  Template.edittag.helpers({
+    selected: function (act,id) {
+      if(Tags.findOne({_id: id}).activities){
+        var acts = Tags.findOne({_id: id}).activities;
+	var a = acts.indexOf(act);
+	  if (a > -1){
+	    return "selected"
+	  } else {
+	    return "";
+	  }
+      } else {
+        return "";
+      }
+    },  
+  });
+  Template.editctag.helpers({
+    selected: function (tag,id) {
+      if(Childtags.findOne({_id: id}).tags){
+        var tags = Childtags.findOne({_id: id}).tags;
+	var t = tags.indexOf(tag);
+	  if (t > -1){
+	    return "selected"
+	  } else {
+	    return "";
+	  }
+      } else {
+        return "";
+      }
+    },
+  });
+  Template.editlink.helpers({
+    selected: function (tag,id) {
+      if(Links.findOne({_id: id}).tags){
+        var ctags = Links.findOne({_id: id}).tags;
+        var t = ctags.indexOf(tag);
+	  if (t > -1){
+	    return "selected"
+	  } else {
+	    return "";
+	  }
+      } else {
+        return "";
+      }
+    },
+    selected_lang: function (lang,id) {
+      if(Links.findOne({_id: id}).language){
+        var langs = Links.findOne({_id: id}).language;
+        var l = langs.indexOf(lang);
+	  if (l > -1){
+	    return "selected"
+	  } else {
+	    return "";
+	  }
+      } else {
+        return "";
+      }
+    },
+  });
   Template.conversations.helpers({
     conversations: function (){
       var u_id = Meteor.userId();
@@ -384,11 +494,18 @@ if (Meteor.isClient) {
 
   Template.ApplicationLayout.events({
     "touchstart #lo": function (){
+      console.log("touch started");
       var divMouseDown;
       divMouseDown = setTimeout(function() {
         console.log("Ben oui");
 	Router.go('/admin');
       }, 3000);
+      $("#lo").on("touchend", function(){
+        console.log("touch has ended");
+        if (divMouseDown) {
+          clearTimeout(divMouseDown);
+	}
+      });
     },
   });
   Template.feed.events({
@@ -427,6 +544,9 @@ if (Meteor.isClient) {
   Template.navbar.events({
     "click #admin": function () {
       Router.go('/admin');
+    },
+    "click #home": function () {
+      Router.go('/');
     },
   });
   Template.friends.events({
@@ -500,8 +620,100 @@ if (Meteor.isClient) {
     "click .back-button": function (){
       history.back();
     }
-  });  
+  });
+  Template.editactivity.events({
+    "submit #edit-act": function (event) {
+      event.preventDefault();
+      var id = event.target.id.value;
+      var name = event.target.name.value;
+      var desc = event.target.desc.value;
+      var slug = event.target.slug.value;
+      var file_name = event.target.file_name.value;
+      var times = $('#times').val();
+      var createdAt = event.target.date.value;
+        Activities.update({_id: id},{
+        name: name,
+        desc: desc,
+        slug: slug,
+        file_name: file_name,
+	times: times,
+        createdAt: createdAt,
+        });
+    Router.go('/admin/');
+    },
+  });
+  Template.edittag.events({
+    "submit #edit-tag": function (event) {
+      event.preventDefault();
+      var id = event.target.id.value;
+      var name = event.target.name.value;
+      var desc = event.target.desc.value;
+      var slug = event.target.slug.value;
+      var createdAt = event.target.date.value;
+      var activities = $('#activities').val();
+        Tags.update({_id: id},{
+        name: name,
+	desc: desc,
+	slug: slug,
+	activities: activities,
+        createdAt: createdAt,
+	});
+      Router.go('/admin/');
+    },
+  });
+  Template.editctag.events({
+    "submit #edit-ctag": function (event) {
+      event.preventDefault();
+      var id = event.target.id.value;
+      var name = event.target.name.value;
+      var desc = event.target.desc.value;
+      var slug = event.target.slug.value;
+      var createdAt = event.target.date.value;
+      var tags = $('#tags').val();
+        Childtags.update({_id: id},{
+	name: name,
+	desc: desc,
+	slug: slug,
+	tags: tags,
+	createdAt: createdAt,
+	});
+      Router.go('/admin/');
+    },  
+  });
+  Template.editlink.events({
+    "submit #edit-link": function (event) {
+      event.preventDefault();
+      var id = event.target.id.value;
+      var url = event.target.url.value;
+      var createdAt = event.target.date.value;
+      if (event.target.lang.value){
+        var lang = event.target.lang.value;
+      } else {
+        var lang = "fr";
+      }
+      var tags = $('#ctags').val();
+        Links.update({_id: id},{
+        url: url,
+	language: lang,
+	tags: tags,
+	createdAt: createdAt,
+	});
+      Router.go('/admin/');	
+    },
+  });
   Template.Admin.events({
+    "click .editact": function () {
+      Router.go('/editactivity/'+this._id+'');      
+    },
+    "click .edittag": function () {
+      Router.go('/edittag/'+this._id+'');
+    }, 
+    "click .editctag": function () {
+      Router.go('/editctag/'+this._id+'');
+    },
+    "click .editlink": function () {
+      Router.go('/editlink/'+this._id+'');
+    },
     "click .del_act": function () {
       Activities.remove(this._id);
     },
