@@ -2,18 +2,16 @@
   <meta name="fragment" content="!">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
 </head>
 
 <template name="ApplicationLayout">
-<body>
+<script type="text/javascript" src="phonegap.js"></script>  
   <navbar>
       {{> yield "navbar"}}
   </navbar>
   <content>
   <div class="container">
-    <div class="row hidden-xs logo"><p style="color:white;font-size:20px;">Logo ici</p></div>
+    <div class="row hidden-xs logo"><img class="logo_img" src="/logo_gab.png" alt="GAB"></div>
       {{> yield}}
   </div>    
   </content>
@@ -23,7 +21,6 @@
   <footer>
    {{> yield "footer"}}
   </footer>
-</body>
 </template>
 
 <template name="Footer">
@@ -85,29 +82,30 @@
        <div class="icons">
         <a class="act_link" href="/act/{{slug}}"> 
 	  <div class="act_name"><p class="wrap">{{name}}</p></div>
-          <img src="/{{file_name}}" class="img" alt="Responsive image">
-        </a>	
-       </div>
+          <div class="act_img"><img src="/{{file_name}}" class="img" alt="Responsive image"></div>
+        </a>
+       </div>	
       </div>
       {{/each}}
     </div>
 </template>
 <template name="activity">
 {{#if activity}}
-  <div class="row greatings">
+  <div class="row greatings sm_greatings">
     <div class="col-xs-12">
       <div class="back-button"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></div>
       <div class="act-desc">{{activity.desc}}</div>
     </div>
   </div>
-  <div class="row acts">
+  <div class="row acts_tag">
   {{#each tags}}
     <div class="col-xs-4 col-sm-2">
-     <a href="/tag/{{slug}}">
-      <div class="act_icons">
+     <div class="act_icons">
+       <a href="/tag/{{slug}}">
          <div class="tag_name"><p><span>{{name}}</span></p></div>
-      </div>
-     </a> 
+       </a> 
+     </div>  
+
     </div>
 
   {{/each}}
@@ -116,49 +114,40 @@
 </template>
 
 <template name="tag">
-   <div class="row greatings">
+   <div class="row sm_greatings">
     <div class="col-xs-12">
       <div class="back-button"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></div>
       <div class="act-desc">{{tag.desc}}</div>
     </div>
   </div>
-
-<!--{{# if no_child}}
-
-<h3 style="color:white;">A voir????</h3>
-
-{{#each links}}
-<a href="http://{{url}}" target="_blank"><h3 style="color:white;">{{url}}</h3></a>
-{{/each}}
-{{else}}
--->
-<div class="row acts">
+<div class="row acts_link">
   {{#each tags}}  
-    <div class="col-xs-4 col-sm-4 col-md-2">  
-	<div class="tag_icons">
-          <p>{{tag.name}}</p>
-	  <div class="subtitle" ><p>{{tag.desc}}</p></div>
+    <div class="col-xs-6 col-sm-4 col-md-2">  
+        <div class="tag_icons">  
+	  <div class="name"><p>{{tag.name}}</p><p class="subtitle">{{tag.desc}}</p></div>
 	  <div id="{{tag._id}}" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner" role="listbox">
               {{#each addIndex links}} 
-              <div class="item {{#if equals index 0}}active scores{{/if}}" id="{{index}}">
+              <div class="item {{#if equals index 0}}active{{/if}} {{../tag._id}}" id="{{index}}">
                 <a href="#" onclick="var ref = window.open('http://{{value.url}}','_blank','location=yes,toolbar=yes','closebuttoncaption=Return'); return false;">{{value.url}}</a>
 	      </div>
 	      {{/each}}
-	    </div> 
+	    </div>
+	  </div>
+	  <div class="slide_wrapper">
 		<div class="row slide_control">
-	          <div class="col-xs-4">
+	          <div class="col-xs-4" style="float:left;">
 	            <a class="slide_button" href="#{{tag._id}}" role="button" data-slide="prev">&#60;</a>
 	          </div>
-	          <div class="col-xs-4 slide_counter">
-	            <div class="num">{{currentIndex tag._id}}/{{length}}</div>
+	          <div class="col-xs-4 slide_counter" style="float:left;">
+	            <div class="num counter">1</div><div class="counter">/{{length}}</div>
 	          </div>
-	          <div class="col-xs-4">
+	          <div class="col-xs-4" style="float:left;">
 	            <a class="right slide_button" href="#{{tag._id}}" role="button" data-slide="next">&#62;</a>
                   </div>
 	        </div>
-          </div>
-	</div>
+	  </div>
+	</div>  
     </div>
 {{/each}}
 </div>

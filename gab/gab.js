@@ -14,11 +14,20 @@ EasySearch.createSearchIndex('users', {
     'limit' : 20
 });
 
-
-
+Meteor.startup(function() {
+ if(Meteor.isClient){
+   return SEO.config({
+     title: "GAB",
+     meta: {
+       "description": "Ben oui Gab",
+     },
+   });
+ }
+});
 Router.route('/', function () {
   this.layout('ApplicationLayout');
-  this.render('Home');
+  this.render('Home', {
+  });
 });
 Router.route('/admin', function () {
   this.layout('ApplicationLayout');
@@ -29,7 +38,12 @@ Router.route('/admin', function () {
     var current_userid = Meteor.userId();
     templateData = { allusers: Meteor.users.find({_id:{$ne: current_userid}}), tags: Tags.find(), activities: Activities.find(), childtags: Childtags.find(), links: Links.find(),};
     return templateData;
-    }
+    },
+    onAfterAction: function () {
+      SEO.set({
+        title: "GAB",
+      });
+    },
   });
 });
 Router.route('/editactivity/:_id', function () {
@@ -118,7 +132,24 @@ Router.route('/act/:slug', function () {
       }  
       templateData = {activity: Activities.findOne({slug: slug}), tags: maintags};
       return templateData;
-    }  
+    },
+    onAfterAction: function() {
+      var act;
+      if (!Meteor.isClient){
+        return;
+      }
+      act = this.data().templateData.activity;
+      SEO.set({
+        title: act.name,
+	meta: {
+          'description': act.desc
+	},
+	og: {
+	  'title': act.name,
+	  'description': act.desc
+	},
+      });	
+    },
   });
 });
 
@@ -215,6 +246,19 @@ UI.registerHelper('addIndex', function (all) {
 UI.registerHelper('equals', function (a, b) {
     return a === b;
 });
+
+//UI.registerHelper('get_id', function (id) {
+//  var elements = document.getElementsByClassName(id);
+//  var carousel_id = ("#"+id+"");
+//  var act = (".active."+id+"");
+//  var currentIndex = $(act).index() + 2;
+//  console.log(currentIndex);
+//  $(carousel_id).bind('slid', function() {
+//    currentIndex = $(act).index() + 2;
+//  });
+//  $('.num').html(''+currentIndex+'');
+//});
+
 
 if (Meteor.isServer) {
 
@@ -314,12 +358,14 @@ if (Meteor.isClient) {
       var txt = "1";
       var car_id = ("#"+id+"");
       console.log(car_id);
-      $(car_id).on('slid.bs.carousel', function () {
-        var carouselData = $(car_id).data('bs.carousel');
-	var currentIndex = carouselData.getActiveIndex();
-	var txt = (currentIndex + 1);
-	console.log(txt);
-      });
+//      $(car_id).on('slid.bs.carousel', function () {
+//        var carouselData = $(car_id).data('bs.carousel');
+//	var currentIndex = carouselData.getActiveIndex();
+//	var txt = (currentIndex + 1);
+//	console.log(txt);    
+//      });
+      var elements = document.getElementsByClassName("item");
+      console.log(elements);
       return txt;
     },
   });
@@ -619,7 +665,14 @@ if (Meteor.isClient) {
   Template.tag.events({
     "click .back-button": function (){
       history.back();
-    }
+    },
+//    "slid .carousel": function (){
+//      var id = this._id;
+//      console.log(id);
+//      var act = (".active."+id+"");
+//      currentIndex = $(act).index() + 1;
+//      $('.num').html(''+currentIndex+'');
+//    }
   });
   Template.editactivity.events({
     "submit #edit-act": function (event) {
